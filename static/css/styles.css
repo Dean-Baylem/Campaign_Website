@@ -1,0 +1,120 @@
+/* Screen Settings */
+
+@media only screen and (min-width: 800px) {
+  .section-area {padding: 3% 15% 0 15%;}
+}
+
+
+@media only screen and (min-width: 1200px) {
+  .section-area {padding: 3% 20% 0 20%;}
+}
+
+@media only screen and (max-width: 799px) {
+  .section-area {padding: 3%}
+}
+
+/* General Settings  */
+
+.font-color {
+  color: #7D6E83;
+}
+
+.light-bg {
+  background-color: #F8EDE3;
+}
+
+.dark-bg {
+  background-color: #DFD3C3;
+}
+
+/* Navbar CSS Settings */
+
+.nav-item {
+  padding-left: 5%;
+  padding-right: 5%;
+}
+
+.navbar {
+  margin-left: 14%;
+  margin-right: 14%;
+}
+
+.navbar-nav {
+  margin-right: 20%;
+}
+
+
+/* Landing Title CSS Settings */
+
+#landing-title {
+  background-color: #F8EDE3;
+}
+
+.main-title {
+  font-size: 4.5rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  line-height: 1.5;
+  text-align: center;
+  padding-top: 5%;
+  padding-bottom: 5%;
+}
+
+/* Card CSS Settings  */
+
+#campaign-cards {
+  background-color: #DFD3C3;
+}
+
+.card {
+  margin-top: 50px;
+  margin-bottom: 50px;
+  background-color: #DFD3C3;
+}
+
+.card-title {
+  font-size: 2rem;
+}
+
+.card-font {
+  line-height: 1.5;
+}
+
+/* Campaign Page CSS */
+
+.summary {
+  padding-bottom: 5%;
+}
+
+.main-location-row {
+  margin-top: 10%;
+  margin-bottom: 10%;
+}
+
+.campaign-title {
+  padding-top: 7%;
+  padding-bottom: 7%;
+}
+
+.character-token {
+  height: 150px;
+  width: auto;
+  display: flex;
+  justify-content: center;
+  padding-bottom: 2%;
+  margin: 2%;
+}
+
+.character-name {
+  text-align: center;
+  margin: 3%;
+}
+
+.campaign-summary {
+  text-align: left;
+  padding-right: 5%;
+}
