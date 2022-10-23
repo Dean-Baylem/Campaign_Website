@@ -7,10 +7,8 @@ class CreateCampaignForm(FlaskForm):
     title = StringField("Campaign Title", validators=[DataRequired()])
     blurb = CKEditorField("Campaign Summary", validators=[DataRequired()])
     campaign_image = StringField("URL for campaign card image", validators=[DataRequired()])
+    page_image = StringField("URL for the campaign page banner", validators=[DataRequired()])
     central_location = StringField("Campaign Location", validators=[DataRequired()])
-    sub_location_1 = StringField("Side locations", validators=[DataRequired()])
-    sub_location_2 = StringField("Side locations", validators=[DataRequired()])
-    sub_location_3 = StringField("Side locations", validators=[DataRequired()])
     submit = SubmitField("Submit Campaign")
 
 
@@ -32,6 +30,14 @@ class CreateFactionForm(FlaskForm):
     faction_name = StringField("Name of Faction", validators=[DataRequired()])
     faction_description = CKEditorField("Faction Summary", validators=[DataRequired()])
     submit = SubmitField("Submit Faction")
+
+
+class CreateLocationForm(FlaskForm):
+    place_name = StringField("Name of Location", validators=[DataRequired()])
+    summary = CKEditorField("Description of the Location", validators=[DataRequired()])
+    image = StringField("Local file location for campaign card image", validators=[DataRequired()])
+    campaign = StringField("Enter the name of the campaign for this location:", validators=[DataRequired()])
+    submit = SubmitField("Submit Location")
 
 
 #

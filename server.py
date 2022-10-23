@@ -26,46 +26,70 @@ db = SQLAlchemy(app)
 
 # Making database tables: string, text, integers.
 
+# Testing relationships with simple tables
+
 class Campaign(db.Model):
     __tablename__ = "campaigns"
     id = db.Column(db.Integer, primary_key=True)
-    campaign_image = db.Column(db.String, nullable=False)
-    title = db.Column(db.String, unique=True, nullable=False)
-    blurb = db.Column(db.Text, nullable=False)
-    central_location = db.Column(db.String, nullable=False)
+    title = db.Column(db.String(100))
     characters = relationship("Character", back_populates="campaign")
-    sub_location_1 = db.Column(db.String)
-    sub_location_2 = db.Column(db.String)
-    sub_location_3 = db.Column(db.String)
-
+    locations = relationship("Location", back_populates="campaign")
+    factions = relationship("Faction", back_populates="campaign")
+    players = relationship("Player", back_populates="campaign")
+    campaign_image = db.Column(db.String)
+    page_image = db.Column(db.String)
+    blurb = db.Column(db.Text)
+    central_location = db.Column(db.String)
 
 class Character(db.Model):
     __tablename__ = "characters"
     id = db.Column(db.Integer, primary_key=True)
-    character_id = db.Column(db.Integer, db.ForeignKey("campaigns.id"))
+    name = db.Column(db.String(100))
     character_image = db.Column(db.String, nullable=False)
+    image = db.Column(db.String)
+    level = db.Column(db.Integer)
+    strength = db.Column(db.Integer)
+    dexterity = db.Column(db.Integer)
+    constitution = db.Column(db.Integer)
+    wisdom = db.Column(db.Integer)
+    intelligence = db.Column(db.Integer)
+    charisma = db.Column(db.Integer)
+    proficiency = db.Column(db.Integer)
+    campaign_id = db.Column(db.Integer, db.ForeignKey("campaigns.id"))
     campaign = relationship("Campaign", back_populates="characters")
-    name = db.Column(db.String, nullable=True)
-    image = db.Column(db.String, nullable=True)
-    level = db.Column(db.Integer, nullable=True)
-    strength = db.Column(db.Integer, nullable=True)
-    dexterity = db.Column(db.Integer, nullable=True)
-    constitution = db.Column(db.Integer, nullable=True)
-    wisdom = db.Column(db.Integer, nullable=True)
-    intelligence = db.Column(db.Integer, nullable=True)
-    charisma = db.Column(db.Integer, nullable=True)
-    proficiency = db.Column(db.Integer, nullable=True)
+    player_id = db.Column(db.Integer, db.ForeignKey("players.id"))
+    player = relationship("Player", back_populates="characters")
+
+class Player(db.Model):
+    __tablename__ = "players"
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(100))
+    email = db.Column(db.String(100))
+    password = db.Column(db.String, nullable=True)
+    characters = relationship("Character", back_populates="player")
+    campaign_id = db.Column(db.Integer, db.ForeignKey("campaigns.id"))
+    campaign = relationship("Campaign", back_populates="players")
+
+class Location(db.Model):
+    __tablename__ = "locations"
+    id = db.Column(db.Integer, primary_key=True)
+    place_name = db.Column(db.String)
+    summary = db.Column(db.Text)
+    image = db.Column(db.String)
+    campaign_id = db.Column(db.Integer, db.ForeignKey("campaigns.id"))
+    campaign = relationship("Campaign", back_populates="locations")
 
 
-# class Factions(db.Model):
-#     __tablename__ = "factions"
-#     id = db.Column(db.Integer, primary_key=True)
-#     campaign = db.Column(db.String, db.ForeignKey("campaigns.title"))
-#     faction_name = db.Column(db.String, nullable=True)
-#     faction_description = db.Column(db.Text, nullable=True)
+class Faction(db.Model):
+    __tablename__ = "factions"
+    id = db.Column(db.Integer, primary_key=True)
+    faction_name = db.Column(db.String(100))
+    faction_description = db.Column(db.Text)
+    faction_image = db.Column(db.String)
+    campaign_id = db.Column(db.Integer, db.ForeignKey("campaigns.id"))
+    campaign = relationship("Campaign", back_populates="factions")
 
-
-# db.create_all()
+db.create_all()
 
 
 @app.route("/")
@@ -95,15 +119,29 @@ def add_new_campaign():
             title=form.title.data,
             blurb=form.blurb.data,
             campaign_image=form.campaign_image.data,
+            page_image=form.page_image.data,
             central_location=form.central_location.data,
-            sub_location_1=form.sub_location_1.data,
-            sub_location_2=form.sub_location_2.data,
-            sub_location_3=form.sub_location_3.data,
         )
         db.session.add(new_campaign)
         db.session.commit()
         return redirect(url_for("home"))
     return render_template("add-campaign.html", form=form)
+
+@app.route("/new-location", methods=["GET", "POST"])
+def add_new_location():
+    form = forms.CreateLocationForm()
+    if form.validate_on_submit():
+        new_location = Location(
+            place_name=form.place_name.data,
+            summary=form.summary.data,
+            image=form.image.data,
+            campaign=form.campaign.data,
+        )
+
+        db.session.add(new_location)
+        db.session.commit()
+        return redirect(url_for('home'))
+    return render_template("add-location.html", form=form)
 
 
 @app.route("/new-character", methods=["GET", "POST"])
