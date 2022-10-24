@@ -1,7 +1,11 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, PasswordField, EmailField, IntegerField
+from wtforms import StringField, SubmitField, PasswordField, EmailField, IntegerField, SelectField
 from wtforms.validators import DataRequired, URL
 from flask_ckeditor import CKEditorField
+
+# List of campaigns currently running:
+campaigns = ["GoS", "CoS", "LotST"]
+
 
 class CreateCampaignForm(FlaskForm):
     title = StringField("Campaign Title", validators=[DataRequired()])
@@ -36,9 +40,20 @@ class CreateLocationForm(FlaskForm):
     place_name = StringField("Name of Location", validators=[DataRequired()])
     summary = CKEditorField("Description of the Location", validators=[DataRequired()])
     image = StringField("Local file location for campaign card image", validators=[DataRequired()])
-    campaign = StringField("Enter the name of the campaign for this location:", validators=[DataRequired()])
+    campaign = SelectField("Please select which campaign this location is a part off",
+                           choices=campaigns, validators=[DataRequired()])
     submit = SubmitField("Submit Location")
 
+class CreateNewPlayerForm(FlaskForm):
+    username = StringField("Please enter your username", validators=[DataRequired()])
+    email = EmailField("Please enter your email", validators=[DataRequired()])
+    password = PasswordField("Please enter your password", validators=[DataRequired()])
+    submit = SubmitField("Submit Player")
+
+class LoginForm(FlaskForm):
+    email = EmailField("Email", validators=[DataRequired()])
+    password = PasswordField("Password", validators=[DataRequired()])
+    submit = SubmitField("Login")
 
 #
 # class Factions(db.Model):

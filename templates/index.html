@@ -1,54 +1,6 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
+{% include "header.html" %}
 
-<head>
-  <meta charset="utf-8">
-  <title>Dungeon Divers Inc. Campaign Tracker</title>
 
-  <!-- CSS Stylesheet -->
-  <link rel="stylesheet" href="{{url_for('static', filename='css/styles.css')}}">
-
-  <!-- Bootstrap Installation -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
-  <!-- MDB -->
-  <link rel="stylesheet" href="css/mdb.min.css" />
-  <script type="text/javascript" src="js/mdb.min.js"></script>
-
-</head>
-
-<body>
-  <section id="title">
-    <div class="container-fluid" style="background-color: #182747;">
-      <nav class="navbar navbar-expand-lg navbar-dark nav-container">
-        <div class="container-fluid box">
-          <a class="navbar-brand" href="#">Dungeon Delvers Incorporated</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Home</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Character</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Events</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">NPC's</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Places</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
-    </div>
-  </section>
   <!-- <div class="bg-image" style="background-image: url(images/wizard-dark-dungeon-illustration.jpg); height: 100vh;"> -->
   <section id="landing-title" class="section-area">
     <div class="container-fluid">
@@ -67,40 +19,22 @@
   <!-- Campaign Cards -->
   <section id="campaign-cards" class="section-area">
     <div class="container-fluid">
-      <div class="row">
-        <!-- <div class="card-group"> -->
+        {% for story in all_campaigns %}
+        <div class="row">
         <div class="card bg-transparent ripple" style="padding-left: 0px; padding-right: 0px;">
-          <a href="#" class="stretched-link"></a>
-          <img class="card-img-top" src="{{url_for('static', filename='images/saltmarsh.jpg')}}" alt="Card image cap">
-          <div class="card-body">
-            <h5 class="card-title font-color">Ghosts of Saltmarsh</h5>
-            <p class="card-text font-color">A swashbuckling adventure set in the port of Saltmarsh. Deal with the lingering danger below the depths of the Azure Sea.</p>
-            <p class="card-text" style="font-size: 0.5rem;"><small class="text-muted"><a
-                  href="https://www.freepik.com/free-vector/treasure-sea-bottom-chest-with-golden-coins-crown-crystal-gems-sword-gold-idol-goblet-with-precious-rocks_12875276.htm#query=pirate%20fantasy&position=7&from_view=search">Image by
-                  upklyak</a> on Freepik</small></p>
-          </div>
+            <a href="{{ url_for('campaign_page', story_id=story.id) }}" class="stretched-link"></a>
+            <img class="card-img-top" src="{{url_for('static', filename=story.campaign_image)}}" alt="Card image cap">
+            <div class="card-body">
+                <h5 class="card-title font-color">{{ story.title }}</h5>
+                <p class="card-text font-color">{{ story.blurb|safe }}</p>
+                <!--            <p class="card-text" style="font-size: 0.5rem;"><small class="text-muted"><a-->
+                <!--                  href="https://www.freepik.com/free-vector/treasure-sea-bottom-chest-with-golden-coins-crown-crystal-gems-sword-gold-idol-goblet-with-precious-rocks_12875276.htm#query=pirate%20fantasy&position=7&from_view=search">Image by-->
+                <!--                  upklyak</a> on Freepik</small></p>-->
+            </div>
         </div>
-        <div class="card bg-transparent ripple" style="padding-left: 0px; padding-right: 0px;">
-          <a href="#" class="stretched-link"></a>
-          <img class="card-img-top" src="{{url_for('static', filename='images/spirit-stars.jpg')}}" alt="Card image cap">
-          <div class="card-body">
-            <h5 class="card-title font-color">Legend of the Spirit Stars</h5>
-            <p class="card-text font-color">7 ancient stones believed to have been created by the Gods have revealed themselves to the world. Join the chase to gain the power of wish!</p>
-            <p class="card-text"><small class="text-muted"></small></p>
-          </div>
-        </div>
-        <div class="card bg-transparent ripple" style="padding-left: 0px; padding-right: 0px;">
-          <a href="#" class="stretched-link"></a>
-          <img class="card-img-top" src="{{url_for('static', filename='images/cos.jpg')}}" alt="Card image cap">
-          <div class="card-body">
-            <h5 class="card-title font-color">Curse of Strahd</h5>
-            <p class="card-text font-color">The mists of Barovia trap you within a cursed land ruled by the vampiric tyrant, Lord Strahd von Zarovich.</p>
-            <p class="card-text" style="font-size: 0.5rem;"><a href="https://www.freepik.com/free-photo/challenger-stands-front-spooky-castle-illustration_14402210.htm#query=fantasy&position=35&from_view=search">Image by liuzishan</a> on
-              Freepik<small class="text-muted"></small></p>
-          </div>
-        </div>
-      </div>
+            {% endfor %}
+    </div>
     </div>
   </section>
 
-</html>
+
