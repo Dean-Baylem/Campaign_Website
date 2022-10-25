@@ -18,6 +18,8 @@ class CreateCampaignForm(FlaskForm):
 
 class CreateCharacterForm(FlaskForm):
     name = StringField("Character Name", validators=[DataRequired()])
+    campaign = SelectField("Please select which campaign this character is part off", choices=campaigns,
+                           validators=[DataRequired()])
     image = StringField("Character Image Url", validators=[DataRequired()])
     level = IntegerField("Character Level", validators=[DataRequired()])
     strength = IntegerField("Character Strength", validators=[DataRequired()])
@@ -27,12 +29,17 @@ class CreateCharacterForm(FlaskForm):
     intelligence = IntegerField("Character Intelligence", validators=[DataRequired()])
     charisma = IntegerField("Character Charisma", validators=[DataRequired()])
     proficiency = IntegerField("Character Proficiency", validators=[DataRequired()])
+    description = CKEditorField("Character Description", validators=[DataRequired()])
+    backstory = CKEditorField("Character Backstory", validators=[DataRequired()])
     submit = SubmitField("Submit Character")
 
 
 class CreateFactionForm(FlaskForm):
     faction_name = StringField("Name of Faction", validators=[DataRequired()])
     faction_description = CKEditorField("Faction Summary", validators=[DataRequired()])
+    faction_image = StringField("Faction image", validators=[DataRequired()])
+    campaign = SelectField("Please select which campaign this faction is found in", choices=campaigns,
+                           validators=[DataRequired()])
     submit = SubmitField("Submit Faction")
 
 

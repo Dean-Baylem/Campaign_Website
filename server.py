@@ -65,6 +65,8 @@ class Character(db.Model):
     intelligence = Column(Integer)
     charisma = Column(Integer)
     proficiency = Column(Integer)
+    description = Column(Text)
+    backstory = Column(Text)
 
     campaign_id = Column(Integer, ForeignKey("campaign.id"))
     campaign = relationship("Campaign", back_populates="characters")
@@ -106,9 +108,10 @@ class Faction(db.Model):
     campaign_id = Column(Integer, ForeignKey("campaign.id"))
     campaign = relationship("Campaign", back_populates="factions")
 
-# db.create_all()
+db.create_all()
 
 # ------------------------ Routes ----------------------------
+
 
 @app.route("/")
 def home():
@@ -119,10 +122,14 @@ def home():
 
 @app.route("/campaign/<story_id>", methods=["GET", "POST"])
 def campaign_page(story_id):
-    character_id = 1
     requested_campaign = Campaign.query.get(story_id)
-    requested_character = Character.query.get(character_id)
-    return render_template("campaign_page.html", campaign=requested_campaign, character=requested_character)
+    if current_user.is_authenticated:
+        requested_character = current_user.characters
+    else:
+        requested_character = None
+    return render_template("campaign_page.html", campaign=requested_campaign,
+                           characters=requested_character, logged_in=current_user.is_authenticated,
+                           campaign_id=int(story_id))
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -135,7 +142,8 @@ def login():
         if check_password_hash(player.password, password):
             login_user(player)
             return redirect(url_for('home'))
-    return render_template("forms.html", form=form)
+    return render_template("forms.html", form=form, logged_in=current_user.is_authenticated)
+
 
 @app.route('/logout')
 def logout():
@@ -143,6 +151,7 @@ def logout():
     return redirect(url_for('home'))
 
 # ------------------------ Form Routes for DB -----------------------------
+
 
 @app.route("/register", methods=["GET", "POST"])
 def register_player():
@@ -161,7 +170,9 @@ def register_player():
         return redirect(url_for("home"))
     return render_template("forms.html", form=form)
 
+
 @app.route("/new-character", methods=["GET", "POST"])
+@login_required
 def add_new_character():
     form = forms.CreateCharacterForm()
     if form.validate_on_submit():
@@ -176,11 +187,21 @@ def add_new_character():
             intelligence=form.intelligence.data,
             charisma=form.charisma.data,
             proficiency=form.proficiency.data,
+            description=form.description.data,
+            backstory=form.backstory.data
         )
+        if form.campaign.data == "GoS":
+            new_character.campaign_id = 1
+        if form.campaign.data == "CoS":
+            new_character.campaign_id = 2
+        if form.campaign.data == "LotST":
+            new_character.campaign_id = 3
+        new_character.player_id = current_user.id
         db.session.add(new_character)
         db.session.commit()
         return redirect(url_for("home"))
-    return render_template("forms.html", form=form)
+    return render_template("forms.html", form=form, logged_in=current_user.is_authenticated)
+
 
 @app.route("/new-location", methods=["GET", "POST"])
 def add_new_location():
@@ -200,7 +221,8 @@ def add_new_location():
         db.session.add(new_location)
         db.session.commit()
         return redirect(url_for('home'))
-    return render_template("forms.html", form=form)
+    return render_template("forms.html", form=form, logged_in=current_user.is_authenticated)
+
 
 @app.route("/new-campaign", methods=["GET", "POST"])
 def add_new_campaign():
@@ -216,8 +238,32 @@ def add_new_campaign():
         db.session.add(new_campaign)
         db.session.commit()
         return redirect(url_for("home"))
-    return render_template("forms.html", form=form)
+    return render_template("forms.html", form=form, logged_in=current_user.is_authenticated)
+
+
+@app.route("/new-faction", methods=["GET", "POST"])
+def add_new_faction():
+    form = forms.CreateFactionForm()
+    if form.validate_on_submit():
+        new_faction = Faction(
+            faction_name=form.faction_name.data,
+            faction_description=form.faction_description.data,
+            faction_image=form.faction_image.data
+        )
+        if form.campaign.data == "GoS":
+            new_faction.campaign_id = 1
+        if form.campaign.data == "CoS":
+            new_faction.campaign_id = 2
+        if form.campaign.data == "LotST":
+            new_faction.campaign_id = 3
+        db.session.add(new_faction)
+        db.session.commit()
+        return redirect(url_for("home"))
+    return render_template("forms.html", form=form, logged_in=current_user.is_authenticated)
 
 if __name__ == '__main__':
     app.run(debug=True)
 
+    faction_name = Column(String(100))
+    faction_description = Column(Text)
+    faction_image = Column(String)
