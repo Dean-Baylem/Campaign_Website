@@ -36,5 +36,61 @@
     </div>
     </div>
   </section>
-
+<footer class="dark-bg">
+    <div class="container dark-bg">
+        <div class="row g-3">
+            <div class="col-1">
+                <a target="_blank" href="https://icons8.com/icon/vM1UwslLOlQc/castle"><img src="https://img.icons8.com/carbon-copy/344/castle.png" style="height: 50px; width: auto;"></a>
+                </div>
+            <div class="col-2">
+                <h5>Dungeon Delvers Incorporated</h5>
+                <p>Rewards a plenty for the daring adventures!</p>
+            </div>
+            <div class="col-3">
+                <h5>Campaigns</h5>
+                <ul class="list-unstyled">
+                    {% for campaign in all_campaigns %}
+                    <li class="mb-2">
+                        <a href="{{ url_for('campaign_page', story_id=campaign.id) }}">{{campaign.title}}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col-3">
+                <h5>Session Schedule</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <a href="#">Available Games</a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="#">Upcoming Campaigns</a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="#">Requests</a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="#">Availability Alerts</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-3">
+                <h5>Community</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <a href="#"><i class="fa-brands fa-discord"></i></a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="#"><i class="fa-brands fa-d-and-d-beyond"></i></a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
 
