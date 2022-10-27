@@ -43,6 +43,7 @@ class Campaign(db.Model):
     locations = relationship("Location", back_populates="campaign")
     factions = relationship("Faction", back_populates="campaign")
     players = relationship("Player", back_populates="campaign")
+    npcs = relationship("NPC", back_populates="campaign")
 
     campaign_image = Column(String)
     page_image = Column(String)
@@ -56,23 +57,36 @@ class Character(db.Model):
 
     name = Column(String(100))
     character_image = Column(String, nullable=False)
-    image = Column(String)
-    level = Column(Integer)
-    strength = Column(Integer)
-    dexterity = Column(Integer)
-    constitution = Column(Integer)
-    wisdom = Column(Integer)
-    intelligence = Column(Integer)
-    charisma = Column(Integer)
-    proficiency = Column(Integer)
-    description = Column(Text)
-    backstory = Column(Text)
+    image = Column(String, nullable=False)
+    level = Column(Integer, nullable=False)
+    strength = Column(Integer, nullable=False)
+    dexterity = Column(Integer, nullable=False)
+    constitution = Column(Integer, nullable=False)
+    wisdom = Column(Integer, nullable=False)
+    intelligence = Column(Integer, nullable=False)
+    charisma = Column(Integer, nullable=False)
+    proficiency = Column(Integer, nullable=False)
+    description = Column(Text, nullable=False)
+    backstory = Column(Text, nullable=False)
 
     campaign_id = Column(Integer, ForeignKey("campaign.id"))
     campaign = relationship("Campaign", back_populates="characters")
     player_id = Column(Integer, ForeignKey("players.id"))
     player = relationship("Player", back_populates="characters")
 
+class NPC(db.Model):
+    __tablename__ = "npc"
+    id = Column(Integer, primary_key=True)
+
+    name = Column(String(100), nullable=False)
+    npc_image = Column(String, nullable=False)
+    npc_description = Column(Text, nullable=False)
+    npc_history = Column(Text, nullable=False)
+    npc_notes = Column(Text, nullable=False)
+
+    campaign_id = Column(Integer, ForeignKey("campaign.id"))
+    campaign = relationship("Campaign", back_populates="npcs")
+    faction = Column(String, nullable=False)
 
 class Player(UserMixin, db.Model):
     __tablename__ = "players"

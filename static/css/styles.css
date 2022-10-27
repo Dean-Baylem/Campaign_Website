@@ -1,4 +1,4 @@
-/* Screen Settings */
+/* Main section changes based on screen size */
 
 @media only screen and (min-width: 800px) {
   .section-area {padding: 3% 15% 0 15%;}
@@ -25,6 +25,44 @@
 
 .dark-bg {
   background-color: #DFD3C3;
+}
+
+/* Footer CSS Settings */
+
+.footer-text {
+  text-align: left;
+  line-height: 1.5;
+}
+
+.footer-title {
+  padding: 2%;
+  padding-left: 7%;
+}
+
+.footer-title-col {
+  padding-right: 5%;
+}
+
+.footer-campaigns {
+  padding-left: 20%;
+}
+
+.footer-subtitle {
+  padding: 4% 0 8% 0;
+}
+
+.bd-footer a {
+  color: #7D6E83;
+  text-decoration: none;
+}
+
+.bd-footer {
+  color: #7D6E83;
+}
+
+.fa-brands {
+  height: 15px;
+  width: 25px
 }
 
 /* Navbar CSS Settings */
@@ -117,4 +155,13 @@
 .campaign-summary {
   text-align: left;
   padding-right: 5%;
+}
+
+.carousel-item {
+  height: 500px;
+}
+
+.carousel-item img {
+    height: 100%;
+    width: auto;
 }
