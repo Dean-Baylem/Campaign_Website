@@ -1,10 +1,16 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, PasswordField, EmailField, IntegerField, SelectField
+from wtforms import StringField, SubmitField, PasswordField, EmailField, IntegerField, SelectField, SelectMultipleField
 from wtforms.validators import DataRequired, URL
 from flask_ckeditor import CKEditorField
 
 # List of campaigns currently running:
 campaigns = ["GoS", "CoS", "LotST"]
+
+# Skill and Save lists
+skills = ["Acrobatics", "Animal Handling", "Arcana", "Athletics", "Deception", "History",
+          "Insight", "Intimidation", "Investigation", "Medicine", "Nature", "Perception",
+          "Performance", "Persuasion", "Religion", "Sleight of Hand", "Stealth", "Survival"]
+saves = ["Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma"]
 
 
 class CreateCampaignForm(FlaskForm):
@@ -13,14 +19,36 @@ class CreateCampaignForm(FlaskForm):
     campaign_image = StringField("URL for campaign card image", validators=[DataRequired()])
     page_image = StringField("URL for the campaign page banner", validators=[DataRequired()])
     central_location = StringField("Campaign Location", validators=[DataRequired()])
+    region_summary = CKEditorField("Describe the region of the campaign", validators=[DataRequired()])
+    faction_summary = CKEditorField("Describe the factions of the campaign", validators=[DataRequired()])
     submit = SubmitField("Submit Campaign")
 
+# The Character forms have been split up to be used in different tabs.
 
-class CreateCharacterForm(FlaskForm):
+
+class CharacterNameAndTraits(FlaskForm):
     name = StringField("Character Name", validators=[DataRequired()])
     campaign = SelectField("Please select which campaign this character is part off", choices=campaigns,
                            validators=[DataRequired()])
-    image = StringField("Character Image Url", validators=[DataRequired()])
+    character_image = StringField("Character Image URL", validators=[DataRequired()])
+    token = StringField("Character Token URL", validators=[DataRequired()])
+    race = StringField("Character Race", validators=[DataRequired()])
+    character_class = StringField("Character Class", validators=[DataRequired()])
+    background = StringField("Character Background", validators=[DataRequired()])
+    personality_traits = StringField("Personality Traits", validators=[DataRequired()])
+    ideals = StringField("Character Ideals", validators=[DataRequired()])
+    bonds = StringField("Character Bonds", validators=[DataRequired()])
+    flaws = StringField("Character Flaws", validators=[DataRequired()])
+    description = CKEditorField("Character Description", validators=[DataRequired()])
+
+
+class CharacterBackstory(FlaskForm):
+    backstory = CKEditorField("Character Backstory", validators=[DataRequired()])
+    notes = CKEditorField("Special Notes about the character")
+    traits_and_features = CKEditorField("What are the characters racial, background and class traits and features?")
+
+
+class CharacterStats(FlaskForm):
     level = IntegerField("Character Level", validators=[DataRequired()])
     strength = IntegerField("Character Strength", validators=[DataRequired()])
     dexterity = IntegerField("Character Dexterity", validators=[DataRequired()])
@@ -28,9 +56,14 @@ class CreateCharacterForm(FlaskForm):
     wisdom = IntegerField("Character Wisdom", validators=[DataRequired()])
     intelligence = IntegerField("Character Intelligence", validators=[DataRequired()])
     charisma = IntegerField("Character Charisma", validators=[DataRequired()])
-    proficiency = IntegerField("Character Proficiency", validators=[DataRequired()])
-    description = CKEditorField("Character Description", validators=[DataRequired()])
-    backstory = CKEditorField("Character Backstory", validators=[DataRequired()])
+
+
+class CharacterProfs(FlaskForm):
+    skills = SelectMultipleField("Please select which skills you are proficient with", choices=skills)
+    saves = SelectMultipleField("Please select which saves you are proficient with", choices=saves)
+    languages = CKEditorField("Please write down which languages you know. Please use bullet points")
+    darkvision = IntegerField("Please write down your darkvision in ft")
+    tool_proficiencies = CKEditorField("Please write down you tool proficiencies. Please use bullet points")
     submit = SubmitField("Submit Character")
 
 
@@ -51,21 +84,42 @@ class CreateLocationForm(FlaskForm):
                            choices=campaigns, validators=[DataRequired()])
     submit = SubmitField("Submit Location")
 
+
 class CreateNewPlayerForm(FlaskForm):
     username = StringField("Please enter your username", validators=[DataRequired()])
     email = EmailField("Please enter your email", validators=[DataRequired()])
     password = PasswordField("Please enter your password", validators=[DataRequired()])
     submit = SubmitField("Submit Player")
 
+
 class LoginForm(FlaskForm):
     email = EmailField("Email", validators=[DataRequired()])
     password = PasswordField("Password", validators=[DataRequired()])
     submit = SubmitField("Login")
 
-#
-# class Factions(db.Model):
-#     __tablename__ = "factions"
-#     id = db.Column(db.Integer, primary_key=True)
-#     campaign = db.Column(db.String, db.ForeignKey("campaigns.title"))
-#     faction_name = db.Column(db.String, nullable=True)
-#     faction_description = db.Column(db.Text, nullable=True)
+
+class SessionReviewForm(FlaskForm):
+    title = StringField("Review Title", validators=[DataRequired()])
+    subtitle = StringField("Review Subtitle", validators=[DataRequired()])
+    body = CKEditorField("Session Review", validators=[DataRequired()])
+    submit = SubmitField("Submit")
+
+
+class NPCForm(FlaskForm):
+    name = StringField("NPC Name", validators=[DataRequired()])
+    npc_image = StringField("NPC Image", validators=[DataRequired()])
+    npc_description = CKEditorField("Describe the NPC", validators=[DataRequired()])
+    npc_history = CKEditorField("NPC Backstory", validators=[DataRequired()])
+    npc_notes = CKEditorField("Interactions between the NPC and the party", validators=[DataRequired()])
+    campaign = SelectField("Please select the campaign for this NPC", choices=campaigns, validators=[DataRequired()])
+    faction = StringField("What faction is this NPC associated with?")
+    submit = SubmitField("Submit")
+
+
+class UpcomingCampaignForm(FlaskForm):
+    name = StringField("Campaign Title", validators=[DataRequired()])
+    timeslot = StringField("Desired Timeslot", validators=[DataRequired()])
+    image = StringField("Campaign Image", validators=[DataRequired()])
+    premise = CKEditorField("Describe the campaign", validators=[DataRequired()])
+    registered_players = IntegerField("How many players have currently agreed to play?", validators=[DataRequired()])
+    submit = SubmitField("Submit")

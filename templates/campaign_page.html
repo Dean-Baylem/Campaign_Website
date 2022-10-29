@@ -94,6 +94,7 @@
             </div>
           </div>
         </div>
+        {% else %}
         {% endif %}
         {% endfor %}
         {% endif %}
@@ -102,18 +103,18 @@
 </section>
 <section id="central-location" class="section-area light-bg">
   <div class="container-fluid">
-    <div class="row main-location-row">
-      <div class="col-lg-12">
+    <div class="row carousel-heading">
+      <div class="col">
         <h1>Regions around {{campaign.central_location}}</h1>
       </div>
     </div>
     <div class="row">
-      <div class="col">
-        <div id="side-locations" class="carousel slide" data-bs-ride="false">
+      <div class="col-xl-12 ">
+        <div id="side-locations" class="carousel slide carousel-section side-locations" data-bs-ride="false">
           <div class="carousel-indicators">
-            <button type="button" data-bs-target="#side-locations" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-            <button type="button" data-bs-target="#side-locations" data-bs-slide-to="1" aria-label="Slide 2"></button>
-            <button type="button" data-bs-target="#side-locations" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            <button type="button" data-bs-target=".side-locations" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target=".side-locations" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target=".side-locations" data-bs-slide-to="2" aria-label="Slide 3"></button>
           </div>
           <div class="carousel-inner">
             {% for location in campaign.locations%}
@@ -124,29 +125,32 @@
               </div>
             </div>
             {% endfor %}
-            <button class="carousel-control-prev" type="button" data-bs-target="#side-locations" data-bs-slide="prev">
+            <button class="carousel-control-prev" type="button" data-bs-target=".side-locations" data-bs-slide="prev">
               <span class="carousel-control-prev-icon" aria-hidden="true"></span>
               <span class="visually-hidden">Previous</span>
             </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#side-locations" data-bs-slide="next">
+            <button class="carousel-control-next" type="button" data-bs-target=".side-locations" data-bs-slide="next">
               <span class="carousel-control-next-icon" aria-hidden="true"></span>
               <span class="visually-hidden">Next</span>
             </button>
           </div>
         </div>
       </div>
+      <div class="col-xl-12">
+        <h5>{{campaign.region_summary|safe}}</h5>
+      </div>
     </div>
 </section>
-<section id="factions" class="section-area light-bg">
+<section id="factions" class="section-area light-bg faction-area">
   <div class="container-fluid">
-    <div class="row">
+    <div class="row carousel-heading">
       <div class="col">
-        <h1>Factions of {{campaign.title}}</h1>
+        <h1>Factions of {{campaign.central_location}}</h1>
       </div>
     </div>
     <div class="row">
       <div class="col">
-        <div id="factions-carousel" class="carousel slide" data-bs-ride="false">
+        <div id="factions-carousel" class="carousel slide carousel-section" data-bs-ride="false">
           <div class="carousel-indicators">
             <button type="button" data-bs-target="#factions-carousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
             <button type="button" data-bs-target="#factions-carousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
@@ -172,6 +176,9 @@
         </div>
       </div>
     </div>
+      <div class="col-xl-12">
+        <h5>{{campaign.faction_summary|safe}}</h5>
+      </div>
   </div>
 </section>
 

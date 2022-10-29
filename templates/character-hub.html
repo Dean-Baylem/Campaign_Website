@@ -1,0 +1,26 @@
+{% include header.html %}
+
+<!-- Title and new character button -->
+
+<section id="character-hub-section" class="character-hub">
+    <div class="row">
+        <div class="col-lg-3">
+            <h2>My Characters</h2>
+        </div>
+        <div class="col-lg-3">
+            <a class="btn btn-primary" href="#" role="button">Create a Character</a>
+        </div>
+    </div>
+    {% for character in player.characters %}
+    <div class="row">
+  <div class="col-lg-3 col-md-4 col-sm-6">
+    <div class="card">
+        <a href="#" class="stretched-link"></a>
+      <img src="{{character.image}}" class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">{{character.name}}</h5>
+        <p class="card-text">{{character.race}} / {{character.class}}</p>
+      </div>
+    </div>
+  </div>
+</section>

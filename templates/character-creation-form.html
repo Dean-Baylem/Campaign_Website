@@ -1,0 +1,33 @@
+{% extends 'bootstrap/base.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+{% include "header.html" %}
+ <div class="container">
+     {{ ckeditor.load() }}
+     {{ ckeditor.config(name='blurb') }}
+  <h2>Dynamic Tabs</h2>
+  <ul class="nav nav-tabs">
+    <li class="active"><a data-toggle="tab" href="#traits">Character Traits</a></li>
+    <li><a data-toggle="tab" href="#backstory">Character Backstory</a></li>
+    <li><a data-toggle="tab" href="#stats">Character Stats</a></li>
+    <li><a data-toggle="tab" href="#profs">Character Proficiencies</a></li>
+  </ul>
+
+  <div class="tab-content">
+    <div id="traits" class="tab-pane in active">
+      {{ wtf.quick_form(trait_form, novalidate=True, button_map={"submit": "primary"}) }}
+    </div>
+    <div id="backstory" class="tab-pane">
+      {{ wtf.quick_form(backstory_form, novalidate=True, button_map={"submit": "primary"}) }}
+    </div>
+    <div id="stats" class="tab-pane">
+      {{ wtf.quick_form(stats_form, novalidate=True, button_map={"submit": "primary"}) }}
+    </div>
+    <div id="profs" class="tab-pane">
+      {{ wtf.quick_form(profs_form, novalidate=True, button_map={"submit": "primary"}) }}
+    </div>
+  </div>
+</div>
+
+{% endblock %}

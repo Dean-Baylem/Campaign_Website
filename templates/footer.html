@@ -1,59 +1,61 @@
-<footer class="bd-footer dark-bg footer-text">
-    <div class="container dark-bg">
-        <div class="row g-3">
-            <div class="col-lg-3 col-sm-6 footer-title-col">
-                <div class="d-flex flex-row">
-                <a target="_blank" href="https://icons8.com/icon/vM1UwslLOlQc/castle"><img src="https://img.icons8.com/carbon-copy/344/castle.png" style="height: 50px; width: auto;"></a>
-                <h5 class="footer-title">Dungeon Delvers Incorporated</h5>
-                    </div>
-                    <div>
-                <p>Join the growing community of Dungeon Delvers. Claim legendary treasure, piles of gold and fame the fantasy world over.</p>
-                    </div>
-            </div>
-            <div class="col-lg-2 offset-lg-1 col-sm-6 footer-campaigns">
-                <h5 class="footer-subtitle">Campaigns</h5>
-                <ul class="list-unstyled">
-                    {% for campaign in all_campaigns %}
-                    <li class="mb-2">
-                        <a href="{{ url_for('campaign_page', story_id=campaign.id) }}">{{campaign.title}}</a>
-                    </li>
-                    {% endfor %}
-                </ul>
-            </div>
-            <div class="col-lg-2 col-sm-6">
-                <h5 class="footer-subtitle">Session Schedule</h5>
-                <ul class="list-unstyled">
-                    <li class="mb-2">
-                        <a href="#">Available Games</a>
-                    </li>
-                    <li class="mb-2">
-                        <a href="#">Upcoming Campaigns</a>
-                    </li>
-                    <li class="mb-2">
-                        <a href="#">Requests</a>
-                    </li>
-                    <li class="mb-2">
-                        <a href="#">Availability Alerts</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="col-lg-2 col-sm-6">
-                <h5 class="footer-subtitle">Community</h5>
-                <ul class="list-unstyled">
-                    <li class="mb-2">
-                        <a href="#"><i class="fa-brands fa-discord"></i>  Discord</a>
-                    </li>
-                    <li class="mb-2">
-                        <a href="#"><i class="fa-brands fa-d-and-d-beyond"></i>  D&D Beyond</a>
-                    </li>
-                    <li class="mb-2">
-                        <a href="#"><i class="fa-brands fa-instagram"></i>  Instagram</a>
-                    </li>
-                    <li class="mb-2">
-                        <a href="#"><i class="fa-brands fa-youtube"></i>  Youtube</a>
-                    </li>
-                </ul>
+<section class="section-area footer-area dark-bg">
+    <footer class="bd-footer footer-text">
+        <div class="container dark-bg">
+            <div class="row g-3">
+                <div class="col-lg-3 col-sm-6 footer-title-col">
+                    <div class="d-flex flex-row">
+                    <a target="_blank" href="https://icons8.com/icon/vM1UwslLOlQc/castle"><img src="https://img.icons8.com/carbon-copy/344/castle.png" style="height: 50px; width: auto;"></a>
+                    <h5 class="footer-title">Dungeon Delvers Incorporated</h5>
+                        </div>
+                        <div>
+                    <p>Join the growing community of Dungeon Delvers. Claim legendary treasure, piles of gold and fame the fantasy world over.</p>
+                        </div>
+                </div>
+                <div class="col-lg-2 offset-xl-3 offset-lg-3 col-sm-6 footer-campaigns">
+                    <h5 class="footer-subtitle">Campaigns</h5>
+                    <ul class="list-unstyled">
+                        {% for campaign in all_campaigns %}
+                        <li class="mb-2">
+                            <a href="{{ url_for('campaign_page', story_id=campaign.id) }}">{{campaign.title}}</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-sm-6">
+                    <h5 class="footer-subtitle">Session Schedule</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <a href="#">Available Games</a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="#">Upcoming Campaigns</a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="#">Requests</a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="#">Availability Alerts</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-sm-6">
+                    <h5 class="footer-subtitle">Community</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <a href="#"><i class="fa-brands fa-discord"></i>  Discord</a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="#"><i class="fa-brands fa-d-and-d-beyond"></i>  D&D Beyond</a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="#"><i class="fa-brands fa-instagram"></i>  Instagram</a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="#"><i class="fa-brands fa-youtube"></i>  Youtube</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
-    </div>
-</footer>
+    </footer>
+</section>
