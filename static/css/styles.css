@@ -19,6 +19,15 @@
 .footer-area {
   padding-top: 0;
 }
+
+/* Character Hub CSS - To make footer stay at bottom of screen */
+
+.hub-body {
+  display:grid;
+  grid-template-rows: auto 1fr auto;
+  min-height:100vh;
+}
+
 /* General Settings  */
 
 .font-color {
@@ -172,4 +181,18 @@
 .carousel-heading {
   text-align: center;
   padding: 2%;
+}
+
+/* The Character Page CSS Settings */
+
+.character_token {
+  height: 150px;
+  width: auto;
+  display: flex;
+  justify: center;
+  margin-left: 20%;
+}
+
+.character_top_row {
+  padding-top: 2%
 }

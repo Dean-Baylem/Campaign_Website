@@ -7,14 +7,15 @@ from flask_ckeditor import CKEditorField
 campaigns = ["GoS", "CoS", "LotST"]
 
 # Skill and Save lists
-skills = ["Acrobatics", "Animal Handling", "Arcana", "Athletics", "Deception", "History",
+all_skills = ["Acrobatics", "Animal Handling", "Arcana", "Athletics", "Deception", "History",
           "Insight", "Intimidation", "Investigation", "Medicine", "Nature", "Perception",
           "Performance", "Persuasion", "Religion", "Sleight of Hand", "Stealth", "Survival"]
-saves = ["Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma"]
+all_saves = ["Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma"]
 
 
 class CreateCampaignForm(FlaskForm):
     title = StringField("Campaign Title", validators=[DataRequired()])
+    subtitle = StringField("Campaign Subtitle", validators=[DataRequired()])
     blurb = CKEditorField("Campaign Summary", validators=[DataRequired()])
     campaign_image = StringField("URL for campaign card image", validators=[DataRequired()])
     page_image = StringField("URL for the campaign page banner", validators=[DataRequired()])
@@ -23,10 +24,8 @@ class CreateCampaignForm(FlaskForm):
     faction_summary = CKEditorField("Describe the factions of the campaign", validators=[DataRequired()])
     submit = SubmitField("Submit Campaign")
 
-# The Character forms have been split up to be used in different tabs.
 
-
-class CharacterNameAndTraits(FlaskForm):
+class CreateNewCharacter(FlaskForm):
     name = StringField("Character Name", validators=[DataRequired()])
     campaign = SelectField("Please select which campaign this character is part off", choices=campaigns,
                            validators=[DataRequired()])
@@ -41,14 +40,10 @@ class CharacterNameAndTraits(FlaskForm):
     flaws = StringField("Character Flaws", validators=[DataRequired()])
     description = CKEditorField("Character Description", validators=[DataRequired()])
 
-
-class CharacterBackstory(FlaskForm):
     backstory = CKEditorField("Character Backstory", validators=[DataRequired()])
     notes = CKEditorField("Special Notes about the character")
     traits_and_features = CKEditorField("What are the characters racial, background and class traits and features?")
 
-
-class CharacterStats(FlaskForm):
     level = IntegerField("Character Level", validators=[DataRequired()])
     strength = IntegerField("Character Strength", validators=[DataRequired()])
     dexterity = IntegerField("Character Dexterity", validators=[DataRequired()])
@@ -57,10 +52,8 @@ class CharacterStats(FlaskForm):
     intelligence = IntegerField("Character Intelligence", validators=[DataRequired()])
     charisma = IntegerField("Character Charisma", validators=[DataRequired()])
 
-
-class CharacterProfs(FlaskForm):
-    skills = SelectMultipleField("Please select which skills you are proficient with", choices=skills)
-    saves = SelectMultipleField("Please select which saves you are proficient with", choices=saves)
+    skills = SelectMultipleField("Please select which skills you are proficient with", choices=all_skills)
+    saves = SelectMultipleField("Please select which saves you are proficient with", choices=all_saves)
     languages = CKEditorField("Please write down which languages you know. Please use bullet points")
     darkvision = IntegerField("Please write down your darkvision in ft")
     tool_proficiencies = CKEditorField("Please write down you tool proficiencies. Please use bullet points")
@@ -87,13 +80,12 @@ class CreateLocationForm(FlaskForm):
 
 class CreateNewPlayerForm(FlaskForm):
     username = StringField("Please enter your username", validators=[DataRequired()])
-    email = EmailField("Please enter your email", validators=[DataRequired()])
     password = PasswordField("Please enter your password", validators=[DataRequired()])
     submit = SubmitField("Submit Player")
 
 
 class LoginForm(FlaskForm):
-    email = EmailField("Email", validators=[DataRequired()])
+    username = StringField("Username", validators=[DataRequired()])
     password = PasswordField("Password", validators=[DataRequired()])
     submit = SubmitField("Login")
 

@@ -12,24 +12,14 @@
 <section id="summary" class="section-area light-bg">
   <div class="container-fluid">
     <div class="row summary">
-      {% if logged_in %}
-      <div class="col-lg-8">
-        {% endif %}
-        {% if not logged_in %}
+      {% if characters %}
         <div class="col-lg-12">
-          {% endif %}
-          <h3 class="campaign-summary">
-            {{campaign.blurb|safe}}
-          </h3>
-        </div>
-        {% if logged_in %}
-        <div class="col-lg-4">
           <div class="character-details">
             {% for character in characters %}
             {% if character.campaign_id == campaign_id %}
             <h1 class="character-name">{{character.name}}</h1>
             <div class="character-token">
-              <img src="{{url_for('static', filename=character.character_image)}}" alt="Character-image" class="character-token" />
+              <img src="{{character.token}}" alt="Character-image" class="character-token" />
             </div>
             <div class="accordion" id="accordionPanelsStayOpenExample">
               <div class="accordion-item">
@@ -94,10 +84,14 @@
             </div>
           </div>
         </div>
-        {% else %}
         {% endif %}
         {% endfor %}
         {% endif %}
+        <div class="col-lg-12">
+          <h3 class="campaign-summary">
+            {{campaign.blurb|safe}}
+          </h3>
+        </div>
       </div>
     </div>
 </section>

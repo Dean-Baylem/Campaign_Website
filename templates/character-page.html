@@ -1,0 +1,56 @@
+{% include "header.html" %}
+
+<!--First row will contain the character image column, name race and class column and character traits column.-->
+
+<section>
+    <div class="container-fluid">
+    <div class="row character_top_row">
+        <div class="col-lg-1">
+            <div class="character_token">
+              <img src="{{character.token}}" class="border border-5">
+            </div>
+        </div>
+        <div class="col-lg-3  border border-5">
+            <div class="character_name">
+              <p>{{character.name}}</p>
+              <p>{{character.race}} / {{character.character_class}}</p>
+            </div>
+        </div>
+        <div class="col-lg-4 offset-lg-1 border border-5">
+            <div class="character_traits">
+            <p>{{character.traits_and_features}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-3">
+            <p>Stats</p>
+        </div>
+        <div class="col-lg-3">
+            <p>Skills</p>
+        </div>
+        <div class="col-lg-6">
+            <div class="row">
+                <div class="col">
+                    <p>Saving throws</p>
+                </div>
+            </div>
+            <div class="col">
+                <p>Inventory</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+  <div class="row row-cols-4">
+    <div class="col">Column</div>
+    <div class="col">Column</div>
+    <div class="col-6">Column</div>
+    <div class="col-6">Column</div>
+    <div class="col-6">Column</div>
+  </div>
+</div>
+
+</section>
+
+{% include "footer.html" %}

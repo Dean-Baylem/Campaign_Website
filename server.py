@@ -31,6 +31,15 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 
+def admin_only(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if current_user.id != 1:
+            return abort(403)
+        return f(*args, **kwargs)
+    return decorated_function
+
+
 @login_manager.user_loader
 def load_player(player_id):
     return Player.query.get(player_id)
@@ -46,7 +55,14 @@ skills = ["Acrobatics", "Animal Handling", "Arcana", "Athletics", "Deception", "
 class Campaign(db.Model):
     __tablename__ = "campaign"
     id = Column(Integer, primary_key=True)
-    title = Column(String(100))
+    title = Column(String(100), nullable=False)
+    subtitle = Column(String(500), nullable=False)
+    campaign_image = Column(String, nullable=False)
+    page_image = Column(String, nullable=False)
+    blurb = Column(Text, nullable=False)
+    central_location = Column(String, nullable=False)
+    region_summary = Column(Text, nullable=False)
+    faction_summary = Column(Text, nullable=False)
 
     characters = relationship("Character", back_populates="campaign")
     locations = relationship("Location", back_populates="campaign")
@@ -56,19 +72,11 @@ class Campaign(db.Model):
     sessions = relationship("ScheduledSession", back_populates="campaign")
     sessionreview = relationship("SessionReview", back_populates="campaign")
 
-    campaign_image = Column(String)
-    page_image = Column(String)
-    blurb = Column(Text)
-    central_location = Column(String)
-    region_summary = Column(Text)
-    faction_summary = Column(Text)
-
 
 class Player(UserMixin, db.Model):
     __tablename__ = "players"
     id = Column(Integer, primary_key=True)
-    username = Column(String(100))
-    email = Column(String(100))
+    username = Column(String(100), nullable=False, unique=True)
     password = Column(String, nullable=False)
     characters = relationship("Character", back_populates="player")
     sessionreview = relationship("SessionReview", back_populates="player")
@@ -248,7 +256,7 @@ class SessionReview(db.Model):
     campaign = relationship("Campaign", back_populates="sessionreview")
 
 
-# db.create_all()
+db.create_all()
 
 # ------------------------ Routes ----------------------------
 
@@ -270,7 +278,7 @@ def campaign_page(story_id):
         requested_character = None
     return render_template("campaign_page.html", campaign=requested_campaign,
                            characters=requested_character, logged_in=current_user.is_authenticated,
-                           campaign_id=int(story_id), all_campaigns=campaigns,)
+                           campaign_id=int(story_id), all_campaigns=campaigns)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -278,19 +286,34 @@ def login():
     campaigns = Campaign.query.all()
     form = forms.LoginForm()
     if form.validate_on_submit():
-        email = request.form.get('email')
+        username = request.form.get('username')
         password = request.form.get('password')
-        player = Player.query.filter_by(email=email).first()
+        player = Player.query.filter_by(username=username).first()
         if check_password_hash(player.password, password):
             login_user(player)
             return redirect(url_for('home'))
-    return render_template("forms.html", form=form, logged_in=current_user.is_authenticated, all_campaigns=campaigns,)
+    return render_template("forms.html", form=form, logged_in=current_user.is_authenticated, all_campaigns=campaigns)
+
+
+@app.route("/character-hub", methods=["GET", "POST"])
+@login_required
+def character_hub():
+    campaigns = Campaign.query.all()
+    return render_template("character-hub.html", logged_in=current_user.is_authenticated, all_campaigns=campaigns)
 
 
 @app.route('/logout')
 def logout():
     logout_user()
     return redirect(url_for('home'))
+
+
+@app.route('/character/<character_id>', methods=["GET", "POST"])
+def character_page(character_id):
+    campaigns = Campaign.query.all()
+    requested_character = Character.query.get(character_id)
+    return render_template("character-page.html", character=requested_character, all_campaigns=campaigns)
+
 
 # ------------------------ Form Routes for DB -----------------------------
 
@@ -301,7 +324,6 @@ def register_player():
     if form.validate_on_submit():
         new_player = Player()
         new_player.username = request.form["username"]
-        new_player.email = request.form["email"]
         new_player.password = generate_password_hash(
             password=request.form["password"],
             method='pbkdf2:sha256',
@@ -317,59 +339,99 @@ def register_player():
 @login_required
 def add_new_character():
     campaigns = Campaign.query.all()
-    trait_form = forms.CharacterNameAndTraits()
-    backstory_form = forms.CharacterBackstory()
-    stats_form = forms.CharacterStats()
-    profs_form = forms.CharacterProfs()
-    if profs_form.validate_on_submit():
+    form = forms.CreateNewCharacter()
+    if form.validate_on_submit():
         new_character = Character(
-            character_image=trait_form.character_image.data,
-            name=trait_form.name.data,
-            token=trait_form.token.data,
-            race=trait_form.race.data,
-            character_class=trait_form.character_class.data,
-            background=trait_form.background.data,
-            personality_traits=trait_form.personality_traits.data,
-            ideals=trait_form.ideals.data,
-            bonds=trait_form.bonds.data,
-            flaws=trait_form.flaws.data,
-            description=trait_form.description.data,
-            backstory=backstory_form.backstory.data,
-            notes=backstory_form.notes.data,
-            traits_and_features=backstory_form.traits_and_features.data,
-            level=stats_form.level.data,
-            strength=stats_form.strength.data,
-            dexterity=stats_form.dexterity.data,
-            constitution=stats_form.constitution.data,
-            wisdom=stats_form.wisdom.data,
-            intelligence=stats_form.intelligence.data,
-            charisma=stats_form.charisma.data,
-            # skills - This one has to be used with a loop to get each prof
-            # Saves - Same as above
-            languages=profs_form.languages.data,
-            darkvision=profs_form.darkvision.data,
-            tool_proficiencies=profs_form.tool_proficiencies.data,
+            character_image=form.character_image.data,
+            name=form.name.data,
+            token=form.token.data,
+            race=form.race.data,
+            character_class=form.character_class.data,
+            background=form.background.data,
+            personality_traits=form.personality_traits.data,
+            ideals=form.ideals.data,
+            bonds=form.bonds.data,
+            flaws=form.flaws.data,
+            description=form.description.data,
+            player_id=current_user.id,
+            backstory=form.backstory.data,
+            notes=form.notes.data,
+            traits_and_features=form.traits_and_features.data,
+            level=form.level.data,
+            strength=form.strength.data,
+            dexterity=form.dexterity.data,
+            constitution=form.constitution.data,
+            wisdom=form.wisdom.data,
+            intelligence=form.intelligence.data,
+            charisma=form.charisma.data,
+            languages=form.languages.data,
+            darkvision=form.darkvision.data,
+            tool_proficiencies=form.tool_proficiencies.data,
         )
-        # for skill in profs_form.skills:
-        #     char_skill = skill.lower()
-        #     if char_skill in skills:
-        #         new_character.char_skill = True
-        if trait_form.campaign.data == "GoS":
+        if form.campaign.data == "GoS":
             new_character.campaign_id = 1
-        if trait_form.campaign.data == "CoS":
+        if form.campaign.data == "CoS":
             new_character.campaign_id = 2
-        if trait_form.campaign.data == "LotST":
+        if form.campaign.data == "LotST":
             new_character.campaign_id = 3
-        new_character.player_id = current_user.id
+        # Saves - Same as above
+        for skill in form.skills.data:
+            if skill == "Acrobatics":
+                new_character.acrobatics = True
+            if skill == "Atheltics":
+                new_character.athletics = True
+            if skill == "Arcana":
+                new_character.arcana = True
+            if skill == "Deception":
+                new_character.deception = True
+            if skill == "History":
+                new_character.history = True
+            if skill == "Insight":
+                new_character.insight = True
+            if skill == "Intimidation":
+                new_character.intimidation = True
+            if skill == "Investigation":
+                new_character.investigation = True
+            if skill == "Medicine":
+                new_character.medicine = True
+            if skill == "Nature":
+                new_character.nature = True
+            if skill == "Perception":
+                new_character.perception = True
+            if skill == "Performance":
+                new_character.performance = True
+            if skill == "Persuasion":
+                new_character.persuasion = True
+            if skill == "Religion":
+                new_character.religion = True
+            if skill == "Sleight of Hand":
+                new_character.sleight_of_hand = True
+            if skill == "Stealth":
+                new_character.stealth = True
+            if skill == "Survival":
+                new_character.survival = True
+        for save in form.saves.data:
+            if save == "Strength":
+                new_character.strength_save = True
+            if save == "Dexterity":
+                new_character.dexterity_save = True
+            if save == "Constitution":
+                new_character.constitution_save = True
+            if save == "Wisdom":
+                new_character.wisdom_save = True
+            if save == "Intelligence":
+                new_character.intelligence_save = True
+            if save == "Charisma":
+                new_character.charisma_save = True
         db.session.add(new_character)
         db.session.commit()
-        return redirect(url_for("home"))
-    return render_template("character-creation-form.html", trait_form=trait_form, backstory_form=backstory_form,
-                           stats_form=stats_form, profs_form=profs_form,
+        return redirect(url_for('home'))
+    return render_template("forms.html", form=form,
                            logged_in=current_user.is_authenticated, all_campaigns=campaigns,)
 
 
 @app.route("/new-location", methods=["GET", "POST"])
+@admin_only
 def add_new_location():
     form = forms.CreateLocationForm()
     if form.validate_on_submit():
@@ -390,12 +452,39 @@ def add_new_location():
     return render_template("forms.html", form=form, logged_in=current_user.is_authenticated)
 
 
+@app.route("/add-npc", methods=["GET", "POST"])
+@admin_only
+def add_new_npc():
+    form = forms.NPCForm()
+    if form.validate_on_submit():
+        new_npc = NPC(
+            name=form.name.data,
+            npc_image=form.npc_image.data,
+            npc_description=form.npc_description.data,
+            npc_history=form.npc_history.data,
+            npc_notes=form.npc_notes.data,
+            faction=form.faction.data
+        )
+        if form.campaign.data == "GoS":
+            new_npc.campaign_id = 1
+        if form.campaign.data == "CoS":
+            new_npc.campaign_id = 2
+        if form.campaign.data == "LotST":
+            new_npc.campaign_id = 3
+        db.session.add(new_npc)
+        db.session.commit()
+        return redirect(url_for('home'))
+    return render_template("forms.html", form=form, logged_in=current_user.is_authenticated)
+
+
 @app.route("/new-campaign", methods=["GET", "POST"])
+@admin_only
 def add_new_campaign():
     form = forms.CreateCampaignForm()
     if form.validate_on_submit():
         new_campaign = Campaign(
             title=form.title.data,
+            subtitle=form.subtitle.data,
             blurb=form.blurb.data,
             campaign_image=form.campaign_image.data,
             page_image=form.page_image.data,
@@ -410,6 +499,7 @@ def add_new_campaign():
 
 
 @app.route("/new-faction", methods=["GET", "POST"])
+@admin_only
 def add_new_faction():
     form = forms.CreateFactionForm()
     if form.validate_on_submit():

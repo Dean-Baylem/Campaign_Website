@@ -1,26 +1,33 @@
-{% include header.html %}
+{% include "header.html" %}
 
 <!-- Title and new character button -->
-
-<section id="character-hub-section" class="character-hub">
+<body class="light-bg hub-body">
+<div class="wrapper">
+<section id="character-hub-section" class="character-hub section-area light-bg">
     <div class="row">
         <div class="col-lg-3">
             <h2>My Characters</h2>
         </div>
         <div class="col-lg-3">
-            <a class="btn btn-primary" href="#" role="button">Create a Character</a>
+            <a class="btn btn-primary" href="{{url_for('add_new_character')}}" role="button">Create a Character</a>
         </div>
     </div>
-    {% for character in player.characters %}
     <div class="row">
-  <div class="col-lg-3 col-md-4 col-sm-6">
-    <div class="card">
-        <a href="#" class="stretched-link"></a>
-      <img src="{{character.image}}" class="card-img-top" alt="...">
-      <div class="card-body">
-        <h5 class="card-title">{{character.name}}</h5>
-        <p class="card-text">{{character.race}} / {{character.class}}</p>
-      </div>
-    </div>
-  </div>
+    {% for character in current_user.characters %}
+        <div class="col-lg-3 col-md-6 col-sm-12">
+            <div class="card">
+                <a href="{{url_for('character_page', character_id=character.id)}}" class="stretched-link"></a>
+                <div class="card-body">
+                  <img src="{{character.character_image}}" class="card-img-top" alt="...">
+                  <h5 class="card-title">{{character.name}}</h5>
+                  <p class="card-text">{{character.race}} / {{character.character_class}}</p>
+                  <p class="card-text">{{character.campaign.title}}</p>
+              </div>
+            </div>
+        </div>
+    {% endfor %}
+        </div>
 </section>
+</div>
+{% include "footer.html" %}
+
