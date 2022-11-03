@@ -20,28 +20,31 @@
   padding-top: 0;
 }
 
-/* Character Sheet Page CSS */
+/* !! Character Sheet Page CSS !! */
 
-@media only screen and (min-width: 800px) {
+/* Phone Screen Settings */
+
+@media only screen and (min-width: 576px) {
   .character-area {padding: 3% 5% 0 5%;}
 }
 
-@media only screen and (min-width: 1200px) {
+/* Tablet Screen Settings */
+@media only screen and (min-width: 992px) {
   .character-area {padding: 3% 10% 0 10%;}
 }
 
-@media only screen and (max-width: 799px) {
+/* Laptop Screen Settings */
+@media only screen and (max-width: 768px) {
   .character-area {padding: 3%}
+  .character_details {padding: 2%;}
 }
 
-@media only screen and (min-width: 1600px) {
+/* Desktop Screen Settings */
+@media only screen and (min-width: 1200px) {
   .character-area {padding: 3% 12% 0 12%}
 }
 
-.character_top_row {
-  padding-top: 3%;
-  padding-bottom: 3%;
-}
+/* Token - Name - Background etc... */
 
 .character_token {
   height: 150px;
@@ -52,26 +55,25 @@
 }
 
 .character_top_row {
-  padding-top: 2%
+  padding-top: 2%;
+  padding-bottom: 2%;
 }
 
 .character-border-box {
   height: 100%;
 }
 
-@media only screen and (max-width: 1200px) {
-.character_details {
-  padding: 2%;
-}
-}
+/* Ability Score Box */
 
 .character-stats {
   text-align: center;
 }
 
 .ability-score {
-  margin: 10% 25%;
+  margin-top: 10%;
 }
+
+/* Skill and Bonuses Box */
 
 .skill-scores {
   margin-right: 5%;
@@ -85,18 +87,34 @@
   margin-right: 20px;
 }
 
-.character-extra-details {
+/* Character Stats / Senses / Proficiencies */
+
+.character-text-centered {
   text-align: center;
   padding: 5%;
+  margin-top: 2%;
+  margin-bottom: 2%;
 }
 
 .character-senses {
-  padding: 5%;
+  padding: 2%;
+  margin-top: 2%;
+  margin-bottom: 2%;
 }
 
 .character-heading {
   text-align: center;
 }
+
+/* Character Personality Trait Box */
+
+.character-personality {
+  margin-top: 2%;
+  margin-bottom: 2%;
+}
+
+/* !! End of Character Sheet Page !! */
+
 /* Character Hub CSS - To make footer stay at bottom of screen */
 
 .hub-body {
