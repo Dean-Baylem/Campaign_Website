@@ -14,7 +14,50 @@ from flask_gravatar import Gravatar
 from functools import wraps
 import forms
 
+
+# ------------- Character Functions ---------------------
+
+
+def prof_bonus(requested_character):
+    if requested_character.level < 5:
+        return 2
+    elif requested_character.level < 9:
+        return 3
+    elif requested_character.level < 13:
+        return 4
+    elif requested_character.level < 16:
+        return 5
+    else:
+        return 6
+
+
+def ability_bonus(stat):
+    if stat == 1:
+        return -5
+    elif stat < 4:
+        return -4
+    elif stat < 6:
+        return -3
+    elif stat < 8:
+        return -2
+    elif stat < 10:
+        return -1
+    elif stat < 12:
+        return 0
+    elif stat < 14:
+        return 1
+    elif stat < 16:
+        return 2
+    elif stat < 18:
+        return 3
+    elif stat < 20:
+        return 4
+    else:
+        return 5
+
+
 app = Flask(__name__)
+app.jinja_env.globals.update(ability_bonus=ability_bonus)
 app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
 ckeditor = CKEditor(app)
 Bootstrap(app)
@@ -260,7 +303,6 @@ db.create_all()
 
 # ------------------------ Routes ----------------------------
 
-
 @app.route("/")
 def home():
     campaigns = Campaign.query.all()
@@ -312,7 +354,8 @@ def logout():
 def character_page(character_id):
     campaigns = Campaign.query.all()
     requested_character = Character.query.get(character_id)
-    return render_template("character-page.html", character=requested_character, all_campaigns=campaigns)
+    prof = prof_bonus(requested_character)
+    return render_template("character-page.html", character=requested_character, all_campaigns=campaigns, prof=prof)
 
 
 # ------------------------ Form Routes for DB -----------------------------

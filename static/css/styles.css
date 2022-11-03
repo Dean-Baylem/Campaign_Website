@@ -20,6 +20,83 @@
   padding-top: 0;
 }
 
+/* Character Sheet Page CSS */
+
+@media only screen and (min-width: 800px) {
+  .character-area {padding: 3% 5% 0 5%;}
+}
+
+@media only screen and (min-width: 1200px) {
+  .character-area {padding: 3% 10% 0 10%;}
+}
+
+@media only screen and (max-width: 799px) {
+  .character-area {padding: 3%}
+}
+
+@media only screen and (min-width: 1600px) {
+  .character-area {padding: 3% 12% 0 12%}
+}
+
+.character_top_row {
+  padding-top: 3%;
+  padding-bottom: 3%;
+}
+
+.character_token {
+  height: 150px;
+  width: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.character_top_row {
+  padding-top: 2%
+}
+
+.character-border-box {
+  height: 100%;
+}
+
+@media only screen and (max-width: 1200px) {
+.character_details {
+  padding: 2%;
+}
+}
+
+.character-stats {
+  text-align: center;
+}
+
+.ability-score {
+  margin: 10% 25%;
+}
+
+.skill-scores {
+  margin-right: 5%;
+}
+
+.list-group-item {
+  background-color: transparent;
+}
+
+.skill-number {
+  margin-right: 20px;
+}
+
+.character-extra-details {
+  text-align: center;
+  padding: 5%;
+}
+
+.character-senses {
+  padding: 5%;
+}
+
+.character-heading {
+  text-align: center;
+}
 /* Character Hub CSS - To make footer stay at bottom of screen */
 
 .hub-body {
@@ -181,18 +258,4 @@
 .carousel-heading {
   text-align: center;
   padding: 2%;
-}
-
-/* The Character Page CSS Settings */
-
-.character_token {
-  height: 150px;
-  width: auto;
-  display: flex;
-  justify: center;
-  margin-left: 20%;
-}
-
-.character_top_row {
-  padding-top: 2%
 }

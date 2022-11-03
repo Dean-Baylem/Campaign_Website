@@ -1,56 +1,239 @@
 {% include "header.html" %}
 
 <!--First row will contain the character image column, name race and class column and character traits column.-->
-
-<section>
-    <div class="container-fluid">
+<section class="character-area light-bg">
+  <div class="container-fluid">
     <div class="row character_top_row">
-        <div class="col-lg-1">
-            <div class="character_token">
-              <img src="{{character.token}}" class="border border-5">
-            </div>
+      <!--        Character Token  -->
+      <div class="col-xl-2">
+        <div>
+          <img src="{{character.token}}" class="character_token border border-5">
         </div>
-        <div class="col-lg-3  border border-5">
-            <div class="character_name">
-              <p>{{character.name}}</p>
-              <p>{{character.race}} / {{character.character_class}}</p>
-            </div>
+      </div>
+      <!--        Character Details  -->
+      <div class="col-xl-4 col-md-6 character_details">
+        <div class="character-border-box border border-5">
+          <h5>{{character.name}}</h5>
+          <p>{{character.race}} / {{character.character_class}}</p>
         </div>
-        <div class="col-lg-4 offset-lg-1 border border-5">
-            <div class="character_traits">
-            <p>{{character.traits_and_features}}</p>
-            </div>
+      </div>
+      <div class="col-xl-4 col-md-6 character_details">
+        <div class="character-border-box border border-5">
+          <p>{{character.traits_and_features | safe}}</p>
         </div>
+      </div>
     </div>
     <div class="row">
-        <div class="col-lg-3">
-            <p>Stats</p>
+      <!--        Character Stats       -->
+      <div class="col-xl-2 col-lg-3 character-stats">
+        <div class="row">
+          <div class="col">
+            <h4 class="character-heading">Ability Scores</h4>
+        <div class="ability-score">
+          <h4>Strength</h4>
+          <h4>{{character.strength}}</h4>
         </div>
-        <div class="col-lg-3">
-            <p>Skills</p>
+        <div class="ability-score">
+          <h4>Dexterity</h4>
+          <h4>{{character.dexterity}}</h4>
         </div>
-        <div class="col-lg-6">
-            <div class="row">
-                <div class="col">
-                    <p>Saving throws</p>
-                </div>
-            </div>
-            <div class="col">
-                <p>Inventory</p>
-            </div>
+        <div class="ability-score">
+          <h4>Constitution</h4>
+          <h4>{{character.constitution}}</h4>
         </div>
+        <div class="ability-score">
+          <h4>Intelligence</h4>
+          <h4>{{character.intelligence}}</h4>
+        </div>
+        <div class="ability-score">
+          <h4>Wisdom</h4>
+          <h4>{{character.wisdom}}</h4>
+        </div>
+        <div class="ability-score">
+          <h4>Charisma</h4>
+          <h4>{{character.charisma}}</h4>
+        </div>
+      </div>
     </div>
-</div>
-<div class="container-fluid">
-  <div class="row row-cols-4">
-    <div class="col">Column</div>
-    <div class="col">Column</div>
-    <div class="col-6">Column</div>
-    <div class="col-6">Column</div>
-    <div class="col-6">Column</div>
+  </div>
+<!--        Character Skill Scores          -->
+      <div class="col-xl-2 col-lg-3">
+        <div class="row">
+          <div class="col">
+            <h4 class="character-heading">Skills and Bonuses</h4>
+        <div class="row">
+          <div class="col">
+        <ul class="list-group list-group-flush skill-scores">
+          <li class="list-group-item bg-transparent"><b class="skill-number">{% if character.acrobatics %}{{prof + ability_bonus(character.dexterity)}}{% else %}{{ability_bonus(character.dexterity)}}{% endif %}</b>Acrobatics</li>
+          <li class="list-group-item bg-transparent"><b class="skill-number">{% if character.animal_handling %}{{prof + ability_bonus(character.wisdom)}}{% else %}{{ability_bonus(character.wisdom)}}{% endif %}</b>Animal Handling</li>
+          <li class="list-group-item bg-transparent"><b class="skill-number">{% if character.arcana %}{{prof + ability_bonus(character.intelligence)}}{% else %}{{ability_bonus(character.intelligence)}}{% endif %}</b>Arcana</li>
+          <li class="list-group-item bg-transparent"><b class="skill-number">{% if character.athletics %}{{prof + ability_bonus(character.strength)}}{% else %}{{ability_bonus(character.strength)}}{% endif %}</b>Athletics</li>
+          <li class="list-group-item bg-transparent"><b class="skill-number">{% if character.deception %}{{prof + ability_bonus(character.charisma)}}{% else %}{{ability_bonus(character.charisma)}}{% endif %}</b>Deception</li>
+          <li class="list-group-item bg-transparent"><b class="skill-number">{% if character.history %}{{prof + ability_bonus(character.intelligence)}}{% else %}{{ability_bonus(character.intelligence)}}{% endif %}</b>History</li>
+          <li class="list-group-item bg-transparent"><b class="skill-number">{% if character.insight %}{{prof + ability_bonus(character.wisdom)}}{% else %}{{ability_bonus(character.wisdom)}}{% endif %}</b>Insight</li>
+          <li class="list-group-item bg-transparent"><b class="skill-number">{% if character.intimidation %}{{prof + ability_bonus(character.charisma)}}{% else %}{{ability_bonus(character.charisma)}}{% endif %}</b>Intimidation</li>
+          <li class="list-group-item bg-transparent"><b class="skill-number">{% if character.investigation %}{{prof + ability_bonus(character.intelligence)}}{% else %}{{ability_bonus(character.intelligence)}}{% endif %}</b>Investigation</li>
+          <li class="list-group-item bg-transparent"><b class="skill-number">{% if character.medicine %}{{prof + ability_bonus(character.wisdom)}}{% else %}{{ability_bonus(character.wisdom)}}{% endif %}</b>Medicine</li>
+          <li class="list-group-item bg-transparent"><b class="skill-number">{% if character.nature %}{{prof + ability_bonus(character.intelligence)}}{% else %}{{ability_bonus(character.intelligence)}}{% endif %}</b>Nature</li>
+          <li class="list-group-item bg-transparent"><b class="skill-number">{% if character.perception %}{{prof + ability_bonus(character.wisdom)}}{% else %}{{ability_bonus(character.wisdom)}}{% endif %}</b>Perception</li>
+          <li class="list-group-item bg-transparent"><b class="skill-number">{% if character.performance %}{{prof + ability_bonus(character.charisma)}}{% else %}{{ability_bonus(character.charisma)}}{% endif %}</b>Performance</li>
+          <li class="list-group-item bg-transparent"><b class="skill-number">{% if character.persuasion %}{{prof + ability_bonus(character.charisma)}}{% else %}{{ability_bonus(character.charisma)}}{% endif %}</b>Persuasion</li>
+          <li class="list-group-item bg-transparent"><b class="skill-number">{% if character.religion %}{{prof + ability_bonus(character.intelligence)}}{% else %}{{ability_bonus(character.intelligence)}}{% endif %}</b>Religion</li>
+          <li class="list-group-item bg-transparent"><b class="skill-number">{% if character.sleight_of_hand %}{{prof + ability_bonus(character.dexterity)}}{% else %}{{ability_bonus(character.dexterity)}}{% endif %}</b>Sleight of Hand</li>
+          <li class="list-group-item bg-transparent"><b class="skill-number">{% if character.stealth %}{{prof + ability_bonus(character.dexterity)}}{% else %}{{ability_bonus(character.dexterity)}}{% endif %}</b>Stealth</li>
+          <li class="list-group-item bg-transparent"><b class="skill-number">{% if character.survival %}{{prof + ability_bonus(character.wisdom)}}{% else %}{{ability_bonus(character.wisdom)}}{% endif %}</b>Survival</li>
+        </ul>
+            </div>
+      </div>
+    </div>
+    </div>
+  </div>
+<!--        Character AC / HP / Init / Prof Bonus / Senses / Proficiencies      -->
+<div class="col-xl-3 col-lg-6">
+  <div class="row">
+    <div class="col">
+      <h4 class="character-heading">Character Stats and Senses</h4>
+      <div class="row">
+        <div class="col-6">
+          <div class="character-extra-details">
+            <h4>Armor Class</h4>
+            <h4>14</h4>
+          </div>
+          <div class="character-extra-details">
+            <h4>Maximum HP / Current HP</h4>
+            <h4>35 / 35</h4>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="character-extra-details">
+            <h4>Initiative Bonus</h4>
+            <h4>{{ability_bonus(character.dexterity)}}</h4>
+          </div>
+          <div class="character-extra-details">
+            <h4>Proficiency Bonus</h4>
+            <h4>{{prof}}</h4>
+          </div>
+        </div>
+      </div>
+      <div class="col character-senses">
+        <h4>Senses</h4>
+        {% if character.darkvision != 0 %}<p>Darkvision: {{character.darkvision}} ft.</p>{% endif %}
+        {% if character.blindsight != 0 %}<p>Blindsight: {{character.blindsight}} ft.</p>{% endif %}
+        {% if character.tremorsense != 0 %}<p>Tremorsense: {{character.tremorsense}} ft.</p>{% endif %}
+        {% if character.truesight != 0 %}<p>Truesight: {{character.truesight}} ft.</p>{% endif %}
+      </div>
+      <div class="col character-senses">
+        <h4>Tool Proficiencies and Languages</h4>
+        <p>Languages</p>
+        <p>{{character.languages | safe}}</p>
+        {% if character.tool_proficiencies %}
+        <p>Tools</p>
+        <p>{{character.tool_proficiencies | safe}}</p>
+        {% endif %}
+      </div>
+    </div>
   </div>
 </div>
+<!--        Character Saving Throws     -->
+      <div class="col-xl-5 col-lg-12">
+        <div class="row">
+          <div class="col">
+            <h4 class="character-heading">Saving throws</h4>
+            <div class="row">
+              <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+                <div class="character-extra-details">
+                <h4>Strength</h4>
+                <h4>{% if character.strength %}{{ ability_bonus(character.strength) + prof }}{% else %}{{ability_bonus(character.strength)}}{%endif%}</h4>
+                </div>
+              </div>
+              <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+                <div class="character-extra-details">
+                <h4>Dexterity</h4>
+                <h4>{% if character.dexterity %}{{ ability_bonus(character.dexterity) + prof }}{% else %}{{ability_bonus(character.dexterity)}}{%endif%}</h4>
+              </div>
+                </div>
+              <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+                <div class="character-extra-details">
+                <h4>Constitution</h4>
+                <h4>{% if character.constitution %}{{ ability_bonus(character.constitution) + prof }}{% else %}{{ability_bonus(character.constitution)}}{%endif%}</h4>
+              </div>
+                </div>
+              <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+                <div class="character-extra-details">
+                <h4>Wisdom</h4>
+                <h4>{% if character.wisdom %}{{ ability_bonus(character.wisdom) + prof }}{% else %}{{ability_bonus(character.wisdom)}}{%endif%}</h4>
+              </div>
+                </div>
+              <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+                <div class="character-extra-details">
+                <h4>Intelligence</h4>
+                <h4>{% if character.intelligence %}{{ ability_bonus(character.intelligence) + prof }}{% else %}{{ability_bonus(character.intelligence)}}{%endif%}</h4>
+              </div>
+                </div>
+              <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+                <div class="character-extra-details">
+                <h4>Charisma</h4>
+                <h4>{% if character.charisma %}{{ ability_bonus(character.charisma) + prof }}{% else %}{{ability_bonus(character.charisma)}}{%endif%}</h4>
+              </div>
+                </div>
+            </div>
 
+          </div>
+        </div>
+<!--          Bootstrap tabs to show various information about the characters    -->
+        <div class="col">
+          <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="actions-tab" data-bs-toggle="tab" data-bs-target="#actions" type="button" role="tab" aria-controls="actions" aria-selected="true">Actions</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="spells-tab" data-bs-toggle="tab" data-bs-target="#spells" type="button" role="tab" aria-controls="spells" aria-selected="false">Spells</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="inventory-tab" data-bs-toggle="tab" data-bs-target="#inventory" type="button" role="tab" aria-controls="inventory" aria-selected="false">Inventory</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="backstory-tab" data-bs-toggle="tab" data-bs-target="#backstory" type="button" role="tab" aria-controls="backstory" aria-selected="false">Backstory</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="description-tab" data-bs-toggle="tab" data-bs-target="#description" type="button" role="tab" aria-controls="description" aria-selected="false">Description</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="notes-tab" data-bs-toggle="tab" data-bs-target="#notes" type="button" role="tab" aria-controls="notes" aria-selected="false">Notes</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="traits-and-features-tab" data-bs-toggle="tab" data-bs-target="#traits-and-features" type="button" role="tab" aria-controls="traits-and-features" aria-selected="false">Traits and Features</button>
+            </li>
+          </ul>
+            <div class="tab-content" id="myTabContent">
+
+              <div class="tab-pane fade show active" id="actions" role="tabpanel" aria-labelledby="actions-tab">
+                <h5>My Actions:</h5>
+                <p>{{character.actions | safe}}</p>
+              </div>
+              <div class="tab-pane fade" id="spells" role="tabpanel" aria-labelledby="spells-tab">
+                <h5>My Spells:</h5>
+              </div>
+              <div class="tab-pane fade" id="inventory" role="tabpanel" aria-labelledby="inventory-tab">
+                <h5>My Inventory:</h5>
+                <p>{{character.inventory | safe}}</p>
+              </div>
+              <div class="tab-pane fade" id="backstory" role="tabpanel" aria-labelledby="backstory-tab">
+                <h5>Backstory:</h5>
+                <p>{{character.backstory | safe}}</p>
+              </div>
+              <div class="tab-pane fade" id="description" role="tabpanel" aria-labelledby="description-tab">
+                <h5>Character Description</h5>
+                <p>{{character.description | safe}}</p>
+              </div>
+              <div class="tab-pane fade" id="traits-and-features" role="tabpanel" aria-labelledby="traits-and-features-tab">
+                <h5>Character Traits and Features</h5>
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
 {% include "footer.html" %}
