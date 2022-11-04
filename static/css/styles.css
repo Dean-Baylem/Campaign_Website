@@ -24,54 +24,82 @@
 
 /* Phone Screen Settings */
 
-@media only screen and (min-width: 576px) {
+@media only screen and (max-width: 576px) {
   .character-area {padding: 3% 5% 0 5%;}
-}
-
-/* Tablet Screen Settings */
-@media only screen and (min-width: 992px) {
-  .character-area {padding: 3% 10% 0 10%;}
+  .character_details {padding: 2%;}
+  .ability-score {margin-top: 2%;}
+  .character_token {height: 50px; width: auto; display: inline-block; margin-left: auto; margin-right: auto; margin-bottom: 1% margin-top: 1%;}
 }
 
 /* Laptop Screen Settings */
+@media only screen and (max-width: 1200px) {
+  .character-area {padding: 3% 10% 0 10%;}
+  .ability-score {margin-top: 5%}
+  .character_details {padding: 2%;}
+  .character_token {height: 120px; width: auto; display: inline-block; margin-left: auto; margin-right: auto; margin-bottom: 1%; margin-top: 1%;}
+}
+
+/* Tablet Screen Settings */
 @media only screen and (max-width: 768px) {
   .character-area {padding: 3%}
   .character_details {padding: 2%;}
+  .character_token {height: 120px; width: auto; display: inline-block; margin-left: auto; margin-right: auto; margin-bottom: 1%; margin-top: 1%;}
 }
 
 /* Desktop Screen Settings */
 @media only screen and (min-width: 1200px) {
   .character-area {padding: 3% 12% 0 12%}
+  .ability-score {margin-top: 10%;}
+  .character-senses {padding: 2%; margin-top: 2%; margin-bottom: 2%; height: 100%;}
+  .character_token {height: 120px; width: auto; display: inline-block; margin-left: auto; margin-right: auto; margin-bottom: 2%;}
 }
 
 /* Token - Name - Background etc... */
-
-.character_token {
-  height: 150px;
-  width: auto;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
 
 .character_top_row {
   padding-top: 2%;
   padding-bottom: 2%;
 }
 
-.character-border-box {
+.name-race-class {
+  display: inline-block;
+  padding: 2% 3%;
+  margin-left: 1%;
+ }
+
+.char-title {
+  font-size: 36px;
+  letter-spacing: 1px;
+  font-weight: 800;
+  font-style: italic;
+  font-family: 'Gentium Book Plus', serif;
+}
+
+.char-text {
+  font-size: 16px;
+  letter-spacing: 1px;
+  font-family: 'Gentium Book Plus', serif;
+  font-stlye: italic;
+}
+
+.full-box {
   height: 100%;
 }
 
+.character-player-details {
+  margin-left: 10%;
+}
+
+
+@media only screen and (max-width: 992px) {
+  .top-row-extra-margin {margin-top: 2%;}
+}
 /* Ability Score Box */
 
 .character-stats {
   text-align: center;
 }
 
-.ability-score {
-  margin-top: 10%;
-}
 
 /* Skill and Bonuses Box */
 
@@ -102,8 +130,14 @@
   margin-bottom: 2%;
 }
 
+.character-personality {
+  padding: 2%;
+  margin-top: 2%;
+  margin-bottom: 2%;
+}
 .character-heading {
   text-align: center;
+  padding: 2% 0;
 }
 
 /* Character Personality Trait Box */
@@ -113,6 +147,13 @@
   margin-bottom: 2%;
 }
 
+.character-navi {
+  padding-top: 2%;
+}
+
+.tab-content {
+  padding: 2% 0;
+}
 /* !! End of Character Sheet Page !! */
 
 /* Character Hub CSS - To make footer stay at bottom of screen */

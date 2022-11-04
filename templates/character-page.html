@@ -4,21 +4,31 @@
 <section class="character-area light-bg">
   <div class="container-fluid">
     <div class="row character_top_row">
-      <!--        Character Token  -->
-      <div class="col-xl-2">
-        <div>
-          <img src="{{character.token}}" class="character_token border border-5">
-        </div>
-      </div>
       <!--        Character Details  -->
-      <div class="col-xl-4 col-md-6 character_details">
-        <div class="character-border-box border border-5">
-          <h5>{{character.name}}</h5>
-          <p>{{character.race}} / {{character.character_class}}</p>
+      <div class="col-xl-5 col-lg-6">
+        <div class="full-box border border-dark border-3">
+          <img src="{{character.token}}" class="character_token">
+          <div class="name-race-class">
+          <h5 class="char-title">{{character.name}}</h5>
+          <p class="char-text">{{character.race}} / {{character.character_class}}</p>
+          </div>
         </div>
       </div>
-      <div class="col-xl-4 col-md-6 character_details">
-        <div class="character-border-box border border-5">
+      <div class="col-xl-3 col-lg-6">
+        <div class="full-box border border-dark border-3 top-row-extra-margin">
+          <div class="name-race-class character-player-details">
+            <h5 class="char-title">Campaign</h5>
+            <p class="char-text">{{character.campaign.title}}</p>
+          </div>
+          <div class="name-race-class character-player-details">
+            <h5 class="char-title">Player</h5>
+            <p class="char-text">{{character.player.username}}</p>
+           </div>
+          </div>
+        </div>
+      <div class="col-xl-4 col-lg-12 character_details">
+        <div class="full-box border border-dark border-3 top-row-extra-margin">
+<!--          This needs to change once the traits are split into seperate categories in the database.-->
           <p>{{character.traits_and_features | safe}}</p>
         </div>
       </div>
@@ -28,28 +38,28 @@
       <div class="col-lg-3 character-stats">
         <div class="row">
           <div class="col">
-            <h4 class="character-heading">Ability Scores</h4>
-        <div class="ability-score border border-3">
-          <h4>Strength</h4>
+            <h4 class="character-heading char-title">Ability Scores</h4>
+        <div class="ability-score border border-dark border-3">
+          <h4 >Strength</h4>
           <h4>{{character.strength}}</h4>
         </div>
-        <div class="ability-score border border-3">
+        <div class="ability-score border border-dark border-3">
           <h4>Dexterity</h4>
           <h4>{{character.dexterity}}</h4>
         </div>
-        <div class="ability-score border border-3">
+        <div class="ability-score border border-dark border-3">
           <h4>Constitution</h4>
           <h4>{{character.constitution}}</h4>
         </div>
-        <div class="ability-score border border-3">
+        <div class="ability-score border border-dark border-3">
           <h4>Intelligence</h4>
           <h4>{{character.intelligence}}</h4>
         </div>
-        <div class="ability-score border border-3">
+        <div class="ability-score border border-dark border-3">
           <h4>Wisdom</h4>
           <h4>{{character.wisdom}}</h4>
         </div>
-        <div class="ability-score border border-3">
+        <div class="ability-score border border-dark border-3">
           <h4>Charisma</h4>
           <h4>{{character.charisma}}</h4>
         </div>
@@ -60,10 +70,10 @@
       <div class="col-lg-3">
         <div class="row">
           <div class="col">
-            <h4 class="character-heading">Skills and Bonuses</h4>
+            <h4 class="character-heading char-title">Skills and Bonuses</h4>
         <div class="row">
           <div class="col">
-        <ul class="list-group list-group-flush skill-scores border border-3">
+        <ul class="list-group list-group-flush skill-scores border border-dark border-3">
           <li class="list-group-item bg-transparent"><b class="skill-number">{% if character.acrobatics %}{{prof + ability_bonus(character.dexterity)}}{% else %}{{ability_bonus(character.dexterity)}}{% endif %}</b>Acrobatics</li>
           <li class="list-group-item bg-transparent"><b class="skill-number">{% if character.animal_handling %}{{prof + ability_bonus(character.wisdom)}}{% else %}{{ability_bonus(character.wisdom)}}{% endif %}</b>Animal Handling</li>
           <li class="list-group-item bg-transparent"><b class="skill-number">{% if character.arcana %}{{prof + ability_bonus(character.intelligence)}}{% else %}{{ability_bonus(character.intelligence)}}{% endif %}</b>Arcana</li>
@@ -92,37 +102,41 @@
 <div class="col-lg-6">
   <div class="row">
     <div class="col">
-      <h4 class="character-heading">Character Stats and Senses</h4>
+      <h4 class="character-heading char-title">Character Stats and Senses</h4>
       <div class="row">
         <div class="col-6">
-          <div class="character-text-centered border border-3">
+          <div class="character-text-centered border border-dark border-3">
             <h4>Armor Class</h4>
             <h4>14</h4>
           </div>
-          <div class="character-text-centered border border-3">
+          <div class="character-text-centered border border-dark border-3">
             <h4>Maximum HP / Current HP</h4>
             <h4>35 / 35</h4>
           </div>
         </div>
         <div class="col-6">
-          <div class="character-text-centered border border-3">
+          <div class="character-text-centered border border-dark border-3">
             <h4>Initiative Bonus</h4>
             <h4>{{ability_bonus(character.dexterity)}}</h4>
           </div>
-          <div class="character-text-centered border border-3">
+          <div class="character-text-centered border border-dark border-3">
             <h4>Proficiency Bonus</h4>
             <h4>{{prof}}</h4>
           </div>
         </div>
       </div>
-      <div class="col character-senses border border-3">
+      <div class="row">
+      <div class="col-xl-6 col-lg-12">
+      <div class="character-senses border border-dark border-3">
         <h4>Senses</h4>
         {% if character.darkvision != 0 %}<p>Darkvision: {{character.darkvision}} ft.</p>{% endif %}
         {% if character.blindsight != 0 %}<p>Blindsight: {{character.blindsight}} ft.</p>{% endif %}
         {% if character.tremorsense != 0 %}<p>Tremorsense: {{character.tremorsense}} ft.</p>{% endif %}
         {% if character.truesight != 0 %}<p>Truesight: {{character.truesight}} ft.</p>{% endif %}
       </div>
-      <div class="col character-senses border border-3">
+      </div>
+      <div class="col-xl-6 col-lg-12">
+      <div class="character-senses border border-dark border-3">
         <h4>Tool Proficiencies and Languages</h4>
         <p>Languages</p>
         <p>{{character.languages | safe}}</p>
@@ -131,48 +145,50 @@
         <p>{{character.tool_proficiencies | safe}}</p>
         {% endif %}
       </div>
+      </div>
+      </div>
     </div>
   </div>
 </div>
 </div>
 <!--        Character Saving Throws     -->
-    <div class="row">
+    <div class="row" style="padding: 2% 0;">
       <div class="col-lg-12">
           <div class="col">
             <h4 class="character-heading">Saving throws</h4>
             <div class="row">
               <div class="col-xl-4 col-lg-6">
-                <div class="character-text-centered border border-3">
+                <div class="character-text-centered border border-dark border-3">
                 <h4>Strength</h4>
                 <h4>{% if character.strength %}{{ ability_bonus(character.strength) + prof }}{% else %}{{ability_bonus(character.strength)}}{%endif%}</h4>
                 </div>
               </div>
               <div class="col-xl-4 col-lg-6">
-                <div class="character-text-centered border border-3">
+                <div class="character-text-centered border border-dark border-3">
                 <h4>Dexterity</h4>
                 <h4>{% if character.dexterity %}{{ ability_bonus(character.dexterity) + prof }}{% else %}{{ability_bonus(character.dexterity)}}{%endif%}</h4>
               </div>
                 </div>
               <div class="col-xl-4 col-lg-6">
-                <div class="character-text-centered border border-3">
+                <div class="character-text-centered border border-dark border-3">
                 <h4>Constitution</h4>
                 <h4>{% if character.constitution %}{{ ability_bonus(character.constitution) + prof }}{% else %}{{ability_bonus(character.constitution)}}{%endif%}</h4>
               </div>
                 </div>
               <div class="col-xl-4 col-lg-6">
-                <div class="character-text-centered border border-3">
+                <div class="character-text-centered border border-dark border-3">
                 <h4>Wisdom</h4>
                 <h4>{% if character.wisdom %}{{ ability_bonus(character.wisdom) + prof }}{% else %}{{ability_bonus(character.wisdom)}}{%endif%}</h4>
               </div>
                 </div>
               <div class="col-xl-4 col-lg-6">
-                <div class="character-text-centered border border-3">
+                <div class="character-text-centered border border-dark border-3">
                 <h4>Intelligence</h4>
                 <h4>{% if character.intelligence %}{{ ability_bonus(character.intelligence) + prof }}{% else %}{{ability_bonus(character.intelligence)}}{%endif%}</h4>
               </div>
                 </div>
               <div class="col-xl-4 col-lg-6">
-                <div class="character-text-centered border border-3">
+                <div class="character-text-centered border border-dark border-3">
                 <h4>Charisma</h4>
                 <h4>{% if character.charisma %}{{ ability_bonus(character.charisma) + prof }}{% else %}{{ability_bonus(character.charisma)}}{%endif%}</h4>
               </div>
@@ -181,28 +197,36 @@
 
           </div>
         </div>
-        <div class="col">
-          <div class="character-senses border border-3">
+      </div>
+        <div class="row">
+          <div class="col-lg-6">
+          <div class="character-personality border border-dark border-3">
             <h4>Personality Traits</h4>
             <p>{{character.personality_traits | safe}}</p>
           </div>
-          <div class="character-senses border border-3">
+          </div>
+          <div class="col-lg-6">
+          <div class="character-personality border border-dark border-3">
             <h4>Ideals</h4>
             <p>{{character.ideals | safe}}</p>
           </div>
-        <div class="col-lg-6">
-          <div class="character-senses border border-3">
+          </div>
+          <div class="col-lg-6">
+          <div class="character-personality border border-dark border-3">
             <h4>Bonds</h4>
             <p>{{character.bonds | safe}}</p>
           </div>
-          <div class="character-senses border border-3">
+          </div>
+          <div class="col-lg-6">
+          <div class="character-personality border border-dark border-3">
             <h4>Flaws</h4>
             <p>{{character.flaws | safe}}</p>
+          </div>
           </div>
         </div>
         </div>
 <!--          Bootstrap tabs to show various information about the characters    -->
-      <div class="row">
+      <div class="row character-navi">
         <div class="col">
           <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
