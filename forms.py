@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, PasswordField, EmailField, IntegerField, SelectField, SelectMultipleField
+from wtforms import StringField, SubmitField, PasswordField, EmailField, IntegerField, \
+    SelectField, SelectMultipleField, TextAreaField
 from wtforms.validators import DataRequired, URL
 from flask_ckeditor import CKEditorField
 
@@ -34,7 +35,7 @@ class CreateNewCharacter(FlaskForm):
     race = StringField("Character Race", validators=[DataRequired()])
     character_class = StringField("Character Class", validators=[DataRequired()])
     background = StringField("Character Background", validators=[DataRequired()])
-    personality_traits = StringField("Personality Traits", validators=[DataRequired()])
+    personality_traits = TextAreaField("Personality Traits", validators=[DataRequired()])
     ideals = StringField("Character Ideals", validators=[DataRequired()])
     bonds = StringField("Character Bonds", validators=[DataRequired()])
     flaws = StringField("Character Flaws", validators=[DataRequired()])

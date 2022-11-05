@@ -68,7 +68,7 @@
  }
 
 .char-title {
-  font-size: 36px;
+  font-size: 2.25rem;
   letter-spacing: 1px;
   font-weight: 800;
   font-style: italic;
@@ -76,10 +76,16 @@
 }
 
 .char-text {
-  font-size: 16px;
+  font-size: 1rem;
   letter-spacing: 1px;
   font-family: 'Gentium Book Plus', serif;
   font-stlye: italic;
+  margin: 0;
+}
+
+.char-extra-details {
+  padding-left: 1%;
+  margin: 1%;
 }
 
 .full-box {
@@ -100,6 +106,29 @@
   text-align: center;
 }
 
+.ability-heading {
+  font-size: 1.87rem;
+  font-family: 'Gentium Book Plus', serif;
+  font-weight: 800;
+  letter-spacing: 2px;
+  line-height: 1.5;
+}
+
+.ability-sub-heading {
+  font-size: 1.125rem;
+  font-family: 'Gentium Book Plus', serif;
+  font-weight: 800;
+  letter-spacing: 2px;
+  line-height: 1.5;
+}
+
+.ability-score-text {
+  font-size: 2.25rem;
+  font-family: 'Gentium Book Plus', serif;
+  font-weight: 800;
+  letter-spacing: 2px;
+  padding-bottom: 1%;
+}
 
 /* Skill and Bonuses Box */
 
@@ -112,7 +141,17 @@
 }
 
 .skill-number {
-  margin-right: 20px;
+  font-weight: 800;
+  display: inline-block;
+}
+
+.ability-text {
+  display: inline-block;
+  position: absolute;
+  left: 50px;
+  font-size: 16px;
+  letter-spacing: 1px;
+  font-family: 'Gentium Book Plus', serif;
 }
 
 /* Character Stats / Senses / Proficiencies */
@@ -125,7 +164,7 @@
 }
 
 .character-senses {
-  padding: 2%;
+  padding: 4%;
   margin-top: 2%;
   margin-bottom: 2%;
 }
@@ -140,6 +179,9 @@
   padding: 2% 0;
 }
 
+.sense-text {
+  margin-top: 1%;
+}
 /* Character Personality Trait Box */
 
 .character-personality {
@@ -152,8 +194,29 @@
 }
 
 .tab-content {
-  padding: 2% 0;
+  padding: 2% 2%;
+  position: relative;
+  z-index: 10;
+  height: 500px;
+  overflow-y: scroll;
+  margin-bottom: 5%;
 }
+
+.char-nav-item {
+  justify-content: center;
+  color: black;
+  font-size: 1rem;
+  font-style: italic;
+  font-family: 'Gentium Book Plus', serif;
+  width: 20%;
+}
+
+.character-navi-button {
+  width: 100%;
+  padding-right: 0;
+  padding-left: 0;
+}
+
 /* !! End of Character Sheet Page !! */
 
 /* Character Hub CSS - To make footer stay at bottom of screen */
@@ -219,7 +282,7 @@
 
 /* Navbar CSS Settings */
 
-.nav-item {
+.header-nav-item {
   padding-left: 5%;
   padding-right: 5%;
 }

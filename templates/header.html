@@ -34,49 +34,49 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-              <li class="nav-item">
+              <li class="nav-item header-nav-item">
                 <a class="nav-link active" aria-current="page" href="{{url_for('home')}}">Home</a>
               </li>
-              <li class="nav-item">
+              <li class="nav-item header-nav-item">
                 <a class="nav-link" href="#">Schedule</a>
               </li>
               {% if current_user.id != 1%}
-              <li class="nav-item">
+              <li class="nav-item header-nav-item">
                 <a class="nav-link" href="#">Contact</a>
               </li>
-              <li class="nav-item">
+              <li class="nav-item header-nav-item">
                 <a class="nav-link" href="#">Requests</a>
               </li>
-              <li class="nav-item">
+              <li class="nav-item header-nav-item">
                 <a class="nav-link" href="#">Availability</a>
               </li>
               {% endif %}
               {% if logged_in %}
               {% if current_user.id == 1%}
-              <li class="nav-item">
+              <li class="nav-item header-nav-item">
                 <a class="nav-link" href="{{url_for('add_new_campaign')}}">New Campaign</a>
               </li>
-              <li class="nav-item">
+              <li class="nav-item header-nav-item">
                 <a class="nav-link" href="{{url_for('add_new_location')}}">New Location</a>
               </li>
-              <li class="nav-item">
+              <li class="nav-item header-nav-item">
                 <a class="nav-link" href="{{url_for('add_new_faction')}}">New Faction</a>
               </li>
-              <li class="nav-item">
+              <li class="nav-item header-nav-item">
                 <a class="nav-link" href="{{url_for('add_new_npc')}}">New NPC</a>
               </li>
               {% endif %}
-              <li class="nav-item">
+              <li class="nav-item header-nav-item">
                 <a class="nav-link" href="{{url_for('character_hub')}}">Characters</a>
               </li>
-              <li class="nav-item">
+              <li class="nav-item header-nav-item">
                 <a class="nav-link" href="{{url_for('logout')}}">Logout</a>
               </li>
               {% endif %}
               {% if not logged_in %}
-              <li class="nav-item">
+              <li class="nav-item header-nav-item">
                 <a class="nav-link" href="/register">Register</a>
-              <li class="nav-item">
+              <li class="nav-item header-nav-item">
                 <a class="nav-link" href="/login">Login</a>
               {% endif %}
               </li>
