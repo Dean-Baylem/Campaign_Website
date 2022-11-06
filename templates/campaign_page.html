@@ -11,84 +11,9 @@
 </section>
 <section id="summary" class="section-area light-bg">
   <div class="container-fluid">
-    <div class="row summary">
-      {% if characters %}
+    <div class="row">
         <div class="col-lg-12">
-          <div class="character-details">
-            {% for character in characters %}
-            {% if character.campaign_id == campaign_id %}
-            <h1 class="character-name">{{character.name}}</h1>
-            <div class="character-token">
-              <img src="{{character.token}}" alt="Character-image" class="character-token" />
-            </div>
-            <div class="accordion" id="accordionPanelsStayOpenExample">
-              <div class="accordion-item">
-                <h2 class="accordion-header" id="panelsStayOpen-headingOne">
-                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-                    Character Stats
-                  </button>
-                </h2>
-                <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
-                  <div class="accordion-body table-responsive">
-                    <table class="table table-borderless">
-                      <thead>
-                        <tr>
-                          <th scope="col">Level</th>
-                          <th scope="col">Strength</th>
-                          <th scope="col">Dexterity</th>
-                          <th scope="col">Constitution</th>
-                          <th scope="col">Intelligence</th>
-                          <th scope="col">Wisdom</th>
-                          <th scope="col">Charisma</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <th scope="row">{{character.level}}</th>
-                          <td>{{character.strength}}</td>
-                          <td>{{character.dexterity}}</td>
-                          <td>{{character.constitution}}</td>
-                          <td>{{character.intelligence}}</td>
-                          <td>{{character.wisdom}}</td>
-                          <td>{{character.charisma}}</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-              <div class="accordion-item">
-                <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
-                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
-                    Description
-                  </button>
-                </h2>
-                <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
-                  <div class="accordion-body">
-                    {{character.description|safe}}
-                  </div>
-                </div>
-              </div>
-              <div class="accordion-item">
-                <h2 class="accordion-header" id="panelsStayOpen-headingThree">
-                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
-                    Character Backstory
-                  </button>
-                </h2>
-                <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
-                  <div class="accordion-body">
-                    {{character.backstory|safe}}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        {% endif %}
-        {% endfor %}
-        {% endif %}
-        <div class="col-lg-12">
-          <h3 class="campaign-summary">
+          <h3 class="campaign-text">
             {{campaign.blurb|safe}}
           </h3>
         </div>
@@ -99,7 +24,7 @@
   <div class="container-fluid">
     <div class="row carousel-heading">
       <div class="col">
-        <h1>Regions around {{campaign.central_location}}</h1>
+        <h1 class="carousel-heading-text">Regions around {{campaign.central_location}}</h1>
       </div>
     </div>
     <div class="row">
@@ -130,8 +55,8 @@
           </div>
         </div>
       </div>
-      <div class="col-xl-12">
-        <h5>{{campaign.region_summary|safe}}</h5>
+      <div class="col-xl-12 carousel-text">
+        <h5 class="campaign-text">{{campaign.region_summary|safe}}</h5>
       </div>
     </div>
 </section>
@@ -139,7 +64,7 @@
   <div class="container-fluid">
     <div class="row carousel-heading">
       <div class="col">
-        <h1>Factions of {{campaign.central_location}}</h1>
+        <h1 class="carousel-heading-text">Factions of {{campaign.central_location}}</h1>
       </div>
     </div>
     <div class="row">
@@ -170,10 +95,33 @@
         </div>
       </div>
     </div>
-      <div class="col-xl-12">
-        <h5>{{campaign.faction_summary|safe}}</h5>
+      <div class="col-xl-12 carousel-text">
+        <h5 class="campaign-text">{{campaign.faction_summary|safe}}</h5>
       </div>
   </div>
+</section>
+<section id="campaign-npcs" class="section-area light-bg campaign-area">
+  <div class="row">
+    <div class="col">
+      <h1 class="carousel-heading-text carousel-heading">Key NPC's in {{campaign.title}}</h1>
+    </div>
+  </div>
+    <div class="row">
+      {% for npc in campaign.npcs %}
+      <div class="col-lg-3 col-md-6 col-sm-12 d-flex">
+          <div class="card flex-fill">
+              <a href="#" class="stretched-link"></a>
+              <div class="card-body npc-card">
+                <img src="{{npc.npc_image}}" class="card-img-top npc-image" alt="{{npc.name}}">
+                <h5 class="card-title">{{npc.name}}</h5>
+                {% if npc.faction %}
+                <p class="card-text">{{npc.faction}}</p>
+                {% endif %}
+            </div>
+          </div>
+      </div>
+      {% endfor %}
+    </div>
 </section>
 
 {% include "footer.html" %}

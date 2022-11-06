@@ -80,6 +80,7 @@ def admin_only(f):
         if current_user.id != 1:
             return abort(403)
         return f(*args, **kwargs)
+
     return decorated_function
 
 
@@ -91,6 +92,7 @@ def load_player(player_id):
 skills = ["Acrobatics", "Animal Handling", "Arcana", "Athletics", "Deception", "History",
           "Insight", "Intimidation", "Investigation", "Medicine", "Nature", "Perception",
           "Performance", "Persuasion", "Religion", "Sleight of Hand", "Stealth", "Survival"]
+
 
 # ---------------- Database Tables --------------------
 
@@ -114,6 +116,19 @@ class Campaign(db.Model):
     npcs = relationship("NPC", back_populates="campaign")
     sessions = relationship("ScheduledSession", back_populates="campaign")
     sessionreview = relationship("SessionReview", back_populates="campaign")
+    house_rules = relationship("HouseRule")
+
+
+class HouseRule(db.Model):
+    __tablename__ = "house_rules"
+    id = Column(Integer, primary_key=True)
+    character_creation = Column(Text)
+    homebrew = Column(Text)
+    special = Column(Text)
+    races = Column(Text)
+    source_material = Column(Text)
+    third_party_material = Column(Text)
+    campaign_id = Column(Integer, ForeignKey("campaign.id"))
 
 
 class Player(UserMixin, db.Model):
@@ -130,7 +145,7 @@ class Player(UserMixin, db.Model):
 class Character(db.Model):
     __tablename__ = "characters"
     id = Column(Integer, primary_key=True)
-    
+
     # ----------- Character Details -------------
     name = Column(String(100))
     character_image = Column(String(250), nullable=False)
@@ -138,6 +153,8 @@ class Character(db.Model):
     race = Column(String(50), nullable=False)
     character_class = Column(String(150), nullable=False)
     background = Column(String(50), nullable=False)
+    alignment = Column(String(50), nullable=False)
+    appearance_summary = Column(String(300), nullable=False)
     personality_traits = Column(String, nullable=False)
     ideals = Column(String, nullable=False)
     bonds = Column(String, nullable=False)
@@ -145,9 +162,11 @@ class Character(db.Model):
     description = Column(Text, nullable=False)
     backstory = Column(Text, nullable=False)
     notes = Column(Text)
-    traits_and_features = Column(Text)
-    inventory = Column(Text)
-    
+    copper = Column(Integer)
+    silver = Column(Integer)
+    electum = Column(Integer)
+    gold = Column(Integer)
+    platinum = Column(Integer)
 
     # ----------- Character Stats ----------------
     level = Column(Integer, nullable=False)
@@ -202,24 +221,71 @@ class Character(db.Model):
     player_id = Column(Integer, ForeignKey("players.id"))
     player = relationship("Player", back_populates="characters")
     actions = relationship("CharacterActions")
+    spells = relationship("Spells")
+    features = relationship("CharacterFeatures")
+    inventory = relationship("CharacterInventory")
 
 
 class CharacterActions(db.Model):
     __tablename__ = "action"
     id = Column(Integer, primary_key=True)
+    name = Column(String, nullable=False)
     description = Column(Text, nullable=False)
-    type = Column(String(50), nullable=False) # Drop down in table generation
-    damaging_action = Column(Boolean, default=True, nullable=False) # True or False in table
+    type = Column(String(50), nullable=False)  # Full, bonus, reaction
+    damaging_action = Column(Boolean, default=True, nullable=False)  # True or False in table
     saving_action = Column(Boolean, default=False, nullable=False)
-    saving_attribute = Column(String(50))
+    saving_attribute = Column(String(50))  # List Options
     range = Column(String(50))
     target = Column(String(50))
     damage_roll_main = Column(String(50))
     damage_type_main = Column(String(50))
     damage_roll_secondary = Column(String(50))
     damage_type_secondary = Column(String(50))
-    ac_bonus = Column(Integer)
-    ac_override = Column(Integer)
+    character_id = Column(Integer, ForeignKey("characters.id"))
+
+
+class Spells(db.Model):
+    __tablename__ = "spell"
+    id = Column(Integer, primary_key=True)
+    name = Column(String(100), nullable=True)
+    cast_time = Column(String(50), nullable=True)
+    description = Column(Text, nullable=True)
+    range = Column(Integer)  # Note to leave blank for self
+    verbal = Column(Boolean, default=True, nullable=False)
+    somatic = Column(Boolean, default=True, nullable=False)
+    material = Column(Boolean, default=True, nullable=False)
+    material_list = Column(String(100))
+    level = Column(Integer, nullable=True)
+    school = Column(String(50), nullable=True)
+    duration = Column(String(50), nullable=True)
+    concentration = Column(Boolean, nullable=True)
+    damaging = Column(Boolean, nullable=True)
+    saving = Column(Boolean, nullable=True)
+    save_type = Column(String(50))  # Drop down list for options.
+    damage_roll_main = Column(String(50))
+    damage_type_main = Column(String(50))
+    damage_roll_secondary = Column(String(50))
+    damage_type_secondary = Column(String(50))
+    ritual = Column(Boolean, default=False, nullable=True)
+    character_id = Column(Integer, ForeignKey("characters.id"))
+
+
+class CharacterFeatures(db.Model):
+    __tablename__ = "feature"
+    id = Column(Integer, primary_key=True)
+    name = Column(String(100), nullable=True)
+    source = Column(String(50), nullable=True)  # have this as drop-down in list
+    description = Column(Text, nullable=True)
+    character_id = Column(Integer, ForeignKey("characters.id"))
+
+
+class CharacterInventory(db.Model):
+    __tablename__ = "inventory"
+    id = Column(Integer, primary_key=True)
+    name = Column(String(100), nullable=True)
+    description = Column(Text, nullable=True)
+    number_owned = Column(Integer, nullable=True)
+    value = Column(String(50))
     character_id = Column(Integer, ForeignKey("characters.id"))
 
 
@@ -280,6 +346,7 @@ class ScheduledSession(db.Model):
     day = Column(String, nullable=False)
     date = Column(DateTime, nullable=False)
     time = Column(String(50), nullable=False)
+    preview = Column(String(300))
     campaign_id = Column(Integer, ForeignKey("campaign.id"))
     campaign = relationship("Campaign", back_populates="sessions")
 
@@ -288,7 +355,7 @@ class SessionReview(db.Model):
     __tablename__ = "sessionreview"
     id = Column(Integer, primary_key=True)
     title = Column(String(250))
-    subtime = Column(String(500))
+    subtitle = Column(String(500))
     body = Column(Text, nullable=False)
     date = Column(DateTime, nullable=False, default=datetime.datetime.utcnow())
 
@@ -299,7 +366,8 @@ class SessionReview(db.Model):
     campaign = relationship("Campaign", back_populates="sessionreview")
 
 
-db.create_all()
+# db.create_all()
+
 
 # ------------------------ Routes ----------------------------
 
@@ -321,6 +389,13 @@ def campaign_page(story_id):
     return render_template("campaign_page.html", campaign=requested_campaign,
                            characters=requested_character, logged_in=current_user.is_authenticated,
                            campaign_id=int(story_id), all_campaigns=campaigns)
+
+
+@app.route('/rules/<campaign_id>', methods=["GET", "POST"])
+def rules_page(campaign_id):
+    requested_campaign = Campaign.query.get(campaign_id)
+    return render_template("rules.html", campaign=requested_campaign)
+
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -355,7 +430,9 @@ def character_page(character_id):
     campaigns = Campaign.query.all()
     requested_character = Character.query.get(character_id)
     prof = prof_bonus(requested_character)
-    return render_template("character-page.html", character=requested_character, all_campaigns=campaigns, prof=prof)
+    return render_template("character-page.html", character=requested_character,
+                           all_campaigns=campaigns, prof=prof, logged_in=current_user.is_authenticated)
+
 
 
 # ------------------------ Form Routes for DB -----------------------------
@@ -470,7 +547,7 @@ def add_new_character():
         db.session.commit()
         return redirect(url_for('home'))
     return render_template("forms.html", form=form,
-                           logged_in=current_user.is_authenticated, all_campaigns=campaigns,)
+                           logged_in=current_user.is_authenticated, all_campaigns=campaigns, )
 
 
 @app.route("/new-location", methods=["GET", "POST"])
@@ -562,6 +639,6 @@ def add_new_faction():
         return redirect(url_for("home"))
     return render_template("forms.html", form=form, logged_in=current_user.is_authenticated)
 
+
 if __name__ == '__main__':
     app.run(debug=True)
-

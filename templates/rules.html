@@ -1,0 +1,56 @@
+{% include "header.html" %}
+
+<section id="title" class="light-bg" style="background-image: url('https://img.freepik.com/free-photo/still-life-objects-with-role-playing-game-sheet_23-2149352337.jpg?size=626&ext=jpg&ga=GA1.2.1993472416.1661425452&semt=ais'); background-repeat: no-repeat; background-size: cover; height: 40%;">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col campaign-title">
+        <h1 class="main-title">{{campaign.title}}</h1>
+          <h4 class="sub-title">Character creation, homebrew and special rules</h4>
+      </div>
+    </div>
+  </div>
+</section>
+<section id="char-creation" class="light-bg">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-6">
+                <h4>Character Creation Rules</h4>
+                <p>{{campaign.house_rules.character_creation}}</p>
+            </div>
+            <div class="col-lg-6">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h4>Available Races</h4>
+                        <p>{{campaign.house_rules.races}}</p>
+                    </div>
+                    <div class="col-lg-12">
+                        <h4>Available Sources</h4>
+                        <p>{{campaign.house_rules.source_material}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section id="homebrew-rules" class="light-bg">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <h4>Homebrew Rules</h4>
+                <p>{{campaign.house_rules.homebrew}}</p>
+            </div>
+        </div>
+    </div>
+</section>
+<section id="special-rules" class="light-bg">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <h4>Special Rules for {{campaign.title}}</h4>
+                <p>{{campaign.house_rules.special}}</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% include "footer.html" %}

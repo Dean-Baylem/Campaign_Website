@@ -34,16 +34,16 @@ class CreateNewCharacter(FlaskForm):
     token = StringField("Character Token URL", validators=[DataRequired()])
     race = StringField("Character Race", validators=[DataRequired()])
     character_class = StringField("Character Class", validators=[DataRequired()])
+    alignment = StringField("Character Alignment", validators=[DataRequired()])
+    appearance_summary = StringField("Short description of character appearance (up to 300 characters)",
+                                     validators=[DataRequired()])
     background = StringField("Character Background", validators=[DataRequired()])
-    personality_traits = TextAreaField("Personality Traits", validators=[DataRequired()])
+    personality_traits = CKEditorField("Personality Traits", validators=[DataRequired()])
     ideals = StringField("Character Ideals", validators=[DataRequired()])
     bonds = StringField("Character Bonds", validators=[DataRequired()])
     flaws = StringField("Character Flaws", validators=[DataRequired()])
     description = CKEditorField("Character Description", validators=[DataRequired()])
-
     backstory = CKEditorField("Character Backstory", validators=[DataRequired()])
-    notes = CKEditorField("Special Notes about the character")
-    traits_and_features = CKEditorField("What are the characters racial, background and class traits and features?")
 
     level = IntegerField("Character Level", validators=[DataRequired()])
     strength = IntegerField("Character Strength", validators=[DataRequired()])
