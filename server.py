@@ -371,6 +371,10 @@ class SessionReview(db.Model):
 
 # ------------------------ Routes ----------------------------
 
+@app.route("/test")
+def test_page():
+    return render_template("test.html")
+
 @app.route("/")
 def home():
     campaigns = Campaign.query.all()
@@ -475,8 +479,7 @@ def add_new_character():
             description=form.description.data,
             player_id=current_user.id,
             backstory=form.backstory.data,
-            notes=form.notes.data,
-            traits_and_features=form.traits_and_features.data,
+            appearance_summary=form.appearance_summary.data,
             level=form.level.data,
             strength=form.strength.data,
             dexterity=form.dexterity.data,
@@ -487,7 +490,9 @@ def add_new_character():
             languages=form.languages.data,
             darkvision=form.darkvision.data,
             tool_proficiencies=form.tool_proficiencies.data,
+            alignment=form.alignment.data,
         )
+
         if form.campaign.data == "GoS":
             new_character.campaign_id = 1
         if form.campaign.data == "CoS":
@@ -638,6 +643,27 @@ def add_new_faction():
         db.session.commit()
         return redirect(url_for("home"))
     return render_template("forms.html", form=form, logged_in=current_user.is_authenticated)
+
+
+@app.route("/<campaign_id>/add-review", methods=["GET", "POST"])
+@admin_only
+def add_review(campaign_id):
+    form = forms.SessionReviewForm()
+    if form.validate_on_submit():
+        new_review = SessionReview(
+            title=form.title.data,
+            subtitle=form.subtitle.data,
+            body=form.body.data,
+            date=date.today().strftime("%B %d, %Y")
+        )
+        new_review.player_id = current_user.id
+        new_review.campaign_id = campaign_id
+        db.session.add(new_review)
+        db.session.commit()
+        return redirect(url_for("campaign_page", story_id=campaign_id))
+    return render_template("forms.html", form=form, logged_in=current_user.is_authenticated)
+
+
 
 
 if __name__ == '__main__':
