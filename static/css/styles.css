@@ -1,19 +1,28 @@
 /* Main section changes based on screen size */
 
-@media only screen and (min-width: 800px) {
-  .section-area {padding: 3% 15% 0 15%;}
+@media only screen and (max-width: 1199px) {
+  .section-area {padding: 1% 15% 1% 15%;}
+  .navbar {padding-left: 5%; margin-right: 14%;}
+  .header-nav-item {padding-left: 3%;}
+  .navbar-nav {position: relative; margin-left: 20%;}
 }
 
 @media only screen and (min-width: 1200px) {
-  .section-area {padding: 3% 20% 0 20%;}
+  .section-area {padding: 1% 20% 1% 20%;}
+  .navbar {margin-left: 10%; margin-right: 10%;}
+  .header-nav-item {padding-left: 3%;}
+  .navbar-nav {position: relative; margin-left: 25%;}
 }
 
 @media only screen and (max-width: 799px) {
-  .section-area {padding: 3%}
+  .section-area {padding: 1% 3%;}
 }
 
 @media only screen and (min-width: 1600px) {
-  .section-area {padding: 3% 25% 0 25%}
+  .section-area {padding: 1% 25% 1% 25%;}
+  .navbar {margin-left: 14%; margin-right: 14%;}
+  .header-nav-item {padding-left: 5%;}
+  .navbar-nav {position: relative; margin-left: 50%;}
 }
 
 .footer-area {
@@ -284,22 +293,6 @@
   width: 25px
 }
 
-/* Navbar CSS Settings */
-
-.header-nav-item {
-  padding-left: 5%;
-  padding-right: 5%;
-}
-
-.navbar {
-  margin-left: 14%;
-  margin-right: 14%;
-}
-
-.navbar-nav {
-  margin-right: 20%;
-}
-
 
 /* Landing Title CSS Settings */
 
@@ -377,9 +370,9 @@
 
 .campaign-text {
   text-align: left;
-  padding-right: 5%;
   font-size: 1.5rem;
   font-family: 'Gentium Book Plus', serif;
+  line-height: 1.5;
 }
 
 .carousel-item {
@@ -397,7 +390,7 @@
 }
 
 .carousel-heading-text {
-  font-family: 'Gentium Book Plus', serif;
+  font-family: 'Cormorant Upright', serif;
   font-size: 4rem;
   font-weight: 500;
 }
@@ -416,7 +409,40 @@
   width: auto;
 }
 
+.card-name {
+  font-family: 'Cormorant Upright', serif;
+  font-weight: 700;
+  line-height: 1.25;
+  font-size 1.5rem;
+}
 
+.card-details {
+  font-family: 'Gentium Book Plus', serif;
+  font-size: 1.125rem;
+  font-style: italic;
+}
+
+.card-summary {
+  font-family: 'Gentium Book Plus', serif;
+}
+
+.post-title {
+  font-family: 'Cormorant Upright', serif;
+  font-weight: 700;
+  font-size: 2rem;
+  color: black;
+}
+
+.post-subtitle{
+  font-family: 'Gentium Book Plus', serif;
+  font-style: italic;
+  color: black;
+}
+
+.post-author{
+  font-family: 'Gentium Book Plus', serif;
+  font-size: 0.9rem;
+}
 /* Rules Page CSS */
 
 .sub-title{
@@ -427,4 +453,32 @@
   font-weight: 700;
   color: #F5EFE6;
   -webkit-text-stroke: 1px black;
+}
+
+/* Session Review CSS */
+
+.review-heading {
+  padding: 7% 20%;
+}
+
+.review-title {
+  text-align: center;
+  line-height: 1.5;
+  font-size: 7rem;
+  font-family: 'Cormorant Upright', serif;
+  padding-bottom: 2%;
+  color: #F8EDE3;
+}
+
+.review-subtitle {
+  text-align: left;
+  line-height: 1.5;
+  font-size: 2.5rem;
+  font-family: 'Cormorant Infant', serif;
+  color: #F8EDE3;
+}
+
+.review-author {
+  color: #F8EDE3;
+  font-family: 'Cormorant Infant', serif;
 }

@@ -375,6 +375,7 @@ class SessionReview(db.Model):
 def test_page():
     return render_template("test.html")
 
+
 @app.route("/")
 def home():
     campaigns = Campaign.query.all()
@@ -400,6 +401,15 @@ def rules_page(campaign_id):
     requested_campaign = Campaign.query.get(campaign_id)
     return render_template("rules.html", campaign=requested_campaign)
 
+
+@app.route('/<campaign_id>/session-review/<review_id>', methods=["GET", "POST"])
+def session_review_page(campaign_id, review_id):
+    campaigns = Campaign.query.all()
+    requested_campaign = Campaign.query.get(campaign_id)
+    requested_review = SessionReview.query.get(review_id)
+    print(requested_campaign.title)
+    return render_template("session_review.html", campaign=requested_campaign, review=requested_review,
+                           all_campaigns=campaigns, logged_in=current_user.is_authenticated)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -438,6 +448,20 @@ def character_page(character_id):
                            all_campaigns=campaigns, prof=prof, logged_in=current_user.is_authenticated)
 
 
+@app.route('/contact-us', methods=["GET", "POST"])
+def contact_page():
+    form = forms.ContactMe()
+    campaigns = Campaign.query.all()
+    if form.validate_on_submit():
+        name = form.name.data
+        email = form.email.data
+        subject = form.subject.data
+        message = form.message.data
+        file_name = f"contact_messages/{form.name.data} - {datetime.datetime.now().strftime('%d-%m-%Y - %H-%M-%S')}.txt"
+        with open(file_name, 'w') as file:
+            file.write(f"Contact Message\n\nname: {name} - email: {email}\nsubject: {subject}\n{message}")
+        return redirect(url_for('home'))
+    return render_template('forms.html', form=form, all_campaigns=campaigns, logged_in=current_user.is_authenticated)
 
 # ------------------------ Form Routes for DB -----------------------------
 

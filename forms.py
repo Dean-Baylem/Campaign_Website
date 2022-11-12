@@ -116,3 +116,11 @@ class UpcomingCampaignForm(FlaskForm):
     premise = CKEditorField("Describe the campaign", validators=[DataRequired()])
     registered_players = IntegerField("How many players have currently agreed to play?", validators=[DataRequired()])
     submit = SubmitField("Submit")
+
+
+class ContactMe(FlaskForm):
+    name = StringField("Name", default="Your name...", validators=[DataRequired()])
+    email = EmailField("Email", default="Your email...", validators=[DataRequired()])
+    subject = StringField("Subject", default="Your subject...", validators=[DataRequired()])
+    message = TextAreaField("Message", default="Your message...", validators=[DataRequired()])
+    submit = SubmitField("Submit")

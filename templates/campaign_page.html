@@ -10,6 +10,7 @@
   </div>
 </section>
 <section id="summary" class="section-area light-bg">
+  <hr>
   <div class="container-fluid">
     <div class="row">
         <div class="col-lg-12">
@@ -18,9 +19,11 @@
           </h3>
         </div>
       </div>
+    <a class="btn btn-outline-dark" href="{{url_for('rules_page', campaign_id=campaign.id)}}">Campaign Rules</a>
     </div>
 </section>
 <section id="central-location" class="section-area light-bg">
+  <hr>
   <div class="container-fluid">
     <div class="row carousel-heading">
       <div class="col">
@@ -61,6 +64,7 @@
     </div>
 </section>
 <section id="factions" class="section-area light-bg faction-area">
+  <hr>
   <div class="container-fluid">
     <div class="row carousel-heading">
       <div class="col">
@@ -102,6 +106,7 @@
 </section>
 
 <section id="campaign-npcs" class="section-area light-bg campaign-area">
+  <hr>
   <div class="row">
     <div class="col">
       <h1 class="carousel-heading-text carousel-heading">Key NPC's in {{campaign.title}}</h1>
@@ -112,11 +117,12 @@
       <div class="col-lg-3 col-md-6 col-sm-12 d-flex">
           <div class="card flex-fill">
               <a href="#" class="stretched-link"></a>
-              <div class="card-body npc-card">
+              <div class="card-body">
                 <img src="{{npc.npc_image}}" class="card-img-top npc-image" alt="{{npc.name}}">
-                <h5 class="card-title">{{npc.name}}</h5>
+                <hr>
+                <h5 class="card-title card-name">{{npc.name}}</h5>
                 {% if npc.faction %}
-                <p class="card-text">{{npc.faction}}</p>
+                <p class="card-text card-details">{{npc.faction}}</p>
                 {% endif %}
             </div>
           </div>
@@ -125,7 +131,8 @@
     </div>
 </section>
 
-<section id="campaign-npcs" class="section-area light-bg campaign-area">
+<section id="campaign-players" class="section-area light-bg campaign-area">
+  <hr>
   <div class="row">
     <div class="col">
       <h1 class="carousel-heading-text carousel-heading">Adventuring Party for {{campaign.title}}</h1>
@@ -142,9 +149,10 @@
                   <img src="{{character.character_image}}" class="card-img-top npc-image" alt="{{character.name}}">
                 </div>
                 <div class="col">
-                  <h5 class="card-title">{{character.name}}</h5>
-                  <p>{{character.character_class}} {{character.race}}</p>
-                  <p>{{character.appearance_summary}}</p>
+                  <h5 class="card-title card-name">{{character.name}}</h5>
+                  <p class="card-details">{{character.character_class}} {{character.race}}</p>
+                  <hr>
+                  <p class="card-summary">{{character.appearance_summary}}</p>
                 </div>
                 </div>
             </div>
@@ -153,8 +161,8 @@
       {% endfor %}
     </div>
 </section>
-
 <section id="session-review" class="section-area light-bg campaign-area">
+<hr>
   <div class="row">
     <h1 class="carousel-heading-text carousel-heading">Session Reviews</h1>
   </div>
@@ -164,15 +172,15 @@
         <hr>
         {% for review in campaign.sessionreview %}
         <div class="session-reviews">
-          <a href="#">
-            <h3>
+          <a href="{{url_for('session_review_page', campaign_id=campaign.id, review_id=review.id)}}" style="text-decoration: none;">
+            <h3 class="post-title">
               {{review.title}}
             </h3>
-            <h4>
+            <h5 class="post-subtitle">
               {{review.subtitle}}
-            </h4>
+            </h5>
           </a>
-          <p>Created by {{review.player.username}} - {% set date = review.date.strftime("%B %d, %Y")%}{{date}}</p>
+          <p class="post-author">Created by {{review.player.username}} - {% set date = review.date.strftime("%B %d, %Y")%}{{date}}</p>
         </div>
         <hr>
         {% endfor %}
@@ -184,6 +192,7 @@
       </div>
     </div>
   </div>
+  <hr>
 </section>
 
 {% include "footer.html" %}
