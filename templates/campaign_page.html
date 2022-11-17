@@ -1,12 +1,14 @@
 {% include "header.html" %}
 
-<section id="campaign-heading" style="background-image: url(../static/{{campaign.page_image}}); background-repeat: no-repeat; background-size: cover; height: 40%;">
-  <div class="container-fluid">
+<section id="campaign-heading">
+  <div class="container-fluid" style="background-image: url(../static/{{campaign.page_image}}); background-repeat: no-repeat; background-size: cover; height: 40%;">
+    <div class="mask" style="background-color: rgba(0, 0, 0, 0.5)" >
     <div class="row">
       <div class="col campaign-title">
         <h1 class="main-title">{{campaign.title}}</h1>
       </div>
     </div>
+  </div>
   </div>
 </section>
 <section id="summary" class="section-area light-bg">
@@ -34,9 +36,13 @@
       <div class="col-xl-12 ">
         <div id="side-locations" class="carousel slide carousel-section side-locations" data-bs-ride="false">
           <div class="carousel-indicators">
+            {% for location in campaign.locations %}
+            {% if loop.index == 1 %}
             <button type="button" data-bs-target=".side-locations" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-            <button type="button" data-bs-target=".side-locations" data-bs-slide-to="1" aria-label="Slide 2"></button>
-            <button type="button" data-bs-target=".side-locations" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            {% else %}
+            <button type="button" data-bs-target=".side-locations" data-bs-slide-to="{{loop.index - 1}}" aria-label="Slide {{loop.index}}"></button>
+          {% endif %}
+          {% endfor %}
           </div>
           <div class="carousel-inner">
             {% for location in campaign.locations%}
@@ -75,12 +81,17 @@
       <div class="col">
         <div id="factions-carousel" class="carousel slide carousel-section" data-bs-ride="false">
           <div class="carousel-indicators">
+            {% for faction in campaign.factions %}
+            {% if loop.index == 1 %}
             <button type="button" data-bs-target="#factions-carousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-            <button type="button" data-bs-target="#factions-carousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-            <button type="button" data-bs-target="#factions-carousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            {% else %}
+            <button type="button" data-bs-target="#factions-carousel" data-bs-slide-to="{{loop.index - 1}}" aria-label="Slide {{loop.index}}"></button>
+<!--            <button type="button" data-bs-target="#factions-carousel" data-bs-slide-to="2" aria-label="Slide 3"></button>-->
+            {% endif %}
+            {% endfor %}
           </div>
           <div class="carousel-inner">
-            {% for faction in campaign.factions%}
+            {% for faction in campaign.factions %}
             <div class="carousel-item {% if loop.index == 1 %} active {% endif %}">
               <img src="{{faction.faction_image}}" class="d-block w-100" alt="{{faction.faction_name}}">
               <div class="carousel-caption d-none d-md-block">

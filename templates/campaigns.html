@@ -1,0 +1,41 @@
+{% include "header.html" %}
+
+
+  <!-- <div class="bg-image" style="background-image: url(images/wizard-dark-dungeon-illustration.jpg); height: 100vh;"> -->
+  <section id="landing-title" class="section-area light-bg">
+    <div class="container-fluid">
+      <!-- <a href="https://www.freepik.com/free-photo/wizard-dark-dungeon-illustration_14402228.htm#query=fantasy&position=48&from_view=search">Image by liuzishan</a> on Freepik -->
+      <div class="row">
+        <div class="col">
+          <h1 class="campaigns-title font-color">Welcome Adventurer!</h1>
+          <div>
+            <h3 class="campaigns-subtitle font-color">Within the caverns lies a library of knowledge regarding: character information, campaign events, NPC details, location notes and much more.
+              Venture down the path below to gain access to your personal page.</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Campaign Cards -->
+  <section id="campaign-cards" class="section-area">
+    <div class="container-fluid">
+        {% for story in all_campaigns %}
+        <div class="row">
+        <div class="card bg-transparent ripple" style="padding-left: 0px; padding-right: 0px;">
+            <a href="{{ url_for('campaign_page', story_id=story.id) }}" class="stretched-link"></a>
+            <img class="card-img-top" src="{{url_for('static', filename=story.campaign_image)}}" alt="Card image cap">
+            <div class="card-body">
+                <h5 class="card-title font-color">{{ story.title }}</h5>
+                <p class="card-text font-color">{{ story.subtitle }}</p>
+                <!--            <p class="card-text" style="font-size: 0.5rem;"><small class="text-muted"><a-->
+                <!--                  href="https://www.freepik.com/free-vector/treasure-sea-bottom-chest-with-golden-coins-crown-crystal-gems-sword-gold-idol-goblet-with-precious-rocks_12875276.htm#query=pirate%20fantasy&position=7&from_view=search">Image by-->
+                <!--                  upklyak</a> on Freepik</small></p>-->
+            </div>
+        </div>
+            {% endfor %}
+    </div>
+    </div>
+  </section>
+
+{% include "footer.html" %}
+

@@ -27,6 +27,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Infant:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
 </head>
 <body>
@@ -44,14 +47,17 @@
                 <a class="nav-link active" aria-current="page" href="{{url_for('home')}}">Home</a>
               </li>
               <li class="nav-item header-nav-item">
+                <a class="nav-link" href="{{url_for('campaigns')}}">Campaigns</a>
+              </li>
+              <li class="nav-item header-nav-item">
+                <a class="nav-link" href="{{url_for('character_hub')}}">Characters</a>
+              </li>
+              <li class="nav-item header-nav-item">
                 <a class="nav-link" href="#">Schedule</a>
               </li>
               {% if current_user.id != 1%}
               <li class="nav-item header-nav-item">
                 <a class="nav-link" href="{{url_for('contact_page')}}">Contact</a>
-              </li>
-              <li class="nav-item header-nav-item">
-                <a class="nav-link" href="#">Availability</a>
               </li>
               {% endif %}
               {% if logged_in %}
@@ -69,9 +75,6 @@
                 <a class="nav-link" href="{{url_for('add_new_npc')}}">New NPC</a>
               </li>
               {% endif %}
-              <li class="nav-item header-nav-item">
-                <a class="nav-link" href="{{url_for('character_hub')}}">Character Hub</a>
-              </li>
               {% if campaign %}
               <li class="nav-item header-nav-item">
                 <a class="nav-link" href="{{url_for('rules_page', campaign_id=campaign.id)}}">Rules</a>

@@ -383,6 +383,13 @@ def home():
                            logged_in=current_user.is_authenticated)
 
 
+@app.route("/campaigns")
+def campaigns():
+    campaigns = Campaign.query.all()
+    return render_template('campaigns.html', all_campaigns=campaigns,
+                           logged_in=current_user.is_authenticated)
+
+
 @app.route("/campaign/<story_id>", methods=["GET", "POST"])
 def campaign_page(story_id):
     campaigns = Campaign.query.all()
@@ -686,8 +693,6 @@ def add_review(campaign_id):
         db.session.commit()
         return redirect(url_for("campaign_page", story_id=campaign_id))
     return render_template("forms.html", form=form, logged_in=current_user.is_authenticated)
-
-
 
 
 if __name__ == '__main__':

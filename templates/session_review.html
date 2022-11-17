@@ -1,7 +1,9 @@
 {% include 'header.html' %}
 
-<section id="session-review-title" style="background-image: url('https://img.freepik.com/free-photo/top-view-beautiful-rpg-still-life-items_23-2149282438.jpg?w=1800&t=st=1667961016~exp=1667961616~hmac=cf64291dc752638d8d455f42cc10f1640aa92bc987bdc514b6d91d4d5c62e96f'); background-repeat: no-repeat; background-size: cover; height: 40%;">
-<div class="container review-heading">
+<section id="session-review-title" >
+<div class="container-fluid" style="background-image: url('https://img.freepik.com/free-photo/top-view-beautiful-rpg-still-life-items_23-2149282438.jpg?w=1800&t=st=1667961016~exp=1667961616~hmac=cf64291dc752638d8d455f42cc10f1640aa92bc987bdc514b6d91d4d5c62e96f'); background-repeat: no-repeat; background-size: cover; height: 40%;">
+<div class="mask" style="background-color: rgba(0, 0, 0, 0.5)" >
+<div class="container review-heading" >
     <div class="row">
         <div class="col">
             <h1 class="review-title">{{review.title}}</h1>
@@ -9,6 +11,7 @@
             <h5 class="review-author">Posted by {{review.player.username}}</h5>
         </div>
     </div>
+</div>
 </div>
 </section>
 

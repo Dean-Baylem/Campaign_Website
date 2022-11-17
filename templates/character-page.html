@@ -1,12 +1,13 @@
 {% include "header.html" %}
 
+
 <!--First row will contain the character image column, name race and class column and character traits column.-->
 <section class="character-area light-bg">
   <div class="container-fluid">
     <div class="row character_top_row">
       <!--        Character Details  -->
-      <div class="col-xl-5 col-lg-6">
-        <div class="full-box border border-dark border-3">
+      <div class="col-xl-5 col-lg-8">
+        <div class="full-box border border-dark border-3 char-token-name">
           <img src="{{character.token}}" class="character_token">
           <div class="name-race-class">
           <h5 class="char-title">{{character.name}}</h5>
@@ -14,24 +15,28 @@
           </div>
         </div>
       </div>
-      <div class="col-xl-3 col-lg-6">
+      <div class="col-xl-3 col-lg-4">
         <div class="full-box border border-dark border-3 top-row-extra-margin">
+          <div class="row">
           <div class="name-race-class character-player-details">
             <h5 class="char-title">Campaign</h5>
             <p class="char-text">{{character.campaign.title}}</p>
           </div>
+            </div>
+          <div class="row">
           <div class="name-race-class character-player-details">
             <h5 class="char-title">Player</h5>
             <p class="char-text">{{character.player.username}}</p>
            </div>
           </div>
+          </div>
         </div>
       <div class="col-xl-4 col-lg-12 character_details">
         <div class="full-box border border-dark border-3 top-row-extra-margin">
 <!--          This needs to change once the traits are split into seperate categories in the database.-->
-          <p class="char-text char-extra-details"><b>Background:</b> Put the background jinja here later</p>
-          <p class="char-text char-extra-details"><b>Alignment:</b> Put the alignment jinja here later</p>
-          <p class="char-text char-extra-details"><b>Appearance:</b> Put the appearance jinja here later</p>
+          <p class="char-text char-extra-details"><b>Background:</b> {{character.background}}</p>
+          <p class="char-text char-extra-details"><b>Alignment:</b> {{character.alignment}}</p>
+          <p class="char-text char-extra-details"><b>Appearance:</b> {{character.appearance_summary}}</p>
         </div>
       </div>
     </div>
