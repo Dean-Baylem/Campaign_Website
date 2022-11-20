@@ -1,0 +1,44 @@
+{% include "header.html" %}
+<body class="light-bg hub-body">
+<div class="wrapper">
+<section id="schedule-heading">
+  <div class="container-fluid" style="background-image: url('https://img.freepik.com/free-vector/cartoon-set-magic-parchment-paper-scrolls_107791-16021.jpg?w=2000&t=st=1668839144~exp=1668839744~hmac=c0a3efa15895fc6a4278285d4549ae8d1bccb25a5c853cca486cc3c09513c387'); background-repeat: no-repeat; background-size: cover;" >
+    <div class="mask" style="background-color: rgba(0, 0, 0, 0.5)">
+      <div class="row section-area">
+        <h1 class="home-title schedule-title heading-font">Game Schedule and Listings</h1>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-area light-bg">
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr class="table-heading-text">
+          <th scope="col"></th>
+          <th scope="col">Dungeon Master</th>
+          <th scope="col">Game Title</th>
+          <th scope="col">Day and Time</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for campaign in all_campaigns %}
+      {% if loop.index % 2 != 0%}
+        <tr class="light-bg">
+      {% else %}
+        <tr class="dark-bg">
+      {% endif %}
+          <th scope="row" class="table-cell-text"><a href="{{ url_for('campaign_page', story_id=campaign.id) }}"><img src="#" alt="campaign image"></a></th>
+          <td class="table-cell-text">Jinja for DM name here</td>
+          <td class="table-cell-text">{{campaign.title}}</td>
+          <td class="table-cell-text">Jinja for the day and time here</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+</div>
+
+{% include 'footer.html' %}

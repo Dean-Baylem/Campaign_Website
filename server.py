@@ -108,7 +108,6 @@ class Campaign(db.Model):
     central_location = Column(String, nullable=False)
     region_summary = Column(Text, nullable=False)
     faction_summary = Column(Text, nullable=False)
-
     characters = relationship("Character", back_populates="campaign")
     locations = relationship("Location", back_populates="campaign")
     factions = relationship("Faction", back_populates="campaign")
@@ -459,6 +458,8 @@ def character_page(character_id):
 def contact_page():
     form = forms.ContactMe()
     campaigns = Campaign.query.all()
+    subtitle = 'If you wish to join a campaign, run your own game under the D.D.Inc banner, or have any questions for us here at D.D.Inc, contact us.'
+    image = "https://img.freepik.com/free-photo/still-life-objects-with-role-playing-game-sheet_23-2149352342.jpg?w=1800&t=st=1668816379~exp=1668816979~hmac=392e7123a6ce3251966987d3f5463a0704a9f98e1987b90645ffe93dde9ce361"
     if form.validate_on_submit():
         name = form.name.data
         email = form.email.data
@@ -468,7 +469,15 @@ def contact_page():
         with open(file_name, 'w') as file:
             file.write(f"Contact Message\n\nname: {name} - email: {email}\nsubject: {subject}\n{message}")
         return redirect(url_for('home'))
-    return render_template('forms.html', form=form, all_campaigns=campaigns, logged_in=current_user.is_authenticated)
+    return render_template('forms.html', form=form, all_campaigns=campaigns,
+                           logged_in=current_user.is_authenticated, image=image,
+                           title='Cast Message', subtitle=subtitle, classes="contact-form")
+
+
+@app.route('/schedule')
+def schedule_page():
+    campaigns = Campaign.query.all()
+    return render_template('schedule.html', all_campaigns=campaigns, logged_in=current_user.is_authenticated)
 
 # ------------------------ Form Routes for DB -----------------------------
 

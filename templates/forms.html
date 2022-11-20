@@ -1,21 +1,42 @@
-{% extends 'bootstrap/base.html' %}
+{% include "header.html" %}
+
 {% import "bootstrap/wtf.html" as wtf %}
 
 {% block content %}
-{% include "header.html" %}
 
- <div class="container">
+{% if image %}
+
+<section id="campaign-heading" class="light-bg">
+  <div class="container-fluid" style="background-image: url({{image}}); background-repeat: no-repeat; background-size: cover;">
+  <div class="mask" style="background-color: rgba(0, 0, 0, 0.5)" >
+    <div class="row section-area">
+      <h1 class="home-title heading-font">{{title}}</h1>
+        <div class="col">
+          <div>
+            <h4 class="home-subtitle home-page-font">{{subtitle}}</h4>
+          </div>
+        </div>
+    </div>
+  </div>
+  </div>
+</section>
+
+{% endif %}
+
+<body>
+<section class="light-bg section-area">
+ <div class="container" style="margin: 0; padding: 0;">
      <div class="row">
          <div class="col-lg-8 col-md-10 mx-auto">
 
              {{ ckeditor.load() }}
              {{ ckeditor.config(name='blurb') }}
-             {{ ckeditor.config(name='description') }}
-             {{ ckeditor.config(name='backstory') }}
-             {{ wtf.quick_form(form, novalidate=True, button_map={"submit": "primary"}) }}
+             {{ wtf.quick_form(form, extra_classes=classes ,novalidate=True, button_map={"submit": "outline-primary"}) }}
 
          </div>
      </div>
  </div>
-
+</section>
 {% endblock %}
+
+{% include 'footer.html' %}

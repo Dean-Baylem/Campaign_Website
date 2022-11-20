@@ -244,10 +244,6 @@
 
 /* General Settings  */
 
-.font-color {
-  color: #7D6E83;
-}
-
 .light-bg {
   background-color: #F8EDE3;
 }
@@ -311,15 +307,17 @@
   line-height: 1.5;
   text-align: center;
   font-family: 'Cormorant Upright', serif;
-  font-weight: 700;
+  font-weight: 800;
+  padding-top: 5%;
 }
 
 .campaigns-subtitle {
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   line-height: 1.5;
   text-align: center;
   padding-top: 5%;
   padding-bottom: 5%;
+  font-family: 'Montserrat', sans-serif;
 }
 
 /* Card CSS Settings  */
@@ -335,7 +333,9 @@
 }
 
 .card-title {
-  font-size: 2rem;
+  font-size: 2.5rem;
+  font-family: 'Cormorant Upright', serif;
+  font-weight: 800;
 }
 
 .card-font {
@@ -480,8 +480,9 @@
 
 /* Home Page CSS Details */
 
-body: {
+.home-page-font-style {
   font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
 }
 
 .heading-font {
@@ -499,7 +500,7 @@ body: {
 
 .home-title {
   padding-top: 5%;
-  font-size: 4.5rem;
+  font-size: 5rem;
   line-height: 1.5;
   text-align: center;
   font-weight: 700;
@@ -507,22 +508,21 @@ body: {
 }
 
 .home-subtitle {
-  font-size: 1.5rem;
+  font-size: 2rem;
   line-height: 1.5;
-  text-align: left;
-  padding-top: 5%;
-  padding-bottom: 5%;
+  text-align: center;
+  padding: 5% 10%;
   color: #FFFFFF;
   font-weight: 600;
   display: inline-block;
 }
 
 .home-subheading {
-  font-size: 3rem;
+  font-size: 2.5rem;
   line-height: 1.5;
   text-align: center;
   padding-top: 2%;
-  padding-bottom: 5%;
+  padding-bottom: 3%;
   font-weight: 700;
 }
 
@@ -552,4 +552,37 @@ body: {
 .home-link {
   display: inline-block;
   margin-right: 20%;
+}
+
+.form-group {
+  padding-bottom: 4%;
+}
+
+.form-control {
+  font-family: 'Montserrat', sans-serif;
+}
+
+.control-label {
+  padding-bottom: 1%;
+  font-family: 'Cormorant Upright', serif;
+  font-weight: 800;
+  font-size: 1.5rem;
+}
+
+/* Schedule Page CSS Settings */
+
+.table-heading-text {
+  font-family: 'Cormorant Infant', serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.table-cell-text {
+  font-family: 'Montserrat', serif;
+  font-weight: 400;
+}
+
+.schedule-title {
+  padding-top: 10%;
+  padding-bottom: 10%;
 }

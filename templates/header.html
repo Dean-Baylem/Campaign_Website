@@ -49,11 +49,13 @@
               <li class="nav-item header-nav-item">
                 <a class="nav-link" href="{{url_for('campaigns')}}">Campaigns</a>
               </li>
+              {% if logged_in %}
               <li class="nav-item header-nav-item">
                 <a class="nav-link" href="{{url_for('character_hub')}}">Characters</a>
               </li>
+              {% endif %}
               <li class="nav-item header-nav-item">
-                <a class="nav-link" href="#">Schedule</a>
+                <a class="nav-link" href="{{url_for('schedule_page')}}">Schedule</a>
               </li>
               {% if current_user.id != 1%}
               <li class="nav-item header-nav-item">
