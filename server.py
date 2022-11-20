@@ -422,20 +422,34 @@ def session_review_page(campaign_id, review_id):
 def login():
     campaigns = Campaign.query.all()
     form = forms.LoginForm()
+    image = 'https://img.freepik.com/free-photo/top-view-beautiful-rpg-still-life-items_23-2149282425.jpg?w=1800&t=st=1668923891~exp=1668924491~hmac=1a144e548bff837473f7442b48915694068909663936c7cc36c77c7dc4166142'
+    title = 'Log In'
+    subtitle = "Welcome back adventurer"
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
     if form.validate_on_submit():
         username = request.form.get('username')
         password = request.form.get('password')
         player = Player.query.filter_by(username=username).first()
+        if not player:
+            flash("Username or password incorrect")
+            return redirect(url_for('login'))
+        elif not check_password_hash(player.password, password):
+            flash("Username of password incorrect")
+            return redirect(url_for('login'))
         if check_password_hash(player.password, password):
             login_user(player)
             return redirect(url_for('home'))
-    return render_template("forms.html", form=form, logged_in=current_user.is_authenticated, all_campaigns=campaigns)
+    return render_template("forms.html", form=form, logged_in=current_user.is_authenticated,
+                           all_campaigns=campaigns, image=image, title=title, subtitle=subtitle)
 
 
 @app.route("/character-hub", methods=["GET", "POST"])
-@login_required
 def character_hub():
     campaigns = Campaign.query.all()
+    if not current_user.is_authenticated:
+        flash("Please login or register to create characters")
+        return redirect(url_for('login'))
     return render_template("character-hub.html", logged_in=current_user.is_authenticated, all_campaigns=campaigns)
 
 
@@ -485,7 +499,15 @@ def schedule_page():
 @app.route("/register", methods=["GET", "POST"])
 def register_player():
     form = forms.CreateNewPlayerForm()
+    campaigns = Campaign.query.all()
+    image = 'https://img.freepik.com/free-photo/top-view-beautiful-rpg-still-life-items_23-2149282425.jpg?w=1800&t=st=1668923891~exp=1668924491~hmac=1a144e548bff837473f7442b48915694068909663936c7cc36c77c7dc4166142'
+    title = "Register"
+    subtitle = "Welcome to Dungeon Delvers Incorportated"
     if form.validate_on_submit():
+        if Player.query.filter_by(username=form.username.data).first():
+            flash("You have already signed up with that username. Please login")
+            return redirect(url_for('login'))
+
         new_player = Player()
         new_player.username = request.form["username"]
         new_player.password = generate_password_hash(
@@ -496,7 +518,8 @@ def register_player():
         db.session.add(new_player)
         db.session.commit()
         return redirect(url_for("home"))
-    return render_template("forms.html", form=form)
+    return render_template("forms.html", form=form, all_campaigns=campaigns,
+                           image=image, title=title, subtitle=subtitle)
 
 
 @app.route("/new-character", methods=["GET", "POST"])

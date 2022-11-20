@@ -242,6 +242,12 @@
   min-height:100vh;
 }
 
+.login-body {
+  display:grid;
+  grid-template-rows: auto 1fr auto;
+  min-height:50vh;
+}
+
 /* General Settings  */
 
 .light-bg {
