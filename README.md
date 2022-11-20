@@ -6,13 +6,11 @@ multiple campaigns it can be difficult to organise and manage all of the informa
 This prototype is intended to do the following:
 
 - Be a central hub for players to find information regarding the campaign they play in
-- Allow the players to have create their own character sheet on the web page
+- Allow players to create their own character sheet on the web page
 - Provide a location for campaign rules to be stored for easy reference by players
-- Provide an easy to access schedule for players to see which games they are in and which games have player openings
-- Receive specific requests from players for games they wish to run
-- Annonymous reviews and feedback of campaigns
-- Players will be able to request a notification if a space becomes available in a game they wish to participate in.
-- General contact section for any other messages from players
+- Provide an easy to access schedule of games.
+- Allow contact to be made directly to me via a contact page which prodcues a unique text document for me to work through.
+- Allow for session reviews to be posted regarding the campaigns players are playing in.
 
 I am focusing on back-end development practice via this project at present using Flask and related libraries. Once I have completed the back-end development of
 the website, and I have become familiar with JavaScript, I will begin work on the front-end functionality. At current I am using Bootstrap 5 for the small amount of
