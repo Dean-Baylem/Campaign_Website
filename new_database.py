@@ -248,8 +248,8 @@ class Character(db.Model):
     max_hit_points = Column(Integer)
     current_hit_points = Column(Integer)
     temp_hit_points = Column(Integer)
-    armor_profs = relationship("armor_profs")
-    weapon_profs = relationship("weapon_profs")
+    armor_profs = Column(Text)
+    weapon_profs = Column(Text)
     strength_save = Column(Boolean, default=False)
     dexterity_save = Column(Boolean, default=False)
     constitution_save = Column(Boolean, default=False)
@@ -297,7 +297,7 @@ class Character(db.Model):
 
     # ------------ Tool & language Proficiencies --------------
     tools = relationship("tool_profs") # Add all the tools as Booleans
-    languages = relationship("languages") # Add all the languages as Booleans
+    languages = relationship("languages")
 
     # ------------ Character Background -----------------------
     background = Column(String(100))
@@ -345,8 +345,26 @@ class Character(db.Model):
     # ---------------- Miscellaneous -----------------
 
     notes = Column(Text)
-    actions = relationship("actions")
+    actions = relationship("actions") # Still need to make this table!!!
     inventory = relationship("items")
+
+
+class Actions(db.Model):
+    __tablename__ = "actions"
+    id = Column(Integer, primary_key=True)
+    name = Column(String, nullable=False)
+    description = Column(Text, nullable=False)
+    type = Column(String(50), nullable=False)  # Full, bonus, reaction
+    damaging_action = Column(Boolean, default=True, nullable=False)  # True or False in table
+    saving_action = Column(Boolean, default=False, nullable=False)
+    saving_attribute = Column(String(50))  # List Options
+    range = Column(String(50))
+    target = Column(String(50))
+    damage_roll_main = Column(String(50))
+    damage_type_main = Column(String(50))
+    damage_roll_secondary = Column(String(50))
+    damage_type_secondary = Column(String(50))
+    character_id = Column(Integer, ForeignKey("characters.id"))
 
 
 class CharacterRaces(db.Model):
@@ -389,15 +407,214 @@ class SubraceFeatures(db.Model):
 
 
 class CharacterClasses(db.Model):
+    __tablename__ = "character_classes"
+    id = Column(Integer, primary_key=True)
+    class_name = Column(String)
+    hit_dice = Column(Integer)
+
+    light_armor = Column(Boolean, default=False)
+    medium_armor = Column(Boolean, default=False)
+    heavy_armor = Column(Boolean, default=False)
+    shields = Column(Boolean, default=False)
+    simple_weapons = Column(Boolean, default=False)
+    martial_weapons = Column(Boolean, default=False)
+    other_weapons = Column(Text)
+
+    strength_save = Column(Boolean, default=False)
+    dexterity_save = Column(Boolean, default=False)
+    constitution_save = Column(Boolean, default=False)
+    intelligence_save = Column(Boolean, default=False)
+    wisdom_save = Column(Boolean, default=False)
+    charisma_save = Column(Boolean, default=False)
+    spellcaster = Column(Boolean)
+
+    num_skills = Column(Integer)
+    num_tools = Column(Integer)
+    start_equipment = Column(Text)
+
+    class_features = relationship("ClassFeatures")
+    subclass_features = relationship("SubclassFeatures")
 
 
+class ClassFeatures(db.Model):
+    __tablename__ = "class_features"
+    id = Column(Integer, primary_key=True)
+    class_id = Column(Integer, ForeignKey("character_classes.id")) # Remember to have a class option in
+                                                                   # the form that then fills the id out
+    class_level = Column(Integer, nullable=False)
+    optional = Column(Boolean)
+    title = Column(String)
+    class_feature_desc = Column(Text)
 
 
+class SubclassFeatures(db.Model):
+    __tablename__ = "subclass_features"
+    id = Column(Integer, primary_key=True)
+    class_id = Column(Integer, ForeignKey("character_classes.id"))  # Remember to have a class option in
+                                                                    # the form that then fills the id out
+    class_level = Column(Integer, nullable=False)
+    optional = Column(Boolean)
+    title = Column(String)
+    subclass_feature_desc = Column(Text)
 
 
+class Spells(db.Model):
+    __tablename__ = "spells"
+    id = Column(Integer, primary_key=True)
+    classes = Column(String) # Have this entered with each seperated by ',' then use split to get the list when needed
+    name = Column(String)
+    cast_time = Column(String)
+    verbal = Column(Boolean)
+    somatic = Column(Boolean)
+    material = Column(Boolean)
+    material_desc = Column(Text)
+    concentration = Column(Boolean)
+    attack_type = Column(String)
+    range = Column(Integer)
+    target = Column(String)
+    spell_desc = Column(Text)
+    spell_level = Column(Integer)
+    spell_school = Column(String)
+    duration = Column(String)
+    attack_spell = Column(Boolean)
+    save_spell = Column(Boolean)
+    save_type = Column(String)
+    ritual = Column(Boolean)
+    primary_damage_die = Column(Integer)
+    number_primary_die = Column(Integer)
+    primary_higher_level_extra_die = Column(Integer)
+    primary_damage_type = Column(String)
+    secondary_damage_die = Column(Integer)
+    number_secondary_die = Column(Integer)
+    secondary_higher_level_extra_die = Column(Integer)
+    secondary_damage_type = Column(String)
+    cantrip_damage_die_1 = Column(Integer)
+    cantrip_damage_die_2 = Column(Integer)
+    cantrip_damage_die_3 = Column(Integer)
+    cantrip_damage_die_4 = Column(Integer)
 
 
+class Backgrounds(db.Model):
+    __tablename__ = "backgrounds"
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    background_desc = Column(Text)
+    background_skill_1 = Column(String)
+    background_skill_2 = Column(String)
+    background_prof_1 = Column(String)
+    background_prof_2 = Column(String)
+    language_1 = Column(String)
+    langauge_2 = Column(String)
+    equipment_desc = Column(Text)
+    background_traits = relationship("BackgroundTraits")
+    background_bonds = relationship("BackgroundBonds")
+    background_ideals = relationship("BackgroundIdeals")
+    background_flaws = relationship("BackgroundFlaws")
+    background_features = relationship("BackgroundFeatures")
+    
 
+class BackgroundTraits(db.Model):
+    __tablename__ = "background_traits"
+    id = Column(Integer, primary_key=True)
+    desc = Column(Text)
+    background_id = Column(Integer, ForeignKey("backgrounds.id"))
+
+
+class BackgroundBonds(db.Model):
+    __tablename__ = "background_bonds"
+    id = Column(Integer, primary_key=True)
+    desc = Column(Text)
+    background_id = Column(Integer, ForeignKey("backgrounds.id"))
+
+
+class BackgroundIdeals(db.Model):
+    __tablename__ = "background_ideals"
+    id = Column(Integer, primary_key=True)
+    desc = Column(Text)
+    background_id = Column(Integer, ForeignKey("backgrounds.id"))
+
+
+class BackgroundFlaws(db.Model):
+    __tablename__ = "background_flaws"
+    id = Column(Integer, primary_key=True)
+    desc = Column(Text)
+    background_id = Column(Integer, ForeignKey("backgrounds.id"))
+
+
+class BackgroundFeatures(db.Model):
+    __tablename__ = "background_features"
+    id = Column(Integer, primary_key=True)
+    title = Column(String)
+    desc = Column(Text)
+
+
+class Weapons(db.Model):
+    __tablename__ = "weapons"
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    type = Column(String)
+    value = Column(Integer)
+    martial = Column(Boolean)
+    simple = Column(Boolean)
+    magic_weapon = Column(Boolean)
+    reach_range = Column(String)
+    hit_bonus = Column(Integer)
+    primary_damage_die = Column(Integer)
+    number_primary_die = Column(Integer)
+    primary_damage_type = Column(String)
+    secondary_damage_die = Column(Integer)
+    number_secondary_die = Column(Integer)
+    secondary_damage_type = Column(String)
+    properties = Column(Text)
+    character_id = Column(Integer, ForeignKey("characters.id"))
+
+
+class Armor(db.Model):
+    __tablename__ = "armor"
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    category = Column(String)
+    armor_class = Column(Integer)
+    dex_bonus = Column(Boolean)
+    dex_bonus_limit = Column(Boolean)
+    str_min = Column(Integer)
+    stealth_disadvantage = Column(Boolean)
+    value = Column(Integer)
+    character_id = Column(Integer, ForeignKey("characters.id"))
+
+
+class Items(db.Model):
+    __tablename__ = "items"
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    category = Column(String)
+    value = Column(Integer)
+    item_desc = Column(Text)
+    character_id = Column(Integer, ForeignKey("characters.id"))
+
+
+class Languages(db.Model):
+    __tablename__ = "languages"
+    id = Column(Integer, primary_key=True)
+    common = Column(Boolean)
+    dwarvish = Column(Boolean)
+    elvish = Column(Boolean)
+    giant = Column(Boolean)
+    gnomish = Column(Boolean)
+    goblin = Column(Boolean)
+    halfling = Column(Boolean)
+    orc = Column(Boolean)
+    abyssal = Column(Boolean)
+    celestial = Column(Boolean)
+    draconic = Column(Boolean)
+    deep_speech = Column(Boolean)
+    infernal = Column(Boolean)
+    primordial = Column(Boolean)
+    sylvan = Column(Boolean)
+    undercommon = Column(Boolean)
+    druidic = Column(Boolean)
+    thieves_cant = Column(Boolean)
+    character_id = Column(Integer, ForeignKey("characters.id"))
 
 
 
