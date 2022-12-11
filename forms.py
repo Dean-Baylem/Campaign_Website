@@ -1,8 +1,9 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField, EmailField, IntegerField, \
-    SelectField, SelectMultipleField, TextAreaField
+    SelectField, SelectMultipleField, TextAreaField, FileField
 from wtforms.validators import DataRequired, URL
 from flask_ckeditor import CKEditorField
+from character_race_details import list_of_races
 
 # List of campaigns currently running:
 campaigns = ["GoS", "CoS", "LotST"]
@@ -13,16 +14,30 @@ all_skills = ["Acrobatics", "Animal Handling", "Arcana", "Athletics", "Deception
           "Performance", "Persuasion", "Religion", "Sleight of Hand", "Stealth", "Survival"]
 all_saves = ["Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma"]
 
+# List of dm's:
+dm_list = ["DungeonDelverDean", "FirehouseGames", "TestDM"]
+
+# Alignments
+alignments = ['Lawful Good', 'Neutral Good', 'Chaotic Good', 'Lawful Neutral', 'Neutral',
+              'Chaotic Neutral', 'Lawful Evil', 'Neutral Evil', 'Chaotic Evil']
+
 
 class CreateCampaignForm(FlaskForm):
     title = StringField("Campaign Title", validators=[DataRequired()])
     subtitle = StringField("Campaign Subtitle", validators=[DataRequired()])
-    blurb = CKEditorField("Campaign Summary", validators=[DataRequired()])
-    campaign_image = StringField("URL for campaign card image", validators=[DataRequired()])
-    page_image = StringField("URL for the campaign page banner", validators=[DataRequired()])
-    central_location = StringField("Campaign Location", validators=[DataRequired()])
+    description = CKEditorField("Campaign Summary", validators=[DataRequired()])
+    page_image = StringField("URL for campaign page image", validators=[DataRequired()])
+    campaign_card_img = StringField("URK for campaign card image", validators=[DataRequired()])
+    central_location = StringField("Campaign central location", validators=[DataRequired()])
+    central_location_img = StringField("Campaign central location img", validators=[DataRequired()])
+    central_location_map = StringField("Campaign central location map", validators=[DataRequired()])
     region_summary = CKEditorField("Describe the region of the campaign", validators=[DataRequired()])
+    region_map = StringField("Map of the region.")
     faction_summary = CKEditorField("Describe the factions of the campaign", validators=[DataRequired()])
+    regular_day = StringField("What day will the weekly game take place?", validators=[DataRequired()])
+    regular_time = StringField("What time will the weekly game take place?", validators=[DataRequired()])
+    dm_username = SelectField("Username of the DM for the campaign?", choices=dm_list, validators=[DataRequired()])
+    dm_img = FileField("Image File")
     submit = SubmitField("Submit Campaign")
 
 
@@ -80,6 +95,7 @@ class CreateLocationForm(FlaskForm):
 
 
 class CreateNewPlayerForm(FlaskForm):
+    email = EmailField("Please enter your email address", validators=[DataRequired()])
     username = StringField("Please enter your username", validators=[DataRequired()])
     password = PasswordField("Please enter your password", validators=[DataRequired()])
     submit = SubmitField("Submit Player")
@@ -124,3 +140,28 @@ class ContactMe(FlaskForm):
     subject = StringField("Subject", default="Your subject...", validators=[DataRequired()])
     message = TextAreaField("Message", default="Your message...", validators=[DataRequired()])
     submit = SubmitField("Submit")
+
+
+class CharacterBaseDetailsForm(FlaskForm):
+    name = StringField("Character name", default="Character name")
+    campaign = SelectField("Please select which campaign this character is part off", choices=campaigns,
+                           validators=[DataRequired()])
+    sex = StringField("What gender is your character?")
+    char_img = StringField("URL for character image")
+    token_img = StringField("URL for token image")
+    char_lvl = IntegerField("What level is your character?", default=1)
+    alignment = SelectField("What is your character's alignment?", choices=alignments)
+
+
+class CharacterRaceFormFirst(FlaskForm):
+    race = SelectField("What race would you like to be?", choices=list_of_races)
+
+# Build the below form into the route directly following the above form.
+# class CharacterRaceFormSecond(FlaskForm):
+#     subrace = Column(String(50))
+#     main_bonus_score = Column(String)
+#     sub_bonus_score = Column(String)
+#     size = Column(String)
+#     speed = Column(Integer)
+#     age = Column(Integer)
+
