@@ -1,9 +1,10 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField, EmailField, IntegerField, \
-    SelectField, SelectMultipleField, TextAreaField, FileField
+    SelectField, SelectMultipleField, TextAreaField, FileField, BooleanField
 from wtforms.validators import DataRequired, URL
 from flask_ckeditor import CKEditorField
-from character_race_details import list_of_races
+from dnd5e_api_stored_details import list_of_races, all_weapon_details, all_classes,\
+    all_languages, all_race_details, all_tools
 
 # List of campaigns currently running:
 campaigns = ["GoS", "CoS", "LotST"]
@@ -12,6 +13,7 @@ campaigns = ["GoS", "CoS", "LotST"]
 all_skills = ["Acrobatics", "Animal Handling", "Arcana", "Athletics", "Deception", "History",
           "Insight", "Intimidation", "Investigation", "Medicine", "Nature", "Perception",
           "Performance", "Persuasion", "Religion", "Sleight of Hand", "Stealth", "Survival"]
+
 all_saves = ["Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma"]
 
 # List of dm's:
@@ -21,6 +23,8 @@ dm_list = ["DungeonDelverDean", "FirehouseGames", "TestDM"]
 alignments = ['Lawful Good', 'Neutral Good', 'Chaotic Good', 'Lawful Neutral', 'Neutral',
               'Chaotic Neutral', 'Lawful Evil', 'Neutral Evil', 'Chaotic Evil']
 
+# Stats
+stats = ["Strength", "Dexterity", "Constitution", "Wisdom", "Intelligence", "Charisma"]
 
 class CreateCampaignForm(FlaskForm):
     title = StringField("Campaign Title", validators=[DataRequired()])
@@ -42,25 +46,24 @@ class CreateCampaignForm(FlaskForm):
 
 
 class CreateNewCharacter(FlaskForm):
+    # ----------- Character Details -------------
     name = StringField("Character Name", validators=[DataRequired()])
     campaign = SelectField("Please select which campaign this character is part off", choices=campaigns,
                            validators=[DataRequired()])
-    character_image = StringField("Character Image URL", validators=[DataRequired()])
-    token = StringField("Character Token URL", validators=[DataRequired()])
-    race = StringField("Character Race", validators=[DataRequired()])
-    character_class = StringField("Character Class", validators=[DataRequired()])
-    alignment = StringField("Character Alignment", validators=[DataRequired()])
-    appearance_summary = StringField("Short description of character appearance (up to 300 characters)",
-                                     validators=[DataRequired()])
-    background = StringField("Character Background", validators=[DataRequired()])
-    personality_traits = CKEditorField("Personality Traits", validators=[DataRequired()])
-    ideals = StringField("Character Ideals", validators=[DataRequired()])
-    bonds = StringField("Character Bonds", validators=[DataRequired()])
-    flaws = StringField("Character Flaws", validators=[DataRequired()])
-    description = CKEditorField("Character Description", validators=[DataRequired()])
-    backstory = CKEditorField("Character Backstory", validators=[DataRequired()])
+    sex = StringField("What is the characters gender?")
+    char_img = StringField("Character Image URL", validators=[DataRequired()])
+    token_img = StringField("Character Token URL", validators=[DataRequired()])
+    char_lvl = IntegerField("What is the starting level of your character?", validators=[DataRequired()])
+    alignment = SelectField("What is your characters alignment?", choices=alignments)
 
-    level = IntegerField("Character Level", validators=[DataRequired()])
+    # ------------- Character Race -----------------
+    race = StringField("Character Race", validators=[DataRequired()])
+    subrace = StringField("Does your character have a subrace?")
+    main_bonus_score = SelectField("Which stat would you like your +2 bonus to be in?", choices=stats)
+    sub_bonus_score = SelectField("Which stat would you like your +1 bonus to be in?", choices=stats) # Remember that the sub and main bonus score must be different values.
+    age = IntegerField("What is your characters age?")
+
+    # ------------- Ability Scores -----------------
     strength = IntegerField("Character Strength", validators=[DataRequired()])
     dexterity = IntegerField("Character Dexterity", validators=[DataRequired()])
     constitution = IntegerField("Character Constitution", validators=[DataRequired()])
@@ -68,13 +71,41 @@ class CreateNewCharacter(FlaskForm):
     intelligence = IntegerField("Character Intelligence", validators=[DataRequired()])
     charisma = IntegerField("Character Charisma", validators=[DataRequired()])
 
+    # -------------- Character Class ----------------
+    class_main = SelectMultipleField("What is your main Character Class", choices=all_classes,
+                                     validators=[DataRequired()])
+    class_main_level = IntegerField("What is your main class level?", validators=[DataRequired()])
+    multiclass = BooleanField("Do you have a second class?")
+    hp_calculation = BooleanField("Do you wish to take the average values for HP?")
+
+    # ------------ Character Background -----------------------
+    appearance_summary = StringField("Short description of character appearance (up to 300 characters)")
+    background = StringField("Character Background", validators=[DataRequired()])
+    personality_trait_1 = StringField("What is your first personality trait?", validators=[DataRequired()])
+    personality_trait_2 = StringField("What is your second personality trait?", validators=[DataRequired()])
+    ideals = StringField("Character Ideals", validators=[DataRequired()])
+    bonds = StringField("Character Bonds", validators=[DataRequired()])
+    flaws = StringField("Character Flaws", validators=[DataRequired()])
+    appearance_detailed = CKEditorField("Please provide a detailed description of your characters appearance")
+    height = IntegerField("What is your characters height in cm: ")
+    weight = IntegerField("What is your characters weight in kg: ")
+    backstory = CKEditorField("Character Backstory")
+
+    # ------------ Tool, language and skill Proficiencies --------------
     skills = SelectMultipleField("Please select which skills you are proficient with", choices=all_skills)
-    saves = SelectMultipleField("Please select which saves you are proficient with", choices=all_saves)
-    languages = CKEditorField("Please write down which languages you know. Please use bullet points")
+    languages = SelectMultipleField("Which languages do you know?", choices=all_languages)
+    tool_proficiencies = SelectMultipleField("Select which tools you are proficient with?", choices=all_tools)
+    instruments = TextAreaField("Which instruments are you proficient with?")
+
+
     darkvision = IntegerField("Please write down your darkvision in ft")
-    tool_proficiencies = CKEditorField("Please write down you tool proficiencies. Please use bullet points")
     submit = SubmitField("Submit Character")
 
+    # saves = Determined by primary class
+    # class_main_subclass = Column(String) ---- Own table based on class level
+    # class_second = Column(String(150)) ---- Own Table for this.
+    # class_second_level = Column(Integer)
+    # class_second_subclass = Column(String)
 
 class CreateFactionForm(FlaskForm):
     faction_name = StringField("Name of Faction", validators=[DataRequired()])

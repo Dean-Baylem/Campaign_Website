@@ -257,6 +257,7 @@ class Character(db.Model):
     spellcaster = Column(Boolean)
 
     # ----------- Spellcasting -------------------
+    # Depending on the character there will be another table for spell options!
     spell_ability = Column(String) # All of these will be updated after a player changes the level of the character.
     spell_dc = Column(Integer)
     spell_attack_mod = Column(Integer)
@@ -636,4 +637,4 @@ class Items(db.Model):
     character_id = Column(Integer, ForeignKey("characters.id"))
 
 
-db.create_all()
+# db.create_all()

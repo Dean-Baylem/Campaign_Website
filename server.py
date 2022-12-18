@@ -72,6 +72,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///campaign_manager.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
+
 # --------------- Setup Login Manager -----------------
 
 login_manager = LoginManager()
