@@ -1,0 +1,184 @@
+{% include "header.html" %}
+
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+
+{% if image %}
+
+<section id="campaign-heading" class="light-bg">
+  <div class="container-fluid" style="background-image: url({{image}}); background-repeat: no-repeat; background-size: cover;">
+  <div class="mask" style="background-color: rgba(0, 0, 0, 0.5)" >
+    <div class="row section-area">
+      <h1 class="home-title heading-font">{{title}}</h1>
+        <div class="col">
+          <div class="campaigns-subtitle">
+            <h4 class="home-subtitle home-page-font">{{subtitle}}</h4>
+          </div>
+        </div>
+    </div>
+  </div>
+  </div>
+</section>
+
+{% endif %}
+
+<body>
+<section class="light-bg section-area login-body">
+ <div class="container" style="margin: 0; padding: 0;">
+     <div class="row">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="character-details-tab" data-bs-toggle="tab" data-bs-target="#character-details-tab-pane" type="button" role="tab" aria-controls="character-details-tab-pane" aria-selected="true">Details</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="character-race-tab" data-bs-toggle="tab" data-bs-target="#character-race-tab-pane" type="button" role="tab" aria-controls="character-race-tab-pane" aria-selected="false">Race</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="character-class-tab" data-bs-toggle="tab" data-bs-target="#character-class-tab-pane" type="button" role="tab" aria-controls="character-class-tab-pane" aria-selected="false">Class</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="character-appearance-tab" data-bs-toggle="tab" data-bs-target="#character-appearance-tab-pane" type="button" role="tab" aria-controls="character-appearance-tab-pane" aria-selected="false">Appearance</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="character-background-tab" data-bs-toggle="tab" data-bs-target="#character-background-tab-pane" type="button" role="tab" aria-controls="character-background-tab-pane" aria-selected="false">Background</button>
+          </li>
+<!--          <li class="nav-item" role="presentation">-->
+<!--            <button class="nav-link" id="disabled-tab" data-bs-toggle="tab" data-bs-target="#disabled-tab-pane" type="button" role="tab" aria-controls="disabled-tab-pane" aria-selected="false">Disabled</button>-->
+<!--          </li>-->
+        </ul>
+         <form method="POST" action="/add-new-character">
+        <div class="tab-content" id="myTabContent">
+          <div class="tab-pane fade show active" id="character-details-tab-pane" role="tabpanel" aria-labelledby="character-details-tab" tabindex="0">
+                  {{ form.csrf_token }}
+                  <div class="row form-group required">
+                      <div class="col-lg-5 control-label">Character Name:</div>
+                      <div class="col-lg-7">{{ form.name(class='form-control') }}</div>
+                  </div>
+                  <div class="row form-group required">
+                      <div class="col-lg-5 control-label">{{ form.campaign.label }}</div>
+                      <div class="col-lg-7">{{ form.campaign(class='form-control') }}</div>
+                  </div>
+                  <div class="row form-group required">
+                      <div class="col-lg-5 control-label">{{ form.sex.label }}</div>
+                      <div class="col-lg-7">{{ form.sex(class='form-control') }}</div>
+                  </div>
+                  <div class="row form-group required">
+                      <div class="col-lg-5 control-label">{{ form.char_img.label }}</div>
+                      <div class="col-lg-7">{{ form.char_img(class='form-control') }}</div>
+                  </div>
+                  <div class="row form-group required">
+                      <div class="col-lg-5 control-label">{{ form.token_img.label }}</div>
+                      <div class="col-lg-7">{{ form.token_img(class='form-control') }}</div>
+                  </div>
+                  <div class="row form-group required">
+                      <div class="col-lg-5 control-label">{{ form.char_lvl.label }}</div>
+                      <div class="col-lg-7">{{ form.char_lvl(class='form-control') }}</div>
+                  </div>
+                  <div class="row form-group required">
+                      <div class="col-lg-5 control-label">{{ form.alignment.label }}</div>
+                      <div class="col-lg-7">{{ form.alignment(class='form-control') }}</div>
+                  </div>
+          </div>
+          <div class="tab-pane fade" id="character-race-tab-pane" role="tabpanel" aria-labelledby="character-race-tab" tabindex="0">
+                <div class="row form-group required">
+                      <div class="col-lg-5 control-label">Character Race:</div>
+                      <div class="col-lg-7">{{ form.race(class='form-control') }}</div>
+                  </div>
+                <div class="row form-group required">
+                      <div class="col-lg-5 control-label">Character Subrace</div>
+                      <div class="col-lg-7">{{ form.subrace(class='form-control') }}</div>
+                  </div>
+                <div class="row form-group required">
+                      <div class="col-lg-5 control-label">Character Age:</div>
+                      <div class="col-lg-7">{{ form.age(class='form-control') }}</div>
+                  </div>
+                <div class="row form-group required">
+                      <div class="col-lg-5 control-label">Main Stat Bonus (+2) :</div>
+                      <div class="col-lg-7">{{ form.main_bonus_score(class='form-control') }}</div>
+                  </div>
+                <div class="row form-group required">
+                      <div class="col-lg-5 control-label">Sub Stat Bonus (+1) :</div>
+                      <div class="col-lg-7">{{ form.sub_bonus_score(class='form-control') }}</div>
+                  </div>
+          </div>
+          <div class="tab-pane fade" id="character-class-tab-pane" role="tabpanel" aria-labelledby="character-class-tab" tabindex="0">
+                  <div class="row form-group required">
+                      <div class="col-lg-5 control-label">Main Character Class :</div>
+                      <div class="col-lg-7">{{ form.class_main(class='form-control') }}</div>
+                  </div>
+                  <div class="row form-group required">
+                      <div class="col-lg-5 control-label">What is your Main Class Level? :</div>
+                      <div class="col-lg-7">{{ form.class_main_level(class='form-control') }}</div>
+                  </div>
+                  <div class="row form-group required">
+                      <div class="col-lg-5 control-label">Does your character have a secondary class?</div>
+                      <div class="col-lg-7">{{ form.multiclass(class='form-control') }}</div>
+                  </div>
+                  <div class="row form-group required">
+                      <div class="col-lg-5 control-label">Would you like to use the average value for HP?</div>
+                      <div class="col-lg-7">{{ form.hp_calculation(class='form-control') }}</div>
+                  </div>
+          </div>
+          <div class="tab-pane fade" id="character-appearance-tab-pane" role="tabpanel" aria-labelledby="character-appearance-tab" tabindex="0">
+                  {{ ckeditor.load() }}
+                  {{ ckeditor.config(name='appearance_detailed') }}
+                  <div class="row form-group required">
+                      <div class="col-lg-5 control-label">{{ form.appearance_summary.label }}</div>
+                      <div class="col-lg-7">{{ form.appearance_summary(class='form-control') }}</div>
+                  </div>
+                  <div class="row form-group required">
+                      <div class="col-lg-5 control-label">{{ form.height.label }}</div>
+                      <div class="col-lg-7">{{ form.height(class='form-control') }}</div>
+                  </div>
+                  <div class="row form-group required">
+                      <div class="col-lg-5 control-label">{{ form.weight.label }}</div>
+                      <div class="col-lg-7">{{ form.weight(class='form-control') }}</div>
+                  </div>
+                  <div class="row form-group required">
+                      <div class="col-lg-5 control-label">{{ form.appearance_detailed.label }}</div>
+                      <div class="col-lg-7">{{ form.appearance_detailed(class='form-control') }}</div>
+                  </div>
+          </div>
+          <div class="tab-pane fade" id="character-background-tab-pane" role="tabpanel" aria-labelledby="character-background-tab" tabindex="0">
+                  <div class="row form-group required">
+                      <div class="col-lg-5 control-label">{{ form.background.label }}</div>
+                      <div class="col-lg-7">{{ form.background(class='form-control') }}</div>
+                  </div>
+                  <div class="row form-group required">
+                      <div class="col-lg-5 control-label">{{ form.personality_trait_1.label }}</div>
+                      <div class="col-lg-7">{{ form.personality_trait_1(class='form-control') }}</div>
+                  </div>
+                  <div class="row form-group required">
+                      <div class="col-lg-5 control-label">{{ form.personality_trait_2.label }}</div>
+                      <div class="col-lg-7">{{ form.personality_trait_2(class='form-control') }}</div>
+                  </div>
+                  <div class="row form-group required">
+                      <div class="col-lg-5 control-label">{{ form.ideals.label }}</div>
+                      <div class="col-lg-7">{{ form.ideals(class='form-control') }}</div>
+                  </div>
+                  <div class="row form-group required">
+                      <div class="col-lg-5 control-label">{{ form.bonds.label }}</div>
+                      <div class="col-lg-7">{{ form.bonds(class='form-control') }}</div>
+                  </div>
+                  <div class="row form-group required">
+                      <div class="col-lg-5 control-label">{{ form.flaws.label }}</div>
+                      <div class="col-lg-7">{{ form.flaws(class='form-control') }}</div>
+                  </div>
+                  <div class="row form-group required">
+                      <div class="col-lg-5 control-label">{{ form.backstory.label }}</div>
+                      <div class="col-lg-7">{{ form.backstory(class='form-control') }}</div>
+                  </div>
+                  <div class="row form-group required">
+                      <div class="col-lg-5 control-label">{{ form.submit.label }}</div>
+                      <div class="col-lg-7">{{ form.submit(class='form-control') }}</div>
+                  </div>
+          </div>
+        </div>
+         </form>
+     </div>
+ </div>
+</section>
+{% endblock %}
+
+{% include 'footer.html' %}

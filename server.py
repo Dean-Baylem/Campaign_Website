@@ -3,8 +3,8 @@ from new_database import Campaign, Player, Location, LocationComments, Armor, Ac
     NPC, SessionReview, SessionReviewComments, ScheduledSession, HouseRule, Character, CharacterClasses, \
     CharacterRaces, RacialFeatures, SubclassFeatures, SubraceFeatures, ClassFeatures, Spells, Backgrounds, \
     BackgroundFeatures, BackgroundIdeals, BackgroundTraits, BackgroundBonds, BackgroundFlaws, \
-    Weapons, Items
-from flask import Flask, render_template, redirect, url_for, flash, request, abort
+    Weapons, Items, Subraces
+from flask import Flask, render_template, redirect, url_for, flash, request, abort, jsonify
 from flask_bootstrap import Bootstrap
 from flask_ckeditor import CKEditor
 from flask_wtf import FlaskForm
@@ -17,6 +17,7 @@ from flask_login import UserMixin, login_user, LoginManager, login_required, cur
 from flask_gravatar import Gravatar
 from functools import wraps
 import forms
+from dnd5e_api_stored_details import class_hit_die, class_skill_profs, all_race_details, class_saves
 
 
 # ------------- Character Functions ---------------------
@@ -254,6 +255,74 @@ def register_player():
                            image=image, title=title, subtitle=subtitle)
 # all_campaigns=campaigns !!!! Remember to add back for the footer!!
 
+@app.route("/add-new-character", methods=["GET", "POST"])
+@login_required
+def new_character():
+    form = forms.CreateNewCharacter()
+    if form.validate_on_submit():
+        new_character = Character(
+            char_img=form.char_img.data,
+            name=form.name.data,
+            sex=form.sex.data,
+            token_img=form.token_img.data,
+            alignment=form.alignment.data,
+            char_lvl=form.char_lvl.data,
+            player_id=current_user.id,
+
+            race=form.race.data,
+            subrace=form.subrace.data,
+            main_bonus_score=form.main_bonus_score.data,
+            sub_bonus_score=form.sub_bonus_score.data,
+            age=form.age.data,
+
+            class_main=form.class_main.data,
+            class_main_level=form.class_main_level.data,
+
+            background=form.background.data,
+            personality_trait_1=form.personality_trait_1.data,
+            personality_trait_2=form.personality_trait_2.data,
+            ideals=form.ideals.data,
+            bonds=form.bonds.data,
+            flaws=form.flaws.data,
+            backstory=form.backstory.data,
+
+            appearance_summary=form.appearance_summary.data,
+            appearance_detailed=form.appearance_detailed.data,
+            height=form.height.data,
+            weight=form.weight.data,
+
+            cp=0,
+            sp=0,
+            ep=0,
+            gp=0,
+            pp=0,
+
+            equipped_armor="",
+        )
+        if form.campaign.data == "GoS":
+            new_character.campaign_id = 1
+        new_character.hit_dice = class_hit_die[form.class_main.data.lower()]
+        if "str" in class_saves[form.class_main.data.lower()]:
+            new_character.strength_save = True
+        if "dex" in class_saves[form.class_main.data.lower()]:
+            new_character.dexterity_save = True
+        if "con" in class_saves[form.class_main.data.lower()]:
+            new_character.constitution_save = True
+        if "int" in class_saves[form.class_main.data.lower()]:
+            new_character.intelligence_save = True
+        if "wis" in class_saves[form.class_main.data.lower()]:
+            new_character.wisdom_save = True
+        if "cha" in class_saves[form.class_main.data.lower()]:
+            new_character.charisma_save = True
+        if form.class_main == "Bard" or "Cleric" or "Druid" or "Sorcerer" or "Warlock" or "Wizard":
+            new_character.spellcaster = True
+        # for language in all_race_details[form.race.data]['languages']:
+        #     new_character.language['index'] = True
+        db.session.add(new_character)
+        db.session.commit()
+        return redirect(url_for('home'))
+    return render_template("create_character_page.html", form=form, logged_in=current_user.is_authenticated)
+
 @app.route("/new-character", methods=["GET", "POST"])
 @login_required
 def add_new_character():
@@ -418,7 +487,7 @@ def add_new_campaign():
             regular_time=form.regular_time.data,
             dm_username=form.dm_username.data,
         )
-        new_campaign.dm_img = request.files[form.dm_img.name]
+        # new_campaign.dm_img = request.files[form.dm_img.name] !! Need to finisht this !!
         db.session.add(new_campaign)
         db.session.commit()
         return redirect(url_for("home"))

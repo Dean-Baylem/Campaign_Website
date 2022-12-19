@@ -5,6 +5,50 @@ import requests
 
 # Data obtained from DND5eapi and stored as lists and dictionaries.
 
+class_saves = {'barbarian': ['str', 'con'],
+               'bard': ['dex', 'cha'],
+               'cleric': ['wis', 'cha'],
+               'druid': ['int', 'wis'],
+               'fighter': ['str', 'con'],
+               'monk': ['str', 'dex'],
+               'paladin': ['wis', 'cha'],
+               'ranger': ['str', 'dex'],
+               'rogue': ['dex', 'int'],
+               'sorcerer': ['con', 'cha'],
+               'warlock': ['wis', 'cha'],
+               'wizard': ['int', 'wis']}
+
+
+class_hit_die = {'barbarian': 12, 'bard': 8, 'cleric': 8,
+                 'druid': 8, 'fighter': 10, 'monk': 8,
+                 'paladin': 10, 'ranger': 10, 'rogue': 8,
+                 'sorcerer': 6, 'warlock': 8, 'wizard': 6}
+
+class_skill_profs = {'barbarian': {'desc': 'Choose two from Animal Handling, Athletics,'
+                                           ' Intimidation, Nature, Perception, and Survival'},
+                     'bard': {'desc': 'Choose any three'},
+                     'cleric': {'desc': 'Choose two from History, Insight, Medicine, Persuasion, and Religion'},
+                     'druid': {'desc': 'Choose two from Arcana, Animal Handling, Insight,'
+                                       ' Medicine, Nature, Perception, Religion, and Survival'},
+                     'fighter': {'desc': 'Choose two skills from Acrobatics,'
+                                         ' Animal Handling, Athletics, History, Insight,'
+                                         ' Intimidation, Perception, and Survival'},
+                     'monk': {'desc': 'Choose two from Acrobatics, Athletics, History, Insight, Religion, and Stealth'},
+                     'paladin': {'desc': 'Choose two from Athletics, Insight,'
+                                         ' Intimidation, Medicine, Persuasion, and Religion'},
+                     'ranger': {'desc': 'Choose three from Animal Handling, Athletics, Insight,'
+                                        ' Investigation, Nature, Perception, Stealth, and Survival'},
+                     'rogue': {'desc': 'Choose four from Acrobatics, Athletics, Deception, Insight,'
+                                       ' Intimidation, Investigation, Perception, Performance,'
+                                       ' Persuasion, Sleight of Hand, and Stealth'},
+                     'sorcerer': {'desc': 'Choose two from Arcana, Deception, Insight,'
+                                          ' Intimidation, Persuasion, and Religion'},
+                     'warlock': {'desc': 'Choose two skills from Arcana, Deception, History,'
+                                         ' Intimidation, Investigation, Nature, and Religion'},
+                     'wizard': {'desc': 'Choose two from Arcana, History, Insight,'
+                                        ' Investigation, Medicine, and Religion'}}
+
+
 list_of_races = ['dragonborn', 'dwarf', 'elf', 'gnome', 'half-elf', 'half-orc', 'halfling', 'human', 'tiefling']
 
 all_race_details = {'dragonborn': {'name': 'Dragonborn',
@@ -60,6 +104,8 @@ all_race_details = {'dragonborn': {'name': 'Dragonborn',
                                                     'humans but live a few years longer.',
                                  'languages': [{'index': 'common', 'name': 'Common', 'url': '/api/languages/common'},
                                                {'index': 'infernal', 'name': 'Infernal', 'url': '/api/languages/infernal'}]}}
+
+
 
 all_classes = ['Barbarian', 'Bard', 'Cleric', 'Druid', 'Fighter', 'Monk', 'Paladin',
                'Ranger', 'Rogue', 'Sorcerer', 'Warlock', 'Wizard']
@@ -149,6 +195,8 @@ all_tools = ["Alchemist's Supplies", "Brewer's Supplies", "Calligrapher's Suppli
              'Dice Set', 'Playing Card Set', 'Bagpipes', 'Drum', 'Dulcimer', 'Flute', 'Lute', 'Lyre',
              'Horn', 'Pan flute', 'Shawm', 'Viol', "Navigator's Tools", "Thieves' Tools"]
 
+# {'index': 'barbarian', 'name': 'Barbarian', 'proficiencies': [{'index': 'light-armor', 'name': 'Light Armor', 'url': '/api/proficiencies/light-armor'}, {'index': 'medium-armor', 'name': 'Medium Armor', 'url': '/api/proficiencies/medium-armor'}, {'index': 'shields', 'name': 'Shields', 'url': '/api/proficiencies/shields'}, {'index': 'simple-weapons', 'name': 'Simple Weapons', 'url': '/api/proficiencies/simple-weapons'}, {'index': 'martial-weapons', 'name': 'Martial Weapons', 'url': '/api/proficiencies/martial-weapons'}, {'index': 'saving-throw-str', 'name': 'Saving Throw: STR', 'url': '/api/proficiencies/saving-throw-str'}, {'index': 'saving-throw-con', 'name': 'Saving Throw: CON', 'url': '/api/proficiencies/saving-throw-con'}], 'saving_throws': [{'index': 'str', 'name': 'STR', 'url': '/api/ability-scores/str'}, {'index': 'con', 'name': 'CON', 'url': '/api/ability-scores/con'}], 'starting_equipment': [{'equipment': {'index': 'explorers-pack', 'name': "Explorer's Pack", 'url': '/api/equipment/explorers-pack'}, 'quantity': 1}, {'equipment': {'index': 'javelin', 'name': 'Javelin', 'url': '/api/equipment/javelin'}, 'quantity': 4}], 'starting_equipment_options': [{'desc': '(a) a greataxe or (b) any martial melee weapon', 'choose': 1, 'type': 'equipment', 'from': {'option_set_type': 'options_array', 'options': [{'option_type': 'counted_reference', 'count': 1, 'of': {'index': 'greataxe', 'name': 'Greataxe', 'url': '/api/equipment/greataxe'}}, {'option_type': 'choice', 'choice': {'desc': 'any martial melee weapon', 'choose': 1, 'type': 'equipment', 'from': {'option_set_type': 'equipment_category', 'equipment_category': {'index': 'martial-melee-weapons', 'name': 'Martial Melee Weapons', 'url': '/api/equipment-categories/martial-melee-weapons'}}}}]}}, {'desc': '(a) two handaxes or (b) any simple weapon', 'choose': 1, 'type': 'equipment', 'from': {'option_set_type': 'options_array', 'options': [{'option_type': 'counted_reference', 'count': 2, 'of': {'index': 'handaxe', 'name': 'Handaxe', 'url': '/api/equipment/handaxe'}}, {'option_type': 'choice', 'choice': {'desc': 'any simple weapon', 'choose': 1, 'type': 'equipment', 'from': {'option_set_type': 'equipment_category', 'equipment_category': {'index': 'simple-weapons', 'name': 'Simple Weapons', 'url': '/api/equipment-categories/simple-weapons'}}}}]}}], 'class_levels': '/api/classes/barbarian/levels', 'multi_classing': {'prerequisites': [{'ability_score': {'index': 'str', 'name': 'STR', 'url': '/api/ability-scores/str'}, 'minimum_score': 13}], 'proficiencies': [{'index': 'shields', 'name': 'Shields', 'url': '/api/proficiencies/shields'}, {'index': 'simple-weapons', 'name': 'Simple Weapons', 'url': '/api/proficiencies/simple-weapons'}, {'index': 'martial-weapons', 'name': 'Martial Weapons', 'url': '/api/proficiencies/martial-weapons'}]}, 'subclasses': [{'index': 'berserker', 'name': 'Berserker', 'url': '/api/subclasses/berserker'}], 'url': '/api/classes/barbarian'}
+
 # ---------------- Checking for all playable races ----------------------
 
 # races = requests.get("https://www.dnd5eapi.co/api/races")
@@ -159,6 +207,7 @@ all_tools = ["Alchemist's Supplies", "Brewer's Supplies", "Calligrapher's Suppli
 #     print(race['index'])
 #     url = "https://www.dnd5eapi.co/api/races/" + race['index']
 #     race_details = requests.get(url).json()
+#     print(race_details)
 #     all_race_details[race_details['index']] = {
 #         "name": race_details['name'],
 #         "age description": race_details['age'],
@@ -169,14 +218,32 @@ all_tools = ["Alchemist's Supplies", "Brewer's Supplies", "Calligrapher's Suppli
 # print(all_race_details)
 # print(all_race_details['elf'])
 
-# ------------- Checking for all the playable classes ------------------
+# ------------- Checking for playable classes and details ------------------
 
+#
 # data = requests.get('https://www.dnd5eapi.co/api/classes/')
 # all_data = data.json()
 # for player_class in all_data['results']:
-#     all_classes.append(player_class['name'])
+#     url = "https://www.dnd5eapi.co" + player_class['url']
+#     class_data = requests.get(url).json()
 #
-# print(all_classes)
+#     # Obtaining the saving throws for each class
+#     # saving_throw_data = class_data['saving_throws']
+#     # saving_throws = []
+#     # for save in saving_throw_data:
+#     #     saving_throws.append(save['index'])
+#     # class_saves[class_data['index']] = saving_throws
+#
+#
+#     # Obtaining skill_prof details per class and storing into a dictionary
+#     # class_skill_profs[class_data['index']] = {
+#     #     'desc': class_data['proficiency_choices'][0]['desc']
+#     # }
+#
+#     # Obtaining hit die data per class and storing into a dictionary
+#     # class_hit_die[class_data['index']] = class_data['hit_die']
+#
+#
 
 # -------------------- Get languages! -------------------
 

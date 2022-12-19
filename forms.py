@@ -3,7 +3,7 @@ from wtforms import StringField, SubmitField, PasswordField, EmailField, Integer
     SelectField, SelectMultipleField, TextAreaField, FileField, BooleanField
 from wtforms.validators import DataRequired, URL
 from flask_ckeditor import CKEditorField
-from dnd5e_api_stored_details import list_of_races, all_weapon_details, all_classes,\
+from dnd5e_api_stored_details import list_of_races, all_weapon_details, all_classes, \
     all_languages, all_race_details, all_tools
 
 # List of campaigns currently running:
@@ -11,8 +11,8 @@ campaigns = ["GoS", "CoS", "LotST"]
 
 # Skill and Save lists
 all_skills = ["Acrobatics", "Animal Handling", "Arcana", "Athletics", "Deception", "History",
-          "Insight", "Intimidation", "Investigation", "Medicine", "Nature", "Perception",
-          "Performance", "Persuasion", "Religion", "Sleight of Hand", "Stealth", "Survival"]
+              "Insight", "Intimidation", "Investigation", "Medicine", "Nature", "Perception",
+              "Performance", "Persuasion", "Religion", "Sleight of Hand", "Stealth", "Survival"]
 
 all_saves = ["Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma"]
 
@@ -26,12 +26,16 @@ alignments = ['Lawful Good', 'Neutral Good', 'Chaotic Good', 'Lawful Neutral', '
 # Stats
 stats = ["Strength", "Dexterity", "Constitution", "Wisdom", "Intelligence", "Charisma"]
 
+# Boolean Selection
+yes_no = ["Yes", "No"]
+
+
 class CreateCampaignForm(FlaskForm):
     title = StringField("Campaign Title", validators=[DataRequired()])
     subtitle = StringField("Campaign Subtitle", validators=[DataRequired()])
     description = CKEditorField("Campaign Summary", validators=[DataRequired()])
     page_image = StringField("URL for campaign page image", validators=[DataRequired()])
-    campaign_card_img = StringField("URK for campaign card image", validators=[DataRequired()])
+    campaign_card_img = StringField("URL for campaign card image", validators=[DataRequired()])
     central_location = StringField("Campaign central location", validators=[DataRequired()])
     central_location_img = StringField("Campaign central location img", validators=[DataRequired()])
     central_location_map = StringField("Campaign central location map", validators=[DataRequired()])
@@ -57,26 +61,27 @@ class CreateNewCharacter(FlaskForm):
     alignment = SelectField("What is your characters alignment?", choices=alignments)
 
     # ------------- Character Race -----------------
-    race = StringField("Character Race", validators=[DataRequired()])
-    subrace = StringField("Does your character have a subrace?")
+    race = SelectField("Character Race", choices=list_of_races, validators=[DataRequired()])
+    subrace = StringField("What Subrace are you?")
     main_bonus_score = SelectField("Which stat would you like your +2 bonus to be in?", choices=stats)
-    sub_bonus_score = SelectField("Which stat would you like your +1 bonus to be in?", choices=stats) # Remember that the sub and main bonus score must be different values.
+    sub_bonus_score = SelectField("Which stat would you like your +1 bonus to be in?",
+                                  choices=stats)  # Remember that the sub and main bonus score must be different values.
     age = IntegerField("What is your characters age?")
 
     # ------------- Ability Scores -----------------
-    strength = IntegerField("Character Strength", validators=[DataRequired()])
-    dexterity = IntegerField("Character Dexterity", validators=[DataRequired()])
-    constitution = IntegerField("Character Constitution", validators=[DataRequired()])
-    wisdom = IntegerField("Character Wisdom", validators=[DataRequired()])
-    intelligence = IntegerField("Character Intelligence", validators=[DataRequired()])
-    charisma = IntegerField("Character Charisma", validators=[DataRequired()])
+    strength = IntegerField("Character Strength")
+    dexterity = IntegerField("Character Dexterity")
+    constitution = IntegerField("Character Constitution")
+    wisdom = IntegerField("Character Wisdom")
+    intelligence = IntegerField("Character Intelligence")
+    charisma = IntegerField("Character Charisma")
 
     # -------------- Character Class ----------------
-    class_main = SelectMultipleField("What is your main Character Class", choices=all_classes,
-                                     validators=[DataRequired()])
-    class_main_level = IntegerField("What is your main class level?", validators=[DataRequired()])
-    multiclass = BooleanField("Do you have a second class?")
-    hp_calculation = BooleanField("Do you wish to take the average values for HP?")
+    class_main = SelectField("What is your main Character Class", choices=all_classes,
+                             validators=[DataRequired()])
+    class_main_level = IntegerField("What is your main class level?")
+    multiclass = SelectField("Do you have a second class?", choices=yes_no)
+    hp_calculation = SelectField("Do you wish to take the average values for HP?", choices=yes_no)
 
     # ------------ Character Background -----------------------
     appearance_summary = StringField("Short description of character appearance (up to 300 characters)")
@@ -97,15 +102,15 @@ class CreateNewCharacter(FlaskForm):
     tool_proficiencies = SelectMultipleField("Select which tools you are proficient with?", choices=all_tools)
     instruments = TextAreaField("Which instruments are you proficient with?")
 
-
-    darkvision = IntegerField("Please write down your darkvision in ft")
     submit = SubmitField("Submit Character")
 
+    # darkvision - Determined by race
     # saves = Determined by primary class
     # class_main_subclass = Column(String) ---- Own table based on class level
     # class_second = Column(String(150)) ---- Own Table for this.
     # class_second_level = Column(Integer)
     # class_second_subclass = Column(String)
+
 
 class CreateFactionForm(FlaskForm):
     faction_name = StringField("Name of Faction", validators=[DataRequired()])
@@ -195,4 +200,3 @@ class CharacterRaceFormFirst(FlaskForm):
 #     size = Column(String)
 #     speed = Column(Integer)
 #     age = Column(Integer)
-
