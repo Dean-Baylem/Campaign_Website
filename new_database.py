@@ -228,12 +228,12 @@ class Character(db.Model):
     age = Column(Integer)
 
     # ------------- Ability Scores -----------------
-    strength = Column(Integer)
-    dexterity = Column(Integer)
-    constitution = Column(Integer)
-    wisdom = Column(Integer)
-    intelligence = Column(Integer)
-    charisma = Column(Integer)
+    strength = Column(Integer, default=0)
+    dexterity = Column(Integer, default=0)
+    constitution = Column(Integer, default=0)
+    wisdom = Column(Integer, default=0)
+    intelligence = Column(Integer, default=0)
+    charisma = Column(Integer, default=0)
 
     # -------------- Character Class ----------------
     class_main = Column(String(150))
@@ -535,61 +535,6 @@ class Spells(db.Model):
     cantrip_damage_die_2 = Column(Integer)
     cantrip_damage_die_3 = Column(Integer)
     cantrip_damage_die_4 = Column(Integer)
-
-
-class Backgrounds(db.Model):
-    __tablename__ = "backgrounds"
-    id = Column(Integer, primary_key=True)
-    name = Column(String)
-    background_desc = Column(Text)
-    background_skill_1 = Column(String)
-    background_skill_2 = Column(String)
-    background_prof_1 = Column(String)
-    background_prof_2 = Column(String)
-    language_1 = Column(String)
-    langauge_2 = Column(String)
-    equipment_desc = Column(Text)
-    background_traits = relationship("BackgroundTraits")
-    background_bonds = relationship("BackgroundBonds")
-    background_ideals = relationship("BackgroundIdeals")
-    background_flaws = relationship("BackgroundFlaws")
-    background_features = relationship("BackgroundFeatures")
-    
-
-class BackgroundTraits(db.Model):
-    __tablename__ = "background_traits"
-    id = Column(Integer, primary_key=True)
-    desc = Column(Text)
-    background_id = Column(Integer, ForeignKey("backgrounds.id"))
-
-
-class BackgroundBonds(db.Model):
-    __tablename__ = "background_bonds"
-    id = Column(Integer, primary_key=True)
-    desc = Column(Text)
-    background_id = Column(Integer, ForeignKey("backgrounds.id"))
-
-
-class BackgroundIdeals(db.Model):
-    __tablename__ = "background_ideals"
-    id = Column(Integer, primary_key=True)
-    desc = Column(Text)
-    background_id = Column(Integer, ForeignKey("backgrounds.id"))
-
-
-class BackgroundFlaws(db.Model):
-    __tablename__ = "background_flaws"
-    id = Column(Integer, primary_key=True)
-    desc = Column(Text)
-    background_id = Column(Integer, ForeignKey("backgrounds.id"))
-
-
-class BackgroundFeatures(db.Model):
-    __tablename__ = "background_features"
-    id = Column(Integer, primary_key=True)
-    title = Column(String)
-    desc = Column(Text)
-    background_id = Column(Integer, ForeignKey("backgrounds.id"))
 
 
 class Weapons(db.Model):

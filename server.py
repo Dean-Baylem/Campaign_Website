@@ -1,8 +1,7 @@
 import datetime
 from new_database import Campaign, Player, Location, LocationComments, Armor, Actions, Faction, FactionComments, \
     NPC, SessionReview, SessionReviewComments, ScheduledSession, HouseRule, Character, CharacterClasses, \
-    CharacterRaces, RacialFeatures, SubclassFeatures, SubraceFeatures, ClassFeatures, Spells, Backgrounds, \
-    BackgroundFeatures, BackgroundIdeals, BackgroundTraits, BackgroundBonds, BackgroundFlaws, \
+    CharacterRaces, RacialFeatures, SubclassFeatures, SubraceFeatures, ClassFeatures, Spells,\
     Weapons, Items, Subraces
 from flask import Flask, render_template, redirect, url_for, flash, request, abort, jsonify
 from flask_bootstrap import Bootstrap
@@ -18,19 +17,20 @@ from flask_gravatar import Gravatar
 from functools import wraps
 import forms
 from dnd5e_api_stored_details import class_hit_die, class_skill_profs, all_race_details, class_saves
+import random
 
 
 # ------------- Character Functions ---------------------
 
 
 def prof_bonus(requested_character):
-    if requested_character.level < 5:
+    if requested_character.char_lvl < 5:
         return 2
-    elif requested_character.level < 9:
+    elif requested_character.char_lvl < 9:
         return 3
-    elif requested_character.level < 13:
+    elif requested_character.char_lvl < 13:
         return 4
-    elif requested_character.level < 16:
+    elif requested_character.char_lvl < 16:
         return 5
     else:
         return 6
@@ -61,11 +61,32 @@ def ability_bonus(stat):
         return 5
 
 
+def generate_stat(num_stats):
+    """
+    This function returns a set of stats in accordance to the roll 4
+    d6's and subtract the lowest value method.
+    """
+    stats = []
+    for stat in range(num_stats):
+        stat_numbers = [random.randint(1, 6) for x in range(4)]
+        stat_numbers.sort(reverse=True)
+        stat_numbers.pop()
+        stats.append(sum(stat_numbers))
+    return stats
+
+
 app = Flask(__name__)
 app.jinja_env.globals.update(ability_bonus=ability_bonus)
 app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
 ckeditor = CKEditor(app)
 Bootstrap(app)
+
+
+# --------------- Setup Login Manager -----------------
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+
 
 # --------------- Connect to database ------------------
 
@@ -73,11 +94,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///campaign_manager.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-
-# --------------- Setup Login Manager -----------------
-
-login_manager = LoginManager()
-login_manager.init_app(app)
 
 
 def admin_only(f):
@@ -231,14 +247,14 @@ def schedule_page():
 @app.route("/register", methods=["GET", "POST"])
 def register_player():
     form = forms.CreateNewPlayerForm()
-    # campaigns = Campaign.query.all()
+    campaigns = Campaign.query.all()
     image = 'https://img.freepik.com/free-photo/top-view-beautiful-rpg-still-life-items_23-2149282425.jpg?w=1800&t=st=1668923891~exp=1668924491~hmac=1a144e548bff837473f7442b48915694068909663936c7cc36c77c7dc4166142'
     title = "Register"
     subtitle = "Welcome to Dungeon Delvers Incorportated"
     if form.validate_on_submit():
-        # if Player.query.filter_by(username=form.username.data).first():
-        #     flash("You have already signed up with that username. Please login")
-        #     return redirect(url_for('login'))
+        if Player.query.filter_by(username=form.username.data).first():
+            flash("You have already signed up with that username. Please login")
+            return redirect(url_for('login'))
 
         new_player = Player()
         new_player.username = request.form["username"]
@@ -252,12 +268,12 @@ def register_player():
         db.session.commit()
         return redirect(url_for("home"))
     return render_template("forms.html", form=form,
-                           image=image, title=title, subtitle=subtitle)
-# all_campaigns=campaigns !!!! Remember to add back for the footer!!
+                           image=image, title=title, subtitle=subtitle, all_campaigns=campaigns)
+
 
 @app.route("/add-new-character", methods=["GET", "POST"])
 @login_required
-def new_character():
+def add_new_character():
     form = forms.CreateNewCharacter()
     if form.validate_on_submit():
         new_character = Character(
@@ -320,103 +336,39 @@ def new_character():
         #     new_character.language['index'] = True
         db.session.add(new_character)
         db.session.commit()
-        return redirect(url_for('home'))
-    return render_template("create_character_page.html", form=form, logged_in=current_user.is_authenticated)
+        return redirect(url_for('new_char_stats', character_id=new_character.id))
+    return render_template("create_character_page.html", form=form, logged_in=current_user.is_authenticated,)
 
-@app.route("/new-character", methods=["GET", "POST"])
-@login_required
-def add_new_character():
-    campaigns = Campaign.query.all()
-    form = forms.CreateNewCharacter()
+
+@app.route("/new-char-stats/<int:character_id>", methods=["GET", "POST"])
+def new_char_stats(character_id):
+    db.session.close()
+    stats = generate_stat(6)
+    requested_character = Character.query.get(character_id)
+    form = forms.CreateStats(
+        strength=requested_character.strength,
+        dexterity=requested_character.dexterity,
+        constitution=requested_character.constitution,
+        wisdom=requested_character.wisdom,
+        intelligence=requested_character.intelligence,
+        charisma=requested_character.charisma
+    )
     if form.validate_on_submit():
-        new_character = Character(
-            character_image=form.character_image.data,
-            name=form.name.data,
-            token=form.token.data,
-            race=form.race.data,
-            character_class=form.character_class.data,
-            background=form.background.data,
-            personality_traits=form.personality_traits.data,
-            ideals=form.ideals.data,
-            bonds=form.bonds.data,
-            flaws=form.flaws.data,
-            description=form.description.data,
-            player_id=current_user.id,
-            backstory=form.backstory.data,
-            appearance_summary=form.appearance_summary.data,
-            level=form.level.data,
-            strength=form.strength.data,
-            dexterity=form.dexterity.data,
-            constitution=form.constitution.data,
-            wisdom=form.wisdom.data,
-            intelligence=form.intelligence.data,
-            charisma=form.charisma.data,
-            languages=form.languages.data,
-            darkvision=form.darkvision.data,
-            tool_proficiencies=form.tool_proficiencies.data,
-            alignment=form.alignment.data,
-        )
-
-        if form.campaign.data == "GoS":
-            new_character.campaign_id = 1
-        if form.campaign.data == "CoS":
-            new_character.campaign_id = 2
-        if form.campaign.data == "LotST":
-            new_character.campaign_id = 3
-        # Saves - Same as above
-        for skill in form.skills.data:
-            if skill == "Acrobatics":
-                new_character.acrobatics = True
-            if skill == "Atheltics":
-                new_character.athletics = True
-            if skill == "Arcana":
-                new_character.arcana = True
-            if skill == "Deception":
-                new_character.deception = True
-            if skill == "History":
-                new_character.history = True
-            if skill == "Insight":
-                new_character.insight = True
-            if skill == "Intimidation":
-                new_character.intimidation = True
-            if skill == "Investigation":
-                new_character.investigation = True
-            if skill == "Medicine":
-                new_character.medicine = True
-            if skill == "Nature":
-                new_character.nature = True
-            if skill == "Perception":
-                new_character.perception = True
-            if skill == "Performance":
-                new_character.performance = True
-            if skill == "Persuasion":
-                new_character.persuasion = True
-            if skill == "Religion":
-                new_character.religion = True
-            if skill == "Sleight of Hand":
-                new_character.sleight_of_hand = True
-            if skill == "Stealth":
-                new_character.stealth = True
-            if skill == "Survival":
-                new_character.survival = True
-        for save in form.saves.data:
-            if save == "Strength":
-                new_character.strength_save = True
-            if save == "Dexterity":
-                new_character.dexterity_save = True
-            if save == "Constitution":
-                new_character.constitution_save = True
-            if save == "Wisdom":
-                new_character.wisdom_save = True
-            if save == "Intelligence":
-                new_character.intelligence_save = True
-            if save == "Charisma":
-                new_character.charisma_save = True
-        db.session.add(new_character)
+        print("Did validate on sumbit")
+        requested_character.strength = form.strength.data
+        requested_character.dexterity = form.dexterity.data
+        requested_character.constitution = form.constitution.data
+        requested_character.wisdom = form.wisdom.data
+        requested_character.intelligence = form.intelligence.data
+        requested_character.charisma = form.charisma.data
+        print(requested_character.strength)
+        print(requested_character.dexterity)
         db.session.commit()
-        return redirect(url_for('home'))
-    return render_template("forms.html", form=form,
-                           logged_in=current_user.is_authenticated, all_campaigns=campaigns, )
+        return redirect(url_for("home"))
+
+    print("Not validate_on_submit")
+    return render_template("character_stat_generation.html", form=form, logged_in=current_user.is_authenticated,
+                           stats=stats, character_id=character_id)
 
 
 @app.route("/new-location", methods=["GET", "POST"])
@@ -425,9 +377,10 @@ def add_new_location():
     form = forms.CreateLocationForm()
     if form.validate_on_submit():
         new_location = Location(
-            place_name=form.place_name.data,
-            summary=form.summary.data,
-            image=form.image.data,
+            location_name=form.location_name.data,
+            location_summary=form.location_summary.data,
+            location_img=form.location_img.data,
+            location_notes=form.location_notes.data,
         )
         if form.campaign.data == "GoS":
             new_location.campaign_id = 1
@@ -438,6 +391,23 @@ def add_new_location():
         db.session.add(new_location)
         db.session.commit()
         return redirect(url_for('home'))
+    return render_template("forms.html", form=form, logged_in=current_user.is_authenticated)
+
+
+@app.route("/edit-location/<int:location_id>", methods=["GET", "POST"])
+@admin_only
+def edit_location(location_id):
+    form = forms.CreateLocationForm()
+    selected_location = Location.query.get(location_id)
+    if form.validate_on_submit():
+        print("Ok")
+        selected_location.location_name = form.location_name.data
+        selected_location.location_summary = form.location_summary.data
+        selected_location.location_img = form.location_img.data
+        selected_location.location_notes = form.location_notes.data
+        db.session.commit()
+        return redirect(url_for('home'))
+    print("Not Ok")
     return render_template("forms.html", form=form, logged_in=current_user.is_authenticated)
 
 

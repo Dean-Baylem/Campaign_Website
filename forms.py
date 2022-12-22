@@ -51,21 +51,19 @@ class CreateCampaignForm(FlaskForm):
 
 class CreateNewCharacter(FlaskForm):
     # ----------- Character Details -------------
-    name = StringField("Character Name", validators=[DataRequired()])
-    campaign = SelectField("Please select which campaign this character is part off", choices=campaigns,
-                           validators=[DataRequired()])
+    name = StringField("Character Name")
+    campaign = SelectField("Please select which campaign this character is part off", choices=campaigns)
     sex = StringField("What is the characters gender?")
-    char_img = StringField("Character Image URL", validators=[DataRequired()])
-    token_img = StringField("Character Token URL", validators=[DataRequired()])
-    char_lvl = IntegerField("What is the starting level of your character?", validators=[DataRequired()])
+    char_img = StringField("Character Image URL")
+    token_img = StringField("Character Token URL")
+    char_lvl = IntegerField("What is the starting level of your character?")
     alignment = SelectField("What is your characters alignment?", choices=alignments)
 
     # ------------- Character Race -----------------
-    race = SelectField("Character Race", choices=list_of_races, validators=[DataRequired()])
+    race = SelectField("Character Race", choices=list_of_races)
     subrace = StringField("What Subrace are you?")
     main_bonus_score = SelectField("Which stat would you like your +2 bonus to be in?", choices=stats)
-    sub_bonus_score = SelectField("Which stat would you like your +1 bonus to be in?",
-                                  choices=stats)  # Remember that the sub and main bonus score must be different values.
+    sub_bonus_score = SelectField("Which stat would you like your +1 bonus to be in?", choices=stats)  # Remember that the sub and main bonus score must be different values.
     age = IntegerField("What is your characters age?")
 
     # ------------- Ability Scores -----------------
@@ -77,20 +75,19 @@ class CreateNewCharacter(FlaskForm):
     charisma = IntegerField("Character Charisma")
 
     # -------------- Character Class ----------------
-    class_main = SelectField("What is your main Character Class", choices=all_classes,
-                             validators=[DataRequired()])
+    class_main = SelectField("What is your main Character Class", choices=all_classes,)
     class_main_level = IntegerField("What is your main class level?")
     multiclass = SelectField("Do you have a second class?", choices=yes_no)
     hp_calculation = SelectField("Do you wish to take the average values for HP?", choices=yes_no)
 
     # ------------ Character Background -----------------------
     appearance_summary = StringField("Short description of character appearance (up to 300 characters)")
-    background = StringField("Character Background", validators=[DataRequired()])
-    personality_trait_1 = StringField("What is your first personality trait?", validators=[DataRequired()])
-    personality_trait_2 = StringField("What is your second personality trait?", validators=[DataRequired()])
-    ideals = StringField("Character Ideals", validators=[DataRequired()])
-    bonds = StringField("Character Bonds", validators=[DataRequired()])
-    flaws = StringField("Character Flaws", validators=[DataRequired()])
+    background = StringField("Character Background")
+    personality_trait_1 = StringField("What is your first personality trait?")
+    personality_trait_2 = StringField("What is your second personality trait?")
+    ideals = StringField("Character Ideals")
+    bonds = StringField("Character Bonds")
+    flaws = StringField("Character Flaws")
     appearance_detailed = CKEditorField("Please provide a detailed description of your characters appearance")
     height = IntegerField("What is your characters height in cm: ")
     weight = IntegerField("What is your characters weight in kg: ")
@@ -112,6 +109,16 @@ class CreateNewCharacter(FlaskForm):
     # class_second_subclass = Column(String)
 
 
+class CreateStats(FlaskForm):
+    strength = IntegerField("Strength")
+    dexterity = IntegerField("Dexterity")
+    constitution = IntegerField("Constitution")
+    intelligence = IntegerField("Intelligence")
+    wisdom = IntegerField("Wisdom")
+    charisma = IntegerField("Charisma")
+    submit = SubmitField("Submit")
+
+
 class CreateFactionForm(FlaskForm):
     faction_name = StringField("Name of Faction", validators=[DataRequired()])
     faction_description = CKEditorField("Faction Summary", validators=[DataRequired()])
@@ -122,9 +129,10 @@ class CreateFactionForm(FlaskForm):
 
 
 class CreateLocationForm(FlaskForm):
-    place_name = StringField("Name of Location", validators=[DataRequired()])
-    summary = CKEditorField("Description of the Location", validators=[DataRequired()])
-    image = StringField("Local file location for campaign card image", validators=[DataRequired()])
+    location_name = StringField("Name of Location", validators=[DataRequired()])
+    location_summary = CKEditorField("Description of the Location", validators=[DataRequired()])
+    location_img = StringField("Local file location for campaign card image", validators=[DataRequired()])
+    location_notes = TextAreaField("Notes of the location")
     campaign = SelectField("Please select which campaign this location is a part off",
                            choices=campaigns, validators=[DataRequired()])
     submit = SubmitField("Submit Location")
