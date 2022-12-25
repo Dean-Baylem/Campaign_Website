@@ -575,7 +575,7 @@ class SubclassFeatures(db.Model):
 class Spells(db.Model):
     __tablename__ = "spells"
     id = Column(Integer, primary_key=True)
-    classes = Column(String) # Have this entered with each seperated by ',' then use split to get the list when needed
+    classes = Column(String)
     name = Column(String)
     cast_time = Column(String)
     verbal = Column(Boolean)
@@ -585,13 +585,10 @@ class Spells(db.Model):
     concentration = Column(Boolean)
     attack_type = Column(String)
     range = Column(String)
-    target = Column(String)
     spell_desc = Column(Text)
     spell_level = Column(Integer)
     spell_school = Column(String)
     duration = Column(String)
-    attack_spell = Column(Boolean)
-    save_spell = Column(Boolean)
     save_type = Column(String)
     ritual = Column(Boolean)
     primary_damage_lvl_1 = Column(String)
@@ -603,18 +600,11 @@ class Spells(db.Model):
     primary_damage_lvl_7 = Column(String)
     primary_damage_lvl_8 = Column(String)
     primary_damage_lvl_9 = Column(String)
-    primary_damage_die = Column(Integer)
-    number_primary_die = Column(Integer)
-    primary_higher_level_extra_die = Column(Integer)
-    primary_damage_type = Column(String)
-    secondary_damage_die = Column(Integer)
-    number_secondary_die = Column(Integer)
-    secondary_higher_level_extra_die = Column(Integer)
-    secondary_damage_type = Column(String)
-    cantrip_damage_die_1 = Column(Integer)
-    cantrip_damage_die_2 = Column(Integer)
-    cantrip_damage_die_3 = Column(Integer)
-    cantrip_damage_die_4 = Column(Integer)
+    cantrip_damage_die_1 = Column(String)
+    cantrip_damage_die_2 = Column(String)
+    cantrip_damage_die_3 = Column(String)
+    cantrip_damage_die_4 = Column(String)
+
 
 
 class Weapons(db.Model):
@@ -666,86 +656,170 @@ db.create_all()
 
 
 # ------------------ Filling database with information from dnd5eapi.com ---------------
-spell_data = requests.get("https://www.dnd5eapi.co/api/spells").json()
-for spell in spell_data['results']:
-    url = "https://www.dnd5eapi.co/api/spells/" + spell['index']
-    spell_details = requests.get(url).json()
-    # Get the classes that have access to the spell
-    classes = ""
-    class_list = spell_details['classes']
-    for character_class in class_list:
-        classes += character_class['name'] + ","
-    # Establish verbal, somatic and material boolean values
 
-    components = spell_details['components']
-    verbal = False
-    somatic = False
-    materials = False
-    if 'V' in components:
-        verbal = True
-    if 'S' in components:
-        somatic = True
-    if 'M' in components:
-        materials = True
-
-    # Establish material description string
-    material_desc = ""
-    try:
-        material_desc = spell_details['material']
-    except KeyError:
-        material_desc = "None"
-
-    # Establish attack_type
-    attack_type = ""
-    try:
-        attack_type = spell_details['attack_type']
-    except KeyError:
-        attack_type = "Save"
-
-    # Build the database entry
-    new_spell = Spells(
-        classes=classes,
-        name=spell_details['name'].lower(),
-        cast_time=spell_details['casting_time'],
-        verbal=verbal,
-        somatic=somatic,
-        material=materials,
-        material_desc=material_desc,
-        concentration=spell_details['concentration'],
-        attack_type=attack_type,
-        range=spell_details['range'],
-        spell_desc=spell_details['desc'],
-        spell_level=spell_details['level'],
-        spell_school=spell_details['school']['name'],
-        duration=spell_details['duration'],
-
-
-    )
-
-    print(spell_details)
-    spell_index = spell_details['index']
-    # spell_name = spell_details['name']
-    spell_desc = spell_details['desc']
-    spell_higher_level_desc = spell_details['higher_level']
-    spell_range = spell_details['range']
-
-    concentration = spell_details['concentration']
-    # casting_time = spell_details['casting_time']
-    spell_level = spell_details['level']
-    try:
-        attack_type = spell_details['attack_type']
-    except KeyError:
-        attack_type = "Save"
-    try:
-        damage_types = spell_details['damage']
-    except KeyError:
-        damage_types = "None"
-    spell_school = spell_details['school']
-    print(spell_details)
-    print(spell_index)
-    print(verbal)
-    print(materials)
-    print(spell_desc)
+# spell_data = requests.get("https://www.dnd5eapi.co/api/spells").json()
+# for spell in spell_data['results']:
+#     url = "https://www.dnd5eapi.co/api/spells/" + spell['index']
+#     spell_details = requests.get(url).json()
+#
+#     # Get the classes that have access to the spell
+#     classes = ""
+#     class_list = spell_details['classes']
+#     for character_class in class_list:
+#         classes += character_class['name'] + ","
+#
+#     # Establish verbal, somatic and material boolean values
+#
+#     components = spell_details['components']
+#     verbal = False
+#     somatic = False
+#     materials = False
+#     if 'V' in components:
+#         verbal = True
+#     if 'S' in components:
+#         somatic = True
+#     if 'M' in components:
+#         materials = True
+#
+#     # Establish material description string
+#     material_desc = ""
+#     try:
+#         material_desc = spell_details['material']
+#     except KeyError:
+#         material_desc = "None"
+#
+#     # Establish attack_type
+#     attack_type = ""
+#     try:
+#         attack_type = spell_details['attack_type']
+#     except KeyError:
+#         attack_type = "Save"
+#
+#     # Establish the damage die entries for each spell and level
+#
+#     primary_damage_lvl_1 = "None"
+#     primary_damage_lvl_2 = "None"
+#     primary_damage_lvl_3 = "None"
+#     primary_damage_lvl_4 = "None"
+#     primary_damage_lvl_5 = "None"
+#     primary_damage_lvl_6 = "None"
+#     primary_damage_lvl_7 = "None"
+#     primary_damage_lvl_8 = "None"
+#     primary_damage_lvl_9 = "None"
+#     cantrip_damage_die_1 = "None"
+#     cantrip_damage_die_2 = "None"
+#     cantrip_damage_die_3 = "None"
+#     cantrip_damage_die_4 = "None"
+#
+#     # print(spell_details)
+#     primary_damage = ""
+#     try:
+#         if spell_details['level'] == 0:
+#             level_damage = {}
+#             try:
+#                 damage_data = spell_details['damage']
+#                 level_damage = damage_data['damage_at_character_level']
+#             except KeyError:
+#                 level_damage = spell_details['heal_at_slot_level']
+#             print(f"{spell_details['name']} : {level_damage}")
+#             damage_dies = ""
+#             for level, damage in level_damage.items():
+#                 damage_dies += f"'{level}:{damage}'"
+#             getting_dies = damage_dies.split("'")
+#             for dies in getting_dies:
+#                 level = (dies.split(":")[0])
+#                 if level == '1':
+#                     cantrip_damage_die_1 = dies.split(":")[1]
+#                 if level == '5':
+#                     cantrip_damage_die_2 = dies.split(":")[1]
+#                 if level == '11':
+#                     cantrip_damage_die_3 = dies.split(":")[1]
+#                 if level == '17':
+#                     cantrip_damage_die_4 = dies.split(":")[1]
+#         else:
+#             level_damage = {}
+#             try:
+#                 damage_data = spell_details['damage']
+#                 level_damage = damage_data['damage_at_slot_level']
+#             except KeyError:
+#                 level_damage = spell_details['heal_at_slot_level']
+#             print(f"{spell_details['name']} : {level_damage}")
+#             damage_dies = ""
+#             for level, damage in level_damage.items():
+#                 damage_dies += f"'{level}:{damage}'"
+#             getting_dies = damage_dies.split("'")
+#             for dies in getting_dies:
+#                 level = (dies.split(":")[0])
+#                 if level == '1':
+#                     primary_damage_lvl_1 = dies.split(":")[1]
+#                 if level == '2':
+#                     primary_damage_lvl_2 = dies.split(":")[1]
+#                 if level == '3':
+#                     primary_damage_lvl_3 = dies.split(":")[1]
+#                 if level == '4':
+#                     primary_damage_lvl_4 = dies.split(":")[1]
+#                 if level == '5':
+#                     primary_damage_lvl_5 = dies.split(":")[1]
+#                 if level == '6':
+#                     primary_damage_lvl_6 = dies.split(":")[1]
+#                 if level == '7':
+#                     primary_damage_lvl_7 = dies.split(":")[1]
+#                 if level == '8':
+#                     primary_damage_lvl_8 = dies.split(":")[1]
+#                 if level == '9':
+#                     primary_damage_lvl_9 = dies.split(":")[1]
+#     except KeyError:
+#         pass
+#
+#     # Getting the DC Type if required
+#
+#     save_type = ""
+#     try:
+#         save_type = spell_details['dc']['dc_type']['index']
+#     except KeyError:
+#         save_type = "None"
+#
+#     # Changing Spell desc from list provided by api into a string
+#
+#     spell_desc = spell_details['desc']
+#     full_desc = ""
+#     for desc in spell_desc:
+#         full_desc += desc
+#
+#     # Build the database entry
+#     new_spell = Spells(
+#         classes=classes,
+#         name=spell_details['name'].lower(),
+#         cast_time=spell_details['casting_time'],
+#         verbal=verbal,
+#         somatic=somatic,
+#         material=materials,
+#         material_desc=material_desc,
+#         concentration=spell_details['concentration'],
+#         attack_type=attack_type,
+#         range=spell_details['range'],
+#         spell_desc=full_desc,
+#         spell_level=spell_details['level'],
+#         spell_school=spell_details['school']['name'],
+#         duration=spell_details['duration'],
+#         ritual=spell_details['ritual'],
+#         primary_damage_lvl_1=primary_damage_lvl_1,
+#         primary_damage_lvl_2=primary_damage_lvl_2,
+#         primary_damage_lvl_3=primary_damage_lvl_3,
+#         primary_damage_lvl_4=primary_damage_lvl_4,
+#         primary_damage_lvl_5=primary_damage_lvl_5,
+#         primary_damage_lvl_6=primary_damage_lvl_6,
+#         primary_damage_lvl_7=primary_damage_lvl_7,
+#         primary_damage_lvl_8=primary_damage_lvl_8,
+#         primary_damage_lvl_9=primary_damage_lvl_9,
+#         cantrip_damage_die_1=cantrip_damage_die_1,
+#         cantrip_damage_die_2=cantrip_damage_die_2,
+#         cantrip_damage_die_3=cantrip_damage_die_3,
+#         cantrip_damage_die_4=cantrip_damage_die_4,
+#         save_type=save_type,
+#     )
+#     db.session.add(new_spell)
+#     db.session.commit()
 
 # --------------------- Wrapper Functions -----------------------
 

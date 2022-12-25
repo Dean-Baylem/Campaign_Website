@@ -198,144 +198,19 @@ all_tools = ["Alchemist's Supplies", "Brewer's Supplies", "Calligrapher's Suppli
 # {'index': 'barbarian', 'name': 'Barbarian', 'proficiencies': [{'index': 'light-armor', 'name': 'Light Armor', 'url': '/api/proficiencies/light-armor'}, {'index': 'medium-armor', 'name': 'Medium Armor', 'url': '/api/proficiencies/medium-armor'}, {'index': 'shields', 'name': 'Shields', 'url': '/api/proficiencies/shields'}, {'index': 'simple-weapons', 'name': 'Simple Weapons', 'url': '/api/proficiencies/simple-weapons'}, {'index': 'martial-weapons', 'name': 'Martial Weapons', 'url': '/api/proficiencies/martial-weapons'}, {'index': 'saving-throw-str', 'name': 'Saving Throw: STR', 'url': '/api/proficiencies/saving-throw-str'}, {'index': 'saving-throw-con', 'name': 'Saving Throw: CON', 'url': '/api/proficiencies/saving-throw-con'}], 'saving_throws': [{'index': 'str', 'name': 'STR', 'url': '/api/ability-scores/str'}, {'index': 'con', 'name': 'CON', 'url': '/api/ability-scores/con'}], 'starting_equipment': [{'equipment': {'index': 'explorers-pack', 'name': "Explorer's Pack", 'url': '/api/equipment/explorers-pack'}, 'quantity': 1}, {'equipment': {'index': 'javelin', 'name': 'Javelin', 'url': '/api/equipment/javelin'}, 'quantity': 4}], 'starting_equipment_options': [{'desc': '(a) a greataxe or (b) any martial melee weapon', 'choose': 1, 'type': 'equipment', 'from': {'option_set_type': 'options_array', 'options': [{'option_type': 'counted_reference', 'count': 1, 'of': {'index': 'greataxe', 'name': 'Greataxe', 'url': '/api/equipment/greataxe'}}, {'option_type': 'choice', 'choice': {'desc': 'any martial melee weapon', 'choose': 1, 'type': 'equipment', 'from': {'option_set_type': 'equipment_category', 'equipment_category': {'index': 'martial-melee-weapons', 'name': 'Martial Melee Weapons', 'url': '/api/equipment-categories/martial-melee-weapons'}}}}]}}, {'desc': '(a) two handaxes or (b) any simple weapon', 'choose': 1, 'type': 'equipment', 'from': {'option_set_type': 'options_array', 'options': [{'option_type': 'counted_reference', 'count': 2, 'of': {'index': 'handaxe', 'name': 'Handaxe', 'url': '/api/equipment/handaxe'}}, {'option_type': 'choice', 'choice': {'desc': 'any simple weapon', 'choose': 1, 'type': 'equipment', 'from': {'option_set_type': 'equipment_category', 'equipment_category': {'index': 'simple-weapons', 'name': 'Simple Weapons', 'url': '/api/equipment-categories/simple-weapons'}}}}]}}], 'class_levels': '/api/classes/barbarian/levels', 'multi_classing': {'prerequisites': [{'ability_score': {'index': 'str', 'name': 'STR', 'url': '/api/ability-scores/str'}, 'minimum_score': 13}], 'proficiencies': [{'index': 'shields', 'name': 'Shields', 'url': '/api/proficiencies/shields'}, {'index': 'simple-weapons', 'name': 'Simple Weapons', 'url': '/api/proficiencies/simple-weapons'}, {'index': 'martial-weapons', 'name': 'Martial Weapons', 'url': '/api/proficiencies/martial-weapons'}]}, 'subclasses': [{'index': 'berserker', 'name': 'Berserker', 'url': '/api/subclasses/berserker'}], 'url': '/api/classes/barbarian'}
 
 # ------------------------- DnD 5e Spells --------------------------
-# cure_wounds = requests.get("https://www.dnd5eapi.co/api/spells/cure-wounds").json()
-# print(cure_wounds)
+# flame_strike = requests.get("https://www.dnd5eapi.co/api/spells/acid-splash").json()
+# print(flame_strike)
 
-spell_data = requests.get("https://www.dnd5eapi.co/api/spells").json()
-for spell in spell_data['results']:
-    primary_damage_lvl_1 = "None"
-    primary_damage_lvl_2 = "None"
-    primary_damage_lvl_3 = "None"
-    primary_damage_lvl_4 = "None"
-    primary_damage_lvl_5 = "None"
-    primary_damage_lvl_6 = "None"
-    primary_damage_lvl_7 = "None"
-    primary_damage_lvl_8 = "None"
-    primary_damage_lvl_9 = "None"
-    cantrip_damage_die_1 = "None"
-    cantrip_damage_die_2 = "None"
-    cantrip_damage_die_3 = "None"
-    cantrip_damage_die_4 = "None"
-    url = "https://www.dnd5eapi.co/api/spells/" + spell['index']
-    spell_details = requests.get(url).json()
-    # print(spell_details)
-    primary_damage = ""
-    try:
-        if spell_details['level'] == 0:
-            level_damage = {}
-            try:
-                damage_data = spell_details['damage']
-                level_damage = damage_data['damage_at_character_level']
-            except KeyError:
-                level_damage = spell_details['heal_at_slot_level']
-            print(f"{spell_details['name']} : {level_damage}")
-            damage_dies = ""
-            for level, damage in level_damage.items():
-                damage_dies += f"'{level}:{damage}'"
-            getting_dies = damage_dies.split("'")
-            for dies in getting_dies:
-                level = (dies.split(":")[0])
-                if level == '1':
-                    cantrip_damage_die_1 = dies.split(":")[1]
-                if level == '5':
-                    cantrip_damage_die_2 = dies.split(":")[1]
-                if level == '11':
-                    cantrip_damage_die_3 = dies.split(":")[1]
-                if level == '17':
-                    cantrip_damage_die_4 = dies.split(":")[1]
-        else:
-            level_damage = {}
-            try:
-                damage_data = spell_details['damage']
-                level_damage = damage_data['damage_at_slot_level']
-            except KeyError:
-                level_damage = spell_details['heal_at_slot_level']
-            print(f"{spell_details['name']} : {level_damage}")
-            damage_dies = ""
-            for level, damage in level_damage.items():
-                damage_dies += f"'{level}:{damage}'"
-            getting_dies = damage_dies.split("'")
-            for dies in getting_dies:
-                level = (dies.split(":")[0])
-                if level == '1':
-                    primary_damage_lvl_1 = dies.split(":")[1]
-                if level == '2':
-                    primary_damage_lvl_2 = dies.split(":")[1]
-                if level == '3':
-                    primary_damage_lvl_3 = dies.split(":")[1]
-                if level == '4':
-                    primary_damage_lvl_4 = dies.split(":")[1]
-                if level == '5':
-                    primary_damage_lvl_5 = dies.split(":")[1]
-                if level == '6':
-                    primary_damage_lvl_6 = dies.split(":")[1]
-                if level == '7':
-                    primary_damage_lvl_7 = dies.split(":")[1]
-                if level == '8':
-                    primary_damage_lvl_8 = dies.split(":")[1]
-                if level == '9':
-                    primary_damage_lvl_9 = dies.split(":")[1]
-    except KeyError:
-        pass
-
-    # print(spell_details)
-    print("Spell Slot Damage")
-    spell_slot_damages = [primary_damage_lvl_1, primary_damage_lvl_2, primary_damage_lvl_3, primary_damage_lvl_4,
-                          primary_damage_lvl_5, primary_damage_lvl_6, primary_damage_lvl_7, primary_damage_lvl_8,
-                          primary_damage_lvl_9]
-    print(spell_slot_damages)
-    print("Cantrip damage")
-    cantrip_damages = [cantrip_damage_die_1, cantrip_damage_die_2, cantrip_damage_die_3, cantrip_damage_die_4]
-    print(cantrip_damages)
-
-    # print(spell_details)
-
-
-
-# fireball_data = requests.get("https://www.dnd5eapi.co/api/spells/fireball").json()
-# # print(fireball_data)
-# primary_damage = ""
-# damage_data = fireball_data['damage']
-# level_damage = damage_data['damage_at_slot_level']
-# damage_dies = ""
-# for level, damage in level_damage.items():
-#     damage_dies += f"'{level}:{damage}'"
-# getting_dies = damage_dies.split("'")
-# for dies in getting_dies:
-#     level = (dies.split(":")[0])
-#     if level == '1':
-#         primary_damage_lvl_1 = dies.split(":")[1]
-#     if level == '2':
-#         primary_damage_lvl_2 = dies.split(":")[1]
-#     if level == '3':
-#         primary_damage_lvl_3 = dies.split(":")[1]
-#     if level == '4':
-#         primary_damage_lvl_4 = dies.split(":")[1]
-#     if level == '5':
-#         primary_damage_lvl_5 = dies.split(":")[1]
-#     if level == '6':
-#         primary_damage_lvl_6 = dies.split(":")[1]
-#     if level == '7':
-#         primary_damage_lvl_7 = dies.split(":")[1]
-#     if level == '8':
-#         primary_damage_lvl_8 = dies.split(":")[1]
-#     if level == '9':
-#         primary_damage_lvl_9 = dies.split(":")[1]
-#
-# print(primary_damage_lvl_1)
-# print(primary_damage_lvl_2)
-# print(primary_damage_lvl_3)
-# print(primary_damage_lvl_4)
-# print(primary_damage_lvl_5)
-# print(primary_damage_lvl_6)
-# print(primary_damage_lvl_7)
-# print(primary_damage_lvl_8)
-# print(primary_damage_lvl_9)
-
-
-
-
-
+# spell_data = requests.get("https://www.dnd5eapi.co/api/spells").json()
+# for spell in spell_data['results']:
+#     url = "https://www.dnd5eapi.co/api/spells/" + spell['index']
+#     spell_details = requests.get(url).json()
+#     spell_desc = spell_details['desc']
+#     full_desc = ""
+#     for desc in spell_desc:
+#         full_desc += desc
+#     print(spell_details['name'])
+#     print(full_desc)
 
 # ---------------- Checking for all playable races ----------------------
 
