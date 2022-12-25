@@ -1,0 +1,71 @@
+{% include "header.html" %}
+
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+
+<body class="light-bg hub-body">
+<div class="wrapper">
+<section id="schedule-heading">
+  <div class="container-fluid" style="background-image: url('https://img.freepik.com/free-photo/still-life-objects-with-role-playing-game-sheet_23-2149352285.jpg?w=1060&t=st=1671534190~exp=1671534790~hmac=8e9c455ccecd0f18db41e942124ff5369b4990048ac536e8b8c72b17fe8e0a89'); background-repeat: no-repeat; background-size: cover;" >
+    <div class="mask" style="background-color: rgba(0, 0, 0, 0.5)">
+      <div class="row section-area">
+        <h1 class="home-title schedule-title heading-font">Skill Proficiencies / Languages / Tools</h1>
+      </div>
+    </div>
+  </div>
+</section>
+    <section class="light-bg section-area login-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h5>Each character has a particular set of skills they excel in, please choose what your character specialises in.</h5>
+                    <p>The random dice gods have provided you with the following stats to use:</p>
+                </div>
+                <div class="col-lg-12">
+                    {% for stat in stats %}
+                    <div style="display: inline-block;"><h3>{{stat}}</h3></div>
+                    {%endfor%}
+                </div>
+            </div>
+        </div>
+        <form method="post" action="/new-char-stats/{{character_id}}">
+            {{ form.csrf_token }}
+            <div class="row">
+                <div class="col-lg-2 col-md-4 col-sm-6 form-group">
+                    <div>{{ form.strength.label}}</div>
+                    <div>{{ form.strength(class='form-control') }}</div>
+                </div>
+                <div class="col-lg-2 col-md-4 col-sm-6 form-group">
+                    <div>{{form.dexterity.label}}</div>
+                    <div>{{ form.dexterity(class='form-control') }}</div>
+                </div>
+                <div class="col-lg-2 col-md-4 col-sm-6 form-group">
+                    <div>{{form.constitution.label}}</div>
+                    <div>{{ form.constitution(class='form-control') }}</div>
+                </div>
+                <div class="col-lg-2 col-md-4 col-sm-6 form-group">
+                    <div>{{form.intelligence.label}}</div>
+                    <div>{{ form.intelligence(class='form-control') }}</div>
+                </div>
+                <div class="col-lg-2 col-md-4 col-sm-6 form-group">
+                    <div>{{form.wisdom.label}}</div>
+                    <div>{{ form.wisdom(class='form-control') }}</div>
+                </div>
+                <div class="col-lg-2 col-md-4 col-sm-6 form-group">
+                    <div>{{form.charisma.label}}</div>
+                    <div>{{ form.charisma(class='form-control') }}</div>
+                </div>
+                <div class="row form-group required">
+                      <div class="col-lg-5 control-label">{{ form.submit.label }}</div>
+                      <div class="col-lg-7">{{ form.submit(class='form-control') }}</div>
+                  </div>
+            </div>
+        </form>
+    </section>
+</div>
+</body>
+
+{% endblock %}
+
+{% include 'footer.html' %}

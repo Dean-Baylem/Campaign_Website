@@ -38,6 +38,9 @@
             <button class="nav-link" id="character-class-tab" data-bs-toggle="tab" data-bs-target="#character-class-tab-pane" type="button" role="tab" aria-controls="character-class-tab-pane" aria-selected="false">Class</button>
           </li>
           <li class="nav-item" role="presentation">
+            <button class="nav-link" id="character-stats-tab" data-bs-toggle="tab" data-bs-target="#character-stats-tab-pane" type="button" role="tab" aria-controls="character-stats-tab-pane" aria-selected="false">Ability Scores</button>
+          </li>
+          <li class="nav-item" role="presentation">
             <button class="nav-link" id="character-appearance-tab" data-bs-toggle="tab" data-bs-target="#character-appearance-tab-pane" type="button" role="tab" aria-controls="character-appearance-tab-pane" aria-selected="false">Appearance</button>
           </li>
           <li class="nav-item" role="presentation">
@@ -119,6 +122,36 @@
                       <div class="col-lg-5 control-label">Would you like to use the average value for HP?</div>
                       <div class="col-lg-7">{{ form.hp_calculation(class='form-control') }}</div>
                   </div>
+          </div>
+          <div class="tab-pane fade" id="character-stats-tab-pane" role="tabpanel" aria-labelledby="character-stats-tab" tabindex="0">
+                <div class="row">
+                    <p>Input your characters stats</p>
+                    <p>The random dice gods have decided to provide you with the following array:{% for stat in stats %} [{{stat}}] {%endfor%}</p>
+                </div>
+                <div class="row form-group required">
+                      <div class="col-lg-5 control-label">Strength</div>
+                      <div class="col-lg-7">{{ form.strength(class='form-control') }}</div>
+                </div>
+                <div class="row form-group required">
+                      <div class="col-lg-5 control-label">Dexterity</div>
+                      <div class="col-lg-7">{{ form.dexterity(class='form-control') }}</div>
+                </div>
+                <div class="row form-group required">
+                      <div class="col-lg-5 control-label">Constitution</div>
+                      <div class="col-lg-7">{{ form.constitution(class='form-control') }}</div>
+                </div>
+                <div class="row form-group required">
+                      <div class="col-lg-5 control-label">Wisdom</div>
+                      <div class="col-lg-7">{{ form.wisdom(class='form-control') }}</div>
+                </div>
+                <div class="row form-group required">
+                      <div class="col-lg-5 control-label">Intelligence</div>
+                      <div class="col-lg-7">{{ form.intelligence(class='form-control') }}</div>
+                </div>
+                <div class="row form-group required">
+                      <div class="col-lg-5 control-label">Charisma</div>
+                      <div class="col-lg-7">{{ form.charisma(class='form-control') }}</div>
+                </div>
           </div>
           <div class="tab-pane fade" id="character-appearance-tab-pane" role="tabpanel" aria-labelledby="character-appearance-tab" tabindex="0">
                   {{ ckeditor.load() }}
