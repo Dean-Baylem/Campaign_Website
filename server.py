@@ -94,6 +94,8 @@ db = SQLAlchemy(app)
 
 # ------------ Data stored in lists and dictionaries for use in routes --------------
 
+api_endpoint = "https://www.dnd5eapi.co/api/"
+
 skills = ["Acrobatics", "Animal Handling", "Arcana", "Athletics", "Deception", "History",
           "Insight", "Intimidation", "Investigation", "Medicine", "Nature", "Perception",
           "Performance", "Persuasion", "Religion", "Sleight of Hand", "Stealth", "Survival"]
@@ -428,7 +430,7 @@ class Character(db.Model):
     gp = Column(Integer)
     pp = Column(Integer)
     weapons = relationship("Weapons")
-    armor = relationship("Armor")
+    # armor = relationship("Armor")
     equipped_armor = Column(String)
 
     # ---------------- Bonuses ------------------------------
@@ -487,6 +489,7 @@ class CharacterRaces(db.Model):
     name = Column(String)
     age_desc = Column(Text)
     size_desc = Column(Text)
+    size = Column(String)
     speed = Column(Integer)
     subraces = relationship("Subraces", back_populates="race")
     racial_features = relationship("RacialFeatures", back_populates="race")
@@ -639,7 +642,7 @@ class Armor(db.Model):
     str_min = Column(Integer)
     stealth_disadvantage = Column(Boolean)
     value = Column(Integer)
-    character_id = Column(Integer, ForeignKey("characters.id"))
+
 
 
 class Items(db.Model):
@@ -652,14 +655,14 @@ class Items(db.Model):
     character_id = Column(Integer, ForeignKey("characters.id"))
 
 
-db.create_all()
+# db.create_all()
 
 
 # ------------------ Filling database with information from dnd5eapi.com ---------------
 
-# spell_data = requests.get("https://www.dnd5eapi.co/api/spells").json()
+# spell_data = requests.get(api_endpoint + "spells").json()
 # for spell in spell_data['results']:
-#     url = "https://www.dnd5eapi.co/api/spells/" + spell['index']
+#     url = api_endpoint + "spells/" + spell['index']
 #     spell_details = requests.get(url).json()
 #
 #     # Get the classes that have access to the spell
@@ -820,6 +823,58 @@ db.create_all()
 #     )
 #     db.session.add(new_spell)
 #     db.session.commit()
+
+
+# Filling out the character race tables
+
+# races = requests.get(api_endpoint + "races")
+# race_data = races.json()
+# all_races = race_data['results']
+#
+# for race in all_races:
+#     url = api_endpoint + "races/" + race['index']
+#     race_details = requests.get(url).json()
+#     new_race = CharacterRaces(
+#         name=race_details['name'],
+#         age_desc=race_details['age'],
+#         size=race_details['size'],
+#         size_desc=race_details['size_description'],
+#         speed=race_details['speed']
+#     )
+#     db.session.add(new_race)
+#     db.session.commit()
+
+# Filling out the armor table
+armor = requests.get(api_endpoint + 'equipment-categories/armor')
+armor_data = armor.json()
+for armor in armor_data['equipment']:
+    url = 'https://www.dnd5eapi.co' + (armor['url'])
+    armor_details = requests.get(url).json()
+    try:
+        if armor_details['contents'] == []:
+            dex_limit = True
+            print(armor_details['name'])
+            try:
+                if armor_details['armor_class']['max_bonus']:
+                    dex_limit = True
+            except KeyError:
+                dex_limit = False
+            print(armor_details['name'])
+            new_armor = Armor(
+                name=armor_details['name'],
+                category=armor_details['armor_category'],
+                armor_class=armor_details['armor_class']['base'],
+                dex_bonus=armor_details['armor_class']['dex_bonus'],
+                dex_bonus_limit=dex_limit,
+                str_min=armor_details['str_minimum'],
+                stealth_disadvantage=armor_details['stealth_disadvantage'],
+                value=f"{armor_details['cost']['quantity']} {armor_details['cost']['unit']}",
+            )
+            db.session.add(new_armor)
+            db.session.commit()
+    except KeyError: # By searching for this KeyError we eliminate the magical items which have a contents key
+        pass
+
 
 # --------------------- Wrapper Functions -----------------------
 
@@ -1240,5 +1295,5 @@ def add_review(campaign_id):
 
 
 
-if __name__ == '__main__':
-    app.run(debug=True)
+# if __name__ == '__main__':
+#     app.run(debug=True)

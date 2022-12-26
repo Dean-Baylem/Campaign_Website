@@ -195,7 +195,6 @@ all_tools = ["Alchemist's Supplies", "Brewer's Supplies", "Calligrapher's Suppli
              'Dice Set', 'Playing Card Set', 'Bagpipes', 'Drum', 'Dulcimer', 'Flute', 'Lute', 'Lyre',
              'Horn', 'Pan flute', 'Shawm', 'Viol', "Navigator's Tools", "Thieves' Tools"]
 
-# {'index': 'barbarian', 'name': 'Barbarian', 'proficiencies': [{'index': 'light-armor', 'name': 'Light Armor', 'url': '/api/proficiencies/light-armor'}, {'index': 'medium-armor', 'name': 'Medium Armor', 'url': '/api/proficiencies/medium-armor'}, {'index': 'shields', 'name': 'Shields', 'url': '/api/proficiencies/shields'}, {'index': 'simple-weapons', 'name': 'Simple Weapons', 'url': '/api/proficiencies/simple-weapons'}, {'index': 'martial-weapons', 'name': 'Martial Weapons', 'url': '/api/proficiencies/martial-weapons'}, {'index': 'saving-throw-str', 'name': 'Saving Throw: STR', 'url': '/api/proficiencies/saving-throw-str'}, {'index': 'saving-throw-con', 'name': 'Saving Throw: CON', 'url': '/api/proficiencies/saving-throw-con'}], 'saving_throws': [{'index': 'str', 'name': 'STR', 'url': '/api/ability-scores/str'}, {'index': 'con', 'name': 'CON', 'url': '/api/ability-scores/con'}], 'starting_equipment': [{'equipment': {'index': 'explorers-pack', 'name': "Explorer's Pack", 'url': '/api/equipment/explorers-pack'}, 'quantity': 1}, {'equipment': {'index': 'javelin', 'name': 'Javelin', 'url': '/api/equipment/javelin'}, 'quantity': 4}], 'starting_equipment_options': [{'desc': '(a) a greataxe or (b) any martial melee weapon', 'choose': 1, 'type': 'equipment', 'from': {'option_set_type': 'options_array', 'options': [{'option_type': 'counted_reference', 'count': 1, 'of': {'index': 'greataxe', 'name': 'Greataxe', 'url': '/api/equipment/greataxe'}}, {'option_type': 'choice', 'choice': {'desc': 'any martial melee weapon', 'choose': 1, 'type': 'equipment', 'from': {'option_set_type': 'equipment_category', 'equipment_category': {'index': 'martial-melee-weapons', 'name': 'Martial Melee Weapons', 'url': '/api/equipment-categories/martial-melee-weapons'}}}}]}}, {'desc': '(a) two handaxes or (b) any simple weapon', 'choose': 1, 'type': 'equipment', 'from': {'option_set_type': 'options_array', 'options': [{'option_type': 'counted_reference', 'count': 2, 'of': {'index': 'handaxe', 'name': 'Handaxe', 'url': '/api/equipment/handaxe'}}, {'option_type': 'choice', 'choice': {'desc': 'any simple weapon', 'choose': 1, 'type': 'equipment', 'from': {'option_set_type': 'equipment_category', 'equipment_category': {'index': 'simple-weapons', 'name': 'Simple Weapons', 'url': '/api/equipment-categories/simple-weapons'}}}}]}}], 'class_levels': '/api/classes/barbarian/levels', 'multi_classing': {'prerequisites': [{'ability_score': {'index': 'str', 'name': 'STR', 'url': '/api/ability-scores/str'}, 'minimum_score': 13}], 'proficiencies': [{'index': 'shields', 'name': 'Shields', 'url': '/api/proficiencies/shields'}, {'index': 'simple-weapons', 'name': 'Simple Weapons', 'url': '/api/proficiencies/simple-weapons'}, {'index': 'martial-weapons', 'name': 'Martial Weapons', 'url': '/api/proficiencies/martial-weapons'}]}, 'subclasses': [{'index': 'berserker', 'name': 'Berserker', 'url': '/api/subclasses/berserker'}], 'url': '/api/classes/barbarian'}
 
 # ------------------------- DnD 5e Spells --------------------------
 # flame_strike = requests.get("https://www.dnd5eapi.co/api/spells/acid-splash").json()
@@ -276,17 +275,6 @@ all_tools = ["Alchemist's Supplies", "Brewer's Supplies", "Calligrapher's Suppli
 
 # --------------- Get the weapon details!!! --------------------
 
-# for race in all_races:
-#     print(race['index'])
-#     url = "https://www.dnd5eapi.co/api/races/" + race['index']
-#     race_details = requests.get(url).json()
-#     all_race_details[race_details['index']] = {
-#         "name": race_details['name'],
-#         "age description": race_details['age'],
-#         "languages": race_details['languages'],
-#     }
-
-
 # weapons = requests.get('https://www.dnd5eapi.co/api/equipment-categories/weapon')
 # weapon_data = weapons.json()
 # for weapon in weapon_data['equipment']:
@@ -323,9 +311,18 @@ all_tools = ["Alchemist's Supplies", "Brewer's Supplies", "Calligrapher's Suppli
 #     try:
 #         if armor_details['contents'] == []:
 #             print(armor_details)
+#             print(armor_details['armor_class']['base'])
+#             dex_bonus = armor_details['armor_class']['dex_bonus']
+#             dex_limit = True
+#             if armor_details['armor_class']['max_bonus']:
+#                 pass
+#             else:
+#                 dex_limit = False
+#             print(dex_limit)
+#
 #     except KeyError:
 #         pass
-#
+# #
 # all_tools = ["Alchemist's Supplies", "Brewer's Supplies", "Calligrapher's Supplies", "Carpenter's Tools",
 #              "Cartographer's Tools", "Cobbler's Tools", "Cook's utensils", "Glassblower's Tools",
 #              "Jeweler's Tools", "Leatherworker's Tools", "Mason's Tools", "Painter's Supplies",
