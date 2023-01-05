@@ -520,7 +520,6 @@
   padding: 5% 10%;
   color: #FFFFFF;
   font-weight: 600;
-  display: inline-block;
 }
 
 .home-subheading {
@@ -591,4 +590,19 @@
 .schedule-title {
   padding-top: 10%;
   padding-bottom: 10%;
+}
+
+/* Comment Box Text CSS */
+
+div.comment-text p {
+  margin: 0;
+}
+
+.comment-username {
+  font-size: 10px;
+}
+/* Faction Page */
+
+.faction-motto {
+  text-align: center;
 }

@@ -1,0 +1,64 @@
+{% include "header.html" %}
+
+<section id="title">
+    <div class="container-fluid"
+         style="background-image: url({{npc.npc_image}}); background-repeat: no-repeat; background-size: cover; height: 40%; padding: 0;">
+        <div class="mask" style="background-color: rgba(0, 0, 0, 0.5)">
+            <div class="row section-area">
+                <h1 class="home-title heading-font">{{npc.name}}</h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="npc-details-section" class="section-area light-bg">
+    <div class="conatiner-fluid">
+        <div class="row">
+            <div class="col-lg-6">
+                <div><h4>{{npc.name}}</h4></div>
+                <div><p>{{npc.npc_description}}</p></div>
+            </div>
+            <div class="col-lg-6">
+                <div>
+                    {{npc.npc_token}}
+                </div>
+                <div>
+                    <p>NPC in {{npc.campaign.title}}</p>
+                    <p>{{npc.sex}} {{npc.race}}</p>
+                    <p>{{npc.location.location_name}} {% if npc.faction %} - {{npc.faction.faction_name}} {% endif %}</p>
+                </div>
+                {% if current.user.username == npc.campaign.dm_username %}
+                <div>
+                    <p>Personality Traits</p>
+                    <p>{{npc.personality_trait_1}}</p>
+                    <p>{{npc.personality_trait_2}}</p>
+                    <p>NPC Ideal: {{npc.ideals}}</p>
+                    <p>NPC Bonds: {{npc.bonds}}</p>
+                    <p>NPC Flaws: {{npc.flaws}}</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="npc-history-section" class="section-area light-bg">
+    <div class="container-fluid">
+        <div class="row">
+            <h3>{{npc.name}}'s History</h3>
+        </div>
+        <div class="row">
+            <p>{{npc.npc_history | safe}}</p>
+        </div>
+    </div>
+    {% if current.user.username == npc.campaign.dm_username %}
+    <hr>
+    <div class="row">
+        <h5>DM Notes for {{npc.name}}</h5>
+        <p>{{npc.npc_notes}}</p>
+    </div>
+    {% endif %}
+</section>
+
+
+{% include "footer.html" %}

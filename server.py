@@ -78,12 +78,10 @@ app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
 ckeditor = CKEditor(app)
 Bootstrap(app)
 
-
 # --------------- Setup Login Manager -----------------
 
 login_manager = LoginManager()
 login_manager.init_app(app)
-
 
 # --------------- Connect to database ------------------
 
@@ -91,14 +89,14 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///campaign_manager.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-
 # ------------ Data stored in lists and dictionaries for use in routes --------------
 
-api_endpoint = "https://www.dnd5eapi.co/api/"
+api_endpoint = "https://www.dnd5eapi.co/api"
 
 skills = ["Acrobatics", "Animal Handling", "Arcana", "Athletics", "Deception", "History",
           "Insight", "Intimidation", "Investigation", "Medicine", "Nature", "Perception",
           "Performance", "Persuasion", "Religion", "Sleight of Hand", "Stealth", "Survival"]
+
 
 # ---------------- Database Tables --------------------
 
@@ -125,7 +123,7 @@ class Campaign(db.Model):
     characters = relationship("Character", back_populates="campaign")
     locations = relationship("Location", back_populates="campaign")
     factions = relationship("Faction", back_populates="campaign")
-    players = relationship("Player", back_populates="campaign") # !!! Change to Many to Many !!!
+    players = relationship("Player", back_populates="campaign")  # !!! Change to Many to Many !!!
     npcs = relationship("NPC", back_populates="campaign")
     scheduled_sessions = relationship("ScheduledSession", back_populates="campaign")
     session_review = relationship("SessionReview", back_populates="campaign")
@@ -168,7 +166,7 @@ class Player(UserMixin, db.Model):
     faction_comments = relationship("FactionComments", back_populates="player")
     location_comments = relationship("LocationComments")
     campaign_id = Column(Integer, ForeignKey("campaign.id"))
-    campaign = relationship("Campaign", back_populates="players") # !!! Change to Many to Many !!!
+    campaign = relationship("Campaign", back_populates="players")  # !!! Change to Many to Many !!!
 
 
 class NPC(db.Model):
@@ -331,7 +329,7 @@ class Character(db.Model):
 
     # ----------- Spellcasting -------------------
     # Depending on the character there will be another table for spell options!
-    spell_ability = Column(String) # All of these will be updated after a player changes the level of the character.
+    spell_ability = Column(String)  # All of these will be updated after a player changes the level of the character.
     spell_dc = Column(Integer)
     spell_attack_mod = Column(Integer)
     cantrips = Column(Integer)
@@ -430,7 +428,6 @@ class Character(db.Model):
     gp = Column(Integer)
     pp = Column(Integer)
     weapons = relationship("Weapons")
-    # armor = relationship("Armor")
     equipped_armor = Column(String)
 
     # ---------------- Bonuses ------------------------------
@@ -509,18 +506,8 @@ class Subraces(db.Model):
     id = Column(Integer, primary_key=True)
     name = Column(String)
     subrace_desc = Column(Text)
-    subrace_features = relationship("SubraceFeatures", back_populates="subrace")
     race_id = Column(Integer, ForeignKey("character_races.id"))
     race = relationship("CharacterRaces", back_populates="subraces")
-
-
-class SubraceFeatures(db.Model):
-    __tablename__ = "sub_race_features"
-    id = Column(Integer, primary_key=True)
-    title = Column(String(200))
-    feature_desc = Column(Text)
-    subrace_id = Column(Integer, ForeignKey("subraces.id"))
-    subrace = relationship("Subraces", back_populates="subrace_features")
 
 
 class CharacterClasses(db.Model):
@@ -535,18 +522,14 @@ class CharacterClasses(db.Model):
     shields = Column(Boolean, default=False)
     simple_weapons = Column(Boolean, default=False)
     martial_weapons = Column(Boolean, default=False)
-    other_weapons = Column(Text)
 
-    strength_save = Column(Boolean, default=False)
-    dexterity_save = Column(Boolean, default=False)
-    constitution_save = Column(Boolean, default=False)
-    intelligence_save = Column(Boolean, default=False)
-    wisdom_save = Column(Boolean, default=False)
-    charisma_save = Column(Boolean, default=False)
-    spellcaster = Column(Boolean)
+    class_save_1 = Column(String, nullable=False)
+    class_save_2 = Column(String, nullable=False)
 
     num_skills = Column(Integer)
+    skill_desc = Column(String)
     num_tools = Column(Integer)
+    tool_desc = Column(String)
     start_equipment = Column(Text)
 
     class_features = relationship("ClassFeatures")
@@ -556,10 +539,9 @@ class CharacterClasses(db.Model):
 class ClassFeatures(db.Model):
     __tablename__ = "class_features"
     id = Column(Integer, primary_key=True)
-    class_id = Column(Integer, ForeignKey("character_classes.id")) # Remember to have a class option in
-                                                                   # the form that then fills the id out
+    class_id = Column(Integer, ForeignKey("character_classes.id"))  # Remember to have a class option in
+    # the form that then fills the id out
     class_level = Column(Integer, nullable=False)
-    optional = Column(Boolean)
     title = Column(String)
     class_feature_desc = Column(Text)
 
@@ -568,7 +550,7 @@ class SubclassFeatures(db.Model):
     __tablename__ = "subclass_features"
     id = Column(Integer, primary_key=True)
     class_id = Column(Integer, ForeignKey("character_classes.id"))  # Remember to have a class option in
-                                                                    # the form that then fills the id out
+    # the form that then fills the id out
     class_level = Column(Integer, nullable=False)
     optional = Column(Boolean)
     title = Column(String)
@@ -609,7 +591,6 @@ class Spells(db.Model):
     cantrip_damage_die_4 = Column(String)
 
 
-
 class Weapons(db.Model):
     __tablename__ = "weapons"
     id = Column(Integer, primary_key=True)
@@ -644,7 +625,6 @@ class Armor(db.Model):
     value = Column(Integer)
 
 
-
 class Items(db.Model):
     __tablename__ = "items"
     id = Column(Integer, primary_key=True)
@@ -660,9 +640,9 @@ class Items(db.Model):
 
 # ------------------ Filling database with information from dnd5eapi.com ---------------
 
-# spell_data = requests.get(api_endpoint + "spells").json()
+# spell_data = requests.get(api_endpoint + "/spells").json()
 # for spell in spell_data['results']:
-#     url = api_endpoint + "spells/" + spell['index']
+#     url = api_endpoint + "/spells/" + spell['index']
 #     spell_details = requests.get(url).json()
 #
 #     # Get the classes that have access to the spell
@@ -827,12 +807,12 @@ class Items(db.Model):
 
 # Filling out the character race tables
 
-# races = requests.get(api_endpoint + "races")
+# races = requests.get(api_endpoint + "/races")
 # race_data = races.json()
 # all_races = race_data['results']
 #
 # for race in all_races:
-#     url = api_endpoint + "races/" + race['index']
+#     url = api_endpoint + "/races/" + race['index']
 #     race_details = requests.get(url).json()
 #     new_race = CharacterRaces(
 #         name=race_details['name'],
@@ -844,36 +824,148 @@ class Items(db.Model):
 #     db.session.add(new_race)
 #     db.session.commit()
 
-# Filling out the armor table
-armor = requests.get(api_endpoint + 'equipment-categories/armor')
-armor_data = armor.json()
-for armor in armor_data['equipment']:
-    url = 'https://www.dnd5eapi.co' + (armor['url'])
-    armor_details = requests.get(url).json()
-    try:
-        if armor_details['contents'] == []:
-            dex_limit = True
-            print(armor_details['name'])
-            try:
-                if armor_details['armor_class']['max_bonus']:
-                    dex_limit = True
-            except KeyError:
-                dex_limit = False
-            print(armor_details['name'])
-            new_armor = Armor(
-                name=armor_details['name'],
-                category=armor_details['armor_category'],
-                armor_class=armor_details['armor_class']['base'],
-                dex_bonus=armor_details['armor_class']['dex_bonus'],
-                dex_bonus_limit=dex_limit,
-                str_min=armor_details['str_minimum'],
-                stealth_disadvantage=armor_details['stealth_disadvantage'],
-                value=f"{armor_details['cost']['quantity']} {armor_details['cost']['unit']}",
-            )
-            db.session.add(new_armor)
-            db.session.commit()
-    except KeyError: # By searching for this KeyError we eliminate the magical items which have a contents key
-        pass
+#  Filling out the armor table
+
+# armor = requests.get(api_endpoint + '/equipment-categories/armor')
+# armor_data = armor.json()
+# for armor in armor_data['equipment']:
+#     url = 'https://www.dnd5eapi.co' + (armor['url'])
+#     armor_details = requests.get(url).json()
+#     try:
+#         if armor_details['contents'] == []:
+#             dex_limit = True
+#             print(armor_details['name'])
+#             try:
+#                 if armor_details['armor_class']['max_bonus']:
+#                     dex_limit = True
+#             except KeyError:
+#                 dex_limit = False
+#             print(armor_details['name'])
+#             new_armor = Armor(
+#                 name=armor_details['name'],
+#                 category=armor_details['armor_category'],
+#                 armor_class=armor_details['armor_class']['base'],
+#                 dex_bonus=armor_details['armor_class']['dex_bonus'],
+#                 dex_bonus_limit=dex_limit,
+#                 str_min=armor_details['str_minimum'],
+#                 stealth_disadvantage=armor_details['stealth_disadvantage'],
+#                 value=f"{armor_details['cost']['quantity']} {armor_details['cost']['unit']}",
+#             )
+#             db.session.add(new_armor)
+#             db.session.commit()
+#     except KeyError: # By searching for this KeyError we eliminate the magical items which have a contents key
+#         pass
+
+# ---------------------- Filling out Class Data Table ----------------------
+
+# data = requests.get('https://www.dnd5eapi.co/api/classes/')
+# all_data = data.json()
+# for player_class in all_data['results']:
+#     url = "https://www.dnd5eapi.co" + player_class['url']
+#     class_data = requests.get(url).json() # Int
+#     proficiencies = class_data['proficiencies']
+#     light_armor = False
+#     medium_armor = False
+#     heavy_armor = False
+#     shields = False
+#     simple_weapons = False
+#     martial_weapons = False
+#     for proficiency in proficiencies:
+#         if proficiency['index'] == "light-armor" or proficiency['index'] == "all-armor":
+#             light_armor = True
+#         if proficiency['index'] == "medium-armor" or proficiency['index'] == "all-armor":
+#             medium_armor = True
+#         if proficiency['index'] == "heavy-armor" or proficiency['index'] == "all-armor":
+#             heavy_armor = True
+#         if proficiency['index'] == "shields":
+#             shields = True
+#         if proficiency['index'] == "martial-weapons":
+#             martial_weapons = True
+#         if proficiency['index'] == "simple-weapons":
+#             simple_weapons = True
+#     saves = class_data['saving_throws']
+#     save_1 = saves[0]['index']
+#     save_2 = saves[1]['index']
+#     num_tools = 0
+#     tool_desc = ""
+#     try:
+#         num_tools = class_data['proficiency_choices'][1]['choose']
+#         tool_desc = class_data['proficiency_choices'][1]['desc']
+#     except IndexError:
+#         num_tools = 0
+#     new_class = CharacterClasses(
+#         class_name=class_data['name'],
+#         hit_dice=class_data['hit_die'],
+#         light_armor=light_armor,
+#         medium_armor=medium_armor,
+#         heavy_armor=heavy_armor,
+#         simple_weapons=simple_weapons,
+#         martial_weapons=martial_weapons,
+#         shields=shields,
+#         class_save_1=save_1,
+#         class_save_2=save_2,
+#         num_skills=class_data['proficiency_choices'][0]['choose'],
+#         skill_desc=class_data['proficiency_choices'][0]['desc'],
+#         num_tools=num_tools,
+#         tool_desc=tool_desc,
+#     )
+#     db.session.add(new_class)
+#     db.session.commit()
+
+# ---------------- Filling out Class Features Table ----------------
+
+# data = requests.get('https://www.dnd5eapi.co/api/classes/')
+# all_data = data.json()
+# class_id = 0
+# for player_class in all_data['results']:
+#     class_id += 1
+#     url = "https://www.dnd5eapi.co" + player_class['url'] + "/features"
+#     class_data = requests.get(url).json()
+#     features = class_data['results']
+#     for feature in features:
+#         feature_url = api_endpoint + "/features/" + feature['index']
+#         feature_data = requests.get(feature_url).json()
+#         title = ""
+#         try:
+#             if feature_data['subclass']:
+#                 title = "Subclass Feature"
+#         except KeyError:
+#             title = feature_data['name']
+#         new_feature = ClassFeatures(
+#             class_id=class_id,
+#             title=title,
+#             class_level=feature_data['level'],
+#             class_feature_desc=feature_data['desc'][0]
+#         )
+#         db.session.add(new_feature)
+#         db.session.commit()
+
+
+# ------------ Filling out the Character Race Features Table --------------
+#
+# races = requests.get("https://www.dnd5eapi.co/api/races")
+# race_data = races.json()
+# all_races = race_data['results']
+# race_id = 0
+#
+# for race in all_races:
+#     race_id += 1
+#     url = "https://www.dnd5eapi.co/api/races/" + race['index']
+#     race_details = requests.get(url).json()
+#     print(race_details['index'])
+#     all_traits = race_details['traits']
+#     for trait in all_traits:
+#         trait_details = requests.get("https://www.dnd5eapi.co" + trait['url']).json()
+#         trait_desc_full = ""
+#         for trait_desc in trait_details['desc']:
+#             trait_desc_full += trait_desc
+#         new_race_feature = RacialFeatures(
+#             title=trait_details['name'],
+#             feature_desc=trait_desc_full,
+#             race_id=race_id,
+#         )
+#         db.session.add(new_race_feature)
+#         db.session.commit()
 
 
 # --------------------- Wrapper Functions -----------------------
@@ -893,12 +985,7 @@ def load_player(player_id):
     return Player.query.get(player_id)
 
 
-# ------------------------ Routes ----------------------------
-
-@app.route("/test")
-def test_page():
-    return render_template("test.html")
-
+# ------------------ Home Related Routes --------------------------
 
 @app.route("/")
 def home():
@@ -906,6 +993,59 @@ def home():
     return render_template('index.html', all_campaigns=campaigns,
                            logged_in=current_user.is_authenticated)
 
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    campaigns = Campaign.query.all()
+    form = forms.LoginForm()
+    image = 'https://img.freepik.com/free-photo/top-view-beautiful-rpg-still-life-items_23-2149282425.jpg?w=1800&t=st=1668923891~exp=1668924491~hmac=1a144e548bff837473f7442b48915694068909663936c7cc36c77c7dc4166142'
+    title = 'Log In'
+    subtitle = "Welcome back adventurer"
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    if form.validate_on_submit():
+        username = request.form.get('username')
+        password = request.form.get('password')
+        player = Player.query.filter_by(username=username).first()
+        if not player:
+            flash("Username or password incorrect")
+            return redirect(url_for('login'))
+        elif not check_password_hash(player.password, password):
+            flash("Username of password incorrect")
+            return redirect(url_for('login'))
+        if check_password_hash(player.password, password):
+            login_user(player)
+            return redirect(url_for('home'))
+    return render_template("forms.html", form=form, logged_in=current_user.is_authenticated,
+                           all_campaigns=campaigns, image=image, title=title, subtitle=subtitle)
+
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('home'))
+
+
+@app.route('/contact-us', methods=["GET", "POST"])
+def contact_page():
+    form = forms.ContactMe()
+    campaigns = Campaign.query.all()
+    subtitle = 'If you wish to join a campaign, run your own game under the D.D.Inc banner, or have any questions for us here at D.D.Inc, contact us.'
+    image = "https://img.freepik.com/free-photo/still-life-objects-with-role-playing-game-sheet_23-2149352342.jpg?w=1800&t=st=1668816379~exp=1668816979~hmac=392e7123a6ce3251966987d3f5463a0704a9f98e1987b90645ffe93dde9ce361"
+    if form.validate_on_submit():
+        name = form.name.data
+        email = form.email.data
+        subject = form.subject.data
+        message = form.message.data
+        file_name = f"contact_messages/{form.name.data} - {datetime.datetime.now().strftime('%d-%m-%Y - %H-%M-%S')}.txt"
+        with open(file_name, 'w') as file:
+            file.write(f"Contact Message\n\nname: {name} - email: {email}\nsubject: {subject}\n{message}")
+        return redirect(url_for('home'))
+    return render_template('forms.html', form=form, all_campaigns=campaigns,
+                           logged_in=current_user.is_authenticated, image=image,
+                           title='Cast Message', subtitle=subtitle, classes="contact-form")
+
+# --------------------- Campaign related routes ------------------------
 
 @app.route("/campaigns")
 def campaigns():
@@ -938,36 +1078,33 @@ def session_review_page(campaign_id, review_id):
     campaigns = Campaign.query.all()
     requested_campaign = Campaign.query.get(campaign_id)
     requested_review = SessionReview.query.get(review_id)
-    print(requested_campaign.title)
     return render_template("session_review.html", campaign=requested_campaign, review=requested_review,
                            all_campaigns=campaigns, logged_in=current_user.is_authenticated)
 
 
-@app.route("/login", methods=["GET", "POST"])
-def login():
+@app.route('/schedule')
+def schedule_page():
     campaigns = Campaign.query.all()
-    form = forms.LoginForm()
-    image = 'https://img.freepik.com/free-photo/top-view-beautiful-rpg-still-life-items_23-2149282425.jpg?w=1800&t=st=1668923891~exp=1668924491~hmac=1a144e548bff837473f7442b48915694068909663936c7cc36c77c7dc4166142'
-    title = 'Log In'
-    subtitle = "Welcome back adventurer"
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
-    if form.validate_on_submit():
-        username = request.form.get('username')
-        password = request.form.get('password')
-        player = Player.query.filter_by(username=username).first()
-        if not player:
-            flash("Username or password incorrect")
-            return redirect(url_for('login'))
-        elif not check_password_hash(player.password, password):
-            flash("Username of password incorrect")
-            return redirect(url_for('login'))
-        if check_password_hash(player.password, password):
-            login_user(player)
-            return redirect(url_for('home'))
-    return render_template("forms.html", form=form, logged_in=current_user.is_authenticated,
-                           all_campaigns=campaigns, image=image, title=title, subtitle=subtitle)
+    return render_template('schedule.html', all_campaigns=campaigns, logged_in=current_user.is_authenticated)
 
+
+@app.route("/faction/<int:faction_id>")
+def faction_page(faction_id):
+    campaigns = Campaign.query.all()
+    requested_faction = Faction.query.get(faction_id)
+    return render_template('faction_page.html', all_campaings=campaigns,
+                           logged_in=current_user.is_authenticated, faction=requested_faction)
+
+
+@app.route("/location/<int:location_id>")
+def location_page(location_id):
+    campaigns = Campaign.query.all()
+    requested_location = Location.query.get(location_id)
+    return render_template('location_page.html', all_campaings=campaigns,
+                           logged_in=current_user.is_authenticated, location=requested_location)
+
+
+# ----------------- Character Related Routes ------------------------
 
 @app.route("/character-hub", methods=["GET", "POST"])
 def character_hub():
@@ -978,12 +1115,6 @@ def character_hub():
     return render_template("character-hub.html", logged_in=current_user.is_authenticated, all_campaigns=campaigns)
 
 
-@app.route('/logout')
-def logout():
-    logout_user()
-    return redirect(url_for('home'))
-
-
 @app.route('/character/<character_id>', methods=["GET", "POST"])
 def character_page(character_id):
     campaigns = Campaign.query.all()
@@ -992,31 +1123,6 @@ def character_page(character_id):
     return render_template("character-page.html", character=requested_character,
                            all_campaigns=campaigns, prof=prof, logged_in=current_user.is_authenticated)
 
-
-@app.route('/contact-us', methods=["GET", "POST"])
-def contact_page():
-    form = forms.ContactMe()
-    campaigns = Campaign.query.all()
-    subtitle = 'If you wish to join a campaign, run your own game under the D.D.Inc banner, or have any questions for us here at D.D.Inc, contact us.'
-    image = "https://img.freepik.com/free-photo/still-life-objects-with-role-playing-game-sheet_23-2149352342.jpg?w=1800&t=st=1668816379~exp=1668816979~hmac=392e7123a6ce3251966987d3f5463a0704a9f98e1987b90645ffe93dde9ce361"
-    if form.validate_on_submit():
-        name = form.name.data
-        email = form.email.data
-        subject = form.subject.data
-        message = form.message.data
-        file_name = f"contact_messages/{form.name.data} - {datetime.datetime.now().strftime('%d-%m-%Y - %H-%M-%S')}.txt"
-        with open(file_name, 'w') as file:
-            file.write(f"Contact Message\n\nname: {name} - email: {email}\nsubject: {subject}\n{message}")
-        return redirect(url_for('home'))
-    return render_template('forms.html', form=form, all_campaigns=campaigns,
-                           logged_in=current_user.is_authenticated, image=image,
-                           title='Cast Message', subtitle=subtitle, classes="contact-form")
-
-
-@app.route('/schedule')
-def schedule_page():
-    campaigns = Campaign.query.all()
-    return render_template('schedule.html', all_campaigns=campaigns, logged_in=current_user.is_authenticated)
 
 # ------------------------ Form Routes for DB -----------------------------
 
@@ -1048,12 +1154,81 @@ def register_player():
                            image=image, title=title, subtitle=subtitle, all_campaigns=campaigns)
 
 
+@app.route("/location/edit-notes/<int:location_id>", methods=["GET", "POST"])
+def edit_location_notes(location_id):
+    campaigns = Campaign.query.all()
+    requested_location = Location.query.get(location_id)
+    form = forms.EditNotes(
+        notes=requested_location.location_notes
+    )
+    if form.validate_on_submit():
+        requested_location.location_notes = form.notes.data
+        db.session.commit()
+        return redirect(url_for("location_page", location_id=location_id))
+    return render_template('forms.html', all_campaings=campaigns,
+                           logged_in=current_user.is_authenticated, location=requested_location, form=form)
+
+
+@app.route("/location/add-comment/<int:location_id>", methods=["GET", "POST"])
+def add_location_comment(location_id):
+    campaigns = Campaign.query.all()
+    requested_location = Location.query.get(location_id)
+    form = forms.AddComment()
+    if form.validate_on_submit():
+        new_comment = LocationComments(
+            body=form.body.data,
+            date=datetime.datetime.utcnow(),
+            player_id=current_user.id,
+            location_id=requested_location.id
+        )
+        db.session.add(new_comment)
+        db.session.commit()
+        return redirect(url_for("location_page", location_id=location_id))
+    return render_template("forms.html", all_campaigns=campaigns,
+                           logged_in=current_user.is_authenticated, location=requested_location, form=form)
+
+
+@app.route("/faction/edit-notes/<int:faction_id>", methods=["GET", "POST"])
+def edit_faction_notes(faction_id):
+    campaigns = Campaign.query.all()
+    requested_faction = Faction.query.get(faction_id)
+    form = forms.EditNotes(
+        notes=requested_faction.faction_notes
+    )
+    if form.validate_on_submit():
+        requested_faction.faction_notes = form.notes.data
+        db.session.commit()
+        return redirect(url_for("faction_page", faction_id=faction_id))
+    return render_template('forms.html', all_campaings=campaigns,
+                           logged_in=current_user.is_authenticated, faction=requested_faction, form=form)
+
+
+@app.route("/faction/add-comment/<int:faction_id>", methods=["GET", "POST"])
+def add_faction_comment(faction_id):
+    campaigns = Campaign.query.all()
+    requested_faction = Faction.query.get(faction_id)
+    form = forms.AddComment()
+    if form.validate_on_submit():
+        new_comment = FactionComments(
+            body=form.body.data,
+            date=datetime.datetime.utcnow(),
+            player_id=current_user.id,
+            faction_id=requested_faction.id
+        )
+        db.session.add(new_comment)
+        db.session.commit()
+        return redirect(url_for("faction_page", faction_id=faction_id))
+    return render_template("forms.html", all_campaigns=campaigns,
+                           logged_in=current_user.is_authenticated, faction=requested_faction, form=form)
+
+
 @app.route("/add-new-character", methods=["GET", "POST"])
 @login_required
 def add_new_character():
     stats = generate_stat(6)
     form = forms.CreateNewCharacter()
     if form.validate_on_submit():
+        spellcaster = False
         new_character = Character(
             char_img=form.char_img.data,
             name=form.name.data,
@@ -1117,47 +1292,33 @@ def add_new_character():
             new_character.charisma_save = True
         if form.class_main == "Bard" or "Cleric" or "Druid" or "Sorcerer" or "Warlock" or "Wizard":
             new_character.spellcaster = True
-        # for language in all_race_details[form.race.data]['languages']:
-        #     new_character.language['index'] = True
+            spellcaster = True
         db.session.add(new_character)
         db.session.commit()
-        return redirect(url_for('new_char_stats', character_id=new_character.id))
-    return render_template("create_character_page.html", form=form, logged_in=current_user.is_authenticated, stats=stats)
+        requested_character = Character.query.filter_by(name=new_character.name).first()
+        character_id = requested_character.id
+        return redirect(url_for('home'))
+    return render_template("create_character_page.html", form=form, logged_in=current_user.is_authenticated,
+                           stats=stats)
 
 
-# @app.route("/character-spellcasting/<int:character_id>", methods=["GET", "POST"])
-# def character_spellcasting(character_id):
-#     requested_character = Character.query.get(character_id)
-
-
-@app.route("/new-char-stats/<int:character_id>", methods=["GET", "POST"])
-def new_char_stats(character_id):
-    stats = generate_stat(6)
+@app.route("/character-spellcasting/<int:character_id>", methods=["GET", "POST"])
+def character_spellcasting(character_id):
     requested_character = Character.query.get(character_id)
-    form = forms.CreateStats(
-        strength=requested_character.strength,
-        dexterity=requested_character.dexterity,
-        constitution=requested_character.constitution,
-        wisdom=requested_character.wisdom,
-        intelligence=requested_character.intelligence,
-        charisma=requested_character.charisma
-    )
-    if form.validate_on_submit():
-        print("Did validate on sumbit")
-        requested_character.strength = form.strength.data
-        requested_character.dexterity = form.dexterity.data
-        requested_character.constitution = form.constitution.data
-        requested_character.wisdom = form.wisdom.data
-        requested_character.intelligence = form.intelligence.data
-        requested_character.charisma = form.charisma.data
-        print(requested_character.strength)
-        print(requested_character.dexterity)
-        db.session.commit()
-        return redirect(url_for("home"))
+    character_class = requested_character.class_main
+    available_spells = []
+    all_1st_level_spells = Spells.query.filter_by(spell_level=1).all()
+    all_cantrips = Spells.query.filter_by(spell_level=0).all()
+    for spell in all_1st_level_spells:
+        class_list = spell.classes.split(",")
 
-    print("Not validate_on_submit")
-    return render_template("character_stat_generation.html", form=form, logged_in=current_user.is_authenticated,
-                           stats=stats, character_id=character_id)
+        # if character_class in spell.classes.split(","):
+        #     available_spells.append(spell.name)
+    print(available_spells)
+    print(all_cantrips)
+    available_spells = []
+    form = forms.SpellSelection(available_spells)
+    return render_template('forms.html', form=form)
 
 
 @app.route("/new-location", methods=["GET", "POST"])
@@ -1203,16 +1364,35 @@ def edit_location(location_id):
 @app.route("/add-npc", methods=["GET", "POST"])
 @admin_only
 def add_new_npc():
+    all_locations = {}
+    all_location_data = Location.query.all()
+    for location in all_location_data:
+        all_locations[location.location_name] = location.id
+    all_factions = {}
+    all_faction_data = Faction.query.all()
+    for faction in all_faction_data:
+        all_factions[faction.faction_name] = faction.id
     form = forms.NPCForm()
+    form.location.choices = list(all_locations.keys())
+    form.faction.choices = list(all_factions.keys())
     if form.validate_on_submit():
         new_npc = NPC(
             name=form.name.data,
+            race=form.race.data,
             npc_image=form.npc_image.data,
             npc_description=form.npc_description.data,
             npc_history=form.npc_history.data,
             npc_notes=form.npc_notes.data,
-            faction=form.faction.data
+            sex=form.sex.data,
+            npc_token=form.npc_token.data,
+            personality_trait_1=form.personality_trait_1.data,
+            personality_trait_2=form.personality_trait_2.data,
+            ideals=form.ideals.data,
+            bonds=form.bonds.data,
+            flaws=form.flaws.data,
         )
+        new_npc.faction_id = all_factions[form.faction.data]
+        new_npc.location_id = all_locations[form.location.data]
         if form.campaign.data == "GoS":
             new_npc.campaign_id = 1
         if form.campaign.data == "CoS":
@@ -1250,7 +1430,7 @@ def add_new_campaign():
         db.session.add(new_campaign)
         db.session.commit()
         return redirect(url_for("home"))
-    return render_template("forms.html", form=form,  logged_in=current_user.is_authenticated)
+    return render_template("forms.html", form=form, logged_in=current_user.is_authenticated)
 
 
 @app.route("/new-faction", methods=["GET", "POST"])
@@ -1261,7 +1441,7 @@ def add_new_faction():
         new_faction = Faction(
             faction_name=form.faction_name.data,
             faction_description=form.faction_description.data,
-            faction_image=form.faction_image.data
+            faction_img=form.faction_image.data
         )
         if form.campaign.data == "GoS":
             new_faction.campaign_id = 1
@@ -1294,6 +1474,5 @@ def add_review(campaign_id):
     return render_template("forms.html", form=form, logged_in=current_user.is_authenticated)
 
 
-
-# if __name__ == '__main__':
-#     app.run(debug=True)
+if __name__ == '__main__':
+    app.run(debug=True)

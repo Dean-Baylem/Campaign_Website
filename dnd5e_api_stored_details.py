@@ -212,50 +212,76 @@ all_tools = ["Alchemist's Supplies", "Brewer's Supplies", "Calligrapher's Suppli
 #     print(full_desc)
 
 # ---------------- Checking for all playable races ----------------------
-
+#
 # races = requests.get("https://www.dnd5eapi.co/api/races")
 # race_data = races.json()
 # all_races = race_data['results']
 #
 # for race in all_races:
-#     print(race['index'])
 #     url = "https://www.dnd5eapi.co/api/races/" + race['index']
 #     race_details = requests.get(url).json()
-#     print(race_details)
-#     all_race_details[race_details['index']] = {
-#         "name": race_details['name'],
-#         "age description": race_details['age'],
-#         "languages": race_details['languages'],
-#     }
+#     print(race_details['index'])
+#     all_traits = race_details['traits']
+#     for trait in all_traits:
+#         trait_details = requests.get("https://www.dnd5eapi.co" + trait['url']).json()
+#         print(trait_details['name'])
+#         print(trait_details['desc'])
 #
 #
 # print(all_race_details)
-# print(all_race_details['elf'])
 
 # ------------- Checking for playable classes and details ------------------
 
+# example = requests.get('https://www.dnd5eapi.co/api/features/dragon-wings').json()
+# print(example)
 #
+# example2 = requests.get('https://www.dnd5eapi.co/api/features/persistent-rage').json()
+# print(example2)
+#
+# api_endpoint = "https://www.dnd5eapi.co"
+# #
 # data = requests.get('https://www.dnd5eapi.co/api/classes/')
 # all_data = data.json()
+# class_id = 0
 # for player_class in all_data['results']:
-#     url = "https://www.dnd5eapi.co" + player_class['url']
+#     class_id += 1
+#     print(player_class['url'])
+#     url = "https://www.dnd5eapi.co" + player_class['url'] + "/features"
 #     class_data = requests.get(url).json()
-#
-#     # Obtaining the saving throws for each class
-#     # saving_throw_data = class_data['saving_throws']
-#     # saving_throws = []
-#     # for save in saving_throw_data:
-#     #     saving_throws.append(save['index'])
-#     # class_saves[class_data['index']] = saving_throws
-#
-#
-#     # Obtaining skill_prof details per class and storing into a dictionary
-#     # class_skill_profs[class_data['index']] = {
-#     #     'desc': class_data['proficiency_choices'][0]['desc']
-#     # }
-#
-#     # Obtaining hit die data per class and storing into a dictionary
-#     # class_hit_die[class_data['index']] = class_data['hit_die']
+#     features = class_data['results']
+#     for feature in features:
+#         feature_url = api_endpoint + feature['url']
+#         feature_data = requests.get(feature_url).json()
+#         try:
+#             if feature_data['subclass']:
+#                 print(feature_data)
+#         except KeyError:
+#             class_id = class_id
+#             title = feature_data['name']
+#             class_level = feature_data['level']
+#             class_feature_desc = feature_data['desc'][0]
+#             # print(class_id)
+#             # print(title)
+#             # print(class_level)
+#             # print(class_feature_desc)
+
+
+
+# Obtaining the saving throws for each class
+# saving_throw_data = class_data['saving_throws']
+# saving_throws = []
+# for save in saving_throw_data:
+#     saving_throws.append(save['index'])
+# class_saves[class_data['index']] = saving_throws
+
+
+# Obtaining skill_prof details per class and storing into a dictionary
+# class_skill_profs[class_data['index']] = {
+#     'desc': class_data['proficiency_choices'][0]['desc']
+# }
+
+# Obtaining hit die data per class and storing into a dictionary
+# class_hit_die[class_data['index']] = class_data['hit_die']
 #
 #
 

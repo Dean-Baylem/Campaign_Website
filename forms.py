@@ -109,6 +109,11 @@ class CreateNewCharacter(FlaskForm):
     # class_second_subclass = Column(String)
 
 
+class SpellSelection(FlaskForm):
+    spells = SelectMultipleField("Please select your spells")
+    submit = SubmitField("Submit")
+
+
 class CreateStats(FlaskForm):
     strength = IntegerField("Strength")
     dexterity = IntegerField("Dexterity")
@@ -126,6 +131,16 @@ class CreateFactionForm(FlaskForm):
     campaign = SelectField("Please select which campaign this faction is found in", choices=campaigns,
                            validators=[DataRequired()])
     submit = SubmitField("Submit Faction")
+
+
+class EditNotes(FlaskForm):
+    notes = CKEditorField("Edit Faction Notes")
+    submit = SubmitField("Submit Notes")
+
+
+class AddComment(FlaskForm):
+    body = CKEditorField("Please write your comment")
+    submit = SubmitField("Submit Comment")
 
 
 class CreateLocationForm(FlaskForm):
@@ -160,12 +175,21 @@ class SessionReviewForm(FlaskForm):
 
 class NPCForm(FlaskForm):
     name = StringField("NPC Name", validators=[DataRequired()])
-    npc_image = StringField("NPC Image", validators=[DataRequired()])
+    race = StringField("NPC Race")
+    sex = StringField("What is the NPC's gender?")
+    npc_image = StringField("Full NPC Image", validators=[DataRequired()])
+    npc_token = StringField("NPC Token Image")
     npc_description = CKEditorField("Describe the NPC", validators=[DataRequired()])
-    npc_history = CKEditorField("NPC Backstory", validators=[DataRequired()])
-    npc_notes = CKEditorField("Interactions between the NPC and the party", validators=[DataRequired()])
+    personality_trait_1 = TextAreaField("Please Enter the first personality trait", validators=[DataRequired()])
+    personality_trait_2 = TextAreaField("Enter a second personality trait if applicable")
+    ideals = TextAreaField("NPC Ideals", validators=[DataRequired()])
+    bonds = TextAreaField("NPC Bonds", validators=[DataRequired()])
+    flaws = TextAreaField("NPC Flaws", validators=[DataRequired()])
+    npc_history = CKEditorField("Notes the characters know about the NPC", validators=[DataRequired()])
+    npc_notes = CKEditorField("Secret DM notes regarding the NPC", validators=[DataRequired()])
     campaign = SelectField("Please select the campaign for this NPC", choices=campaigns, validators=[DataRequired()])
-    faction = StringField("What faction is this NPC associated with?")
+    faction = SelectField("What faction is this NPC associated with?")
+    location = SelectField("Where is the NPC based?")
     submit = SubmitField("Submit")
 
 

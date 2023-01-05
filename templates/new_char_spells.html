@@ -1,0 +1,70 @@
+{% include "header.html" %}
+
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+
+{% if image %}
+
+<section id="campaign-heading" class="light-bg">
+  <div class="container-fluid" style="background-image: url({{image}}); background-repeat: no-repeat; background-size: cover;">
+  <div class="mask" style="background-color: rgba(0, 0, 0, 0.5)" >
+    <div class="row section-area">
+      <h1 class="home-title heading-font">{{title}}</h1>
+        <div class="col">
+          <div class="campaigns-subtitle">
+            <h4 class="home-subtitle home-page-font">{{subtitle}}</h4>
+          </div>
+        </div>
+    </div>
+  </div>
+  </div>
+</section>
+
+{% endif %}
+
+<body>
+<section class="light-bg section-area login-body">
+ <div class="container" style="margin: 0; padding: 0;">
+     <div class="row">
+         <form method="POST" action="/add-new-character">
+        <div class="tab-content" id="myTabContent">
+          <div class="tab-pane fade show active" id="character-details-tab-pane" role="tabpanel" aria-labelledby="character-details-tab" tabindex="0">
+                  {{ form.csrf_token }}
+                  <div class="row form-group required">
+                      <div class="col-lg-5 control-label">Character Name:</div>
+                      <div class="col-lg-7">{{ form.name(class='form-control') }}</div>
+                  </div>
+                  <div class="row form-group required">
+                      <div class="col-lg-5 control-label">{{ form.campaign.label }}</div>
+                      <div class="col-lg-7">{{ form.campaign(class='form-control') }}</div>
+                  </div>
+                  <div class="row form-group required">
+                      <div class="col-lg-5 control-label">{{ form.sex.label }}</div>
+                      <div class="col-lg-7">{{ form.sex(class='form-control') }}</div>
+                  </div>
+                  <div class="row form-group required">
+                      <div class="col-lg-5 control-label">{{ form.char_img.label }}</div>
+                      <div class="col-lg-7">{{ form.char_img(class='form-control') }}</div>
+                  </div>
+                  <div class="row form-group required">
+                      <div class="col-lg-5 control-label">{{ form.token_img.label }}</div>
+                      <div class="col-lg-7">{{ form.token_img(class='form-control') }}</div>
+                  </div>
+                  <div class="row form-group required">
+                      <div class="col-lg-5 control-label">{{ form.char_lvl.label }}</div>
+                      <div class="col-lg-7">{{ form.char_lvl(class='form-control') }}</div>
+                  </div>
+                  <div class="row form-group required">
+                      <div class="col-lg-5 control-label">{{ form.alignment.label }}</div>
+                      <div class="col-lg-7">{{ form.alignment(class='form-control') }}</div>
+                  </div>
+          </div>
+          </div>
+         </form>
+     </div>
+ </div>
+</section>
+{% endblock %}
+
+{% include 'footer.html' %}
