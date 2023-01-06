@@ -1,9 +1,9 @@
 {% include "header.html" %}
 
 <section id="campaign-heading">
-  <div class="container-fluid" style="background-image: url(../static/{{campaign.page_image}}); background-repeat: no-repeat; background-size: cover; height: 40%;">
+  <div class="container-fluid" style="background-image: url(../static/{{campaign.page_image}}); background-repeat: no-repeat; background-size: cover; height: 40%; padding: 0;">
     <div class="mask" style="background-color: rgba(0, 0, 0, 0.5)" >
-    <div class="row">
+    <div class="row" style="margin: 0;">
       <div class="col campaign-title">
         <h1 class="main-title">{{campaign.title}}</h1>
       </div>
@@ -131,12 +131,12 @@
           <div class="card flex-fill">
               <a href="#" class="stretched-link"></a>
               <div class="card-body">
-                <a href="#" class="stretched-link"></a>
+                <a href="{{url_for('npc_page', npc_id = npc.id)}}" class="stretched-link"></a>
                 <img src="{{npc.npc_image}}" class="card-img-top npc-image" alt="{{npc.name}}">
                 <hr>
                 <h5 class="card-title card-name">{{npc.name}}</h5>
                 {% if npc.faction %}
-                <p class="card-text card-details">{{npc.faction}}</p>
+                <p class="card-text card-details">{{npc.faction.faction_name}}</p>
                 {% endif %}
             </div>
           </div>

@@ -29,6 +29,10 @@
   padding-top: 0;
 }
 
+.center-text {
+  text-align: center;
+}
+
 /* !! Character Sheet Page CSS !! */
 
 /* Phone Screen Settings */
@@ -605,4 +609,28 @@ div.comment-text p {
 
 .faction-motto {
   text-align: center;
+}
+
+/* NPC Page */
+
+.npc-heading {
+  padding-top: 8%;
+  padding-bottom: 8%;
+}
+
+.npc-text {
+  text-align: left;
+  font-size: 1.2rem;
+  font-family: 'Gentium Book Plus', serif;
+  line-height: 1.5;
+}
+
+.npc-token-img {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 2%;
+  padding-top: 2%;
+}
+.npc-token-img img {
+  border-radius: 50%;
 }

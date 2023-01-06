@@ -2,10 +2,10 @@
 
 <section id="title">
     <div class="container-fluid"
-         style="background-image: url({{npc.npc_image}}); background-repeat: no-repeat; background-size: cover; height: 40%; padding: 0;">
+         style="background-image: url({{npc.npc_image}}); background-repeat: no-repeat; background-size: cover; height: 10%; padding: 0;">
         <div class="mask" style="background-color: rgba(0, 0, 0, 0.5)">
             <div class="row section-area">
-                <h1 class="home-title heading-font">{{npc.name}}</h1>
+                <h1 class="home-title heading-font npc-heading">{{npc.name}}</h1>
             </div>
         </div>
     </div>
@@ -15,26 +15,42 @@
     <div class="conatiner-fluid">
         <div class="row">
             <div class="col-lg-6">
-                <div><h4>{{npc.name}}</h4></div>
-                <div><p>{{npc.npc_description}}</p></div>
+                <div><h2 class="home-subheading heading-font">{{npc.name}}</h2></div>
+                <div><h5 class="home-page-font-style">{{npc.npc_description | safe}}</h5></div>
             </div>
             <div class="col-lg-6">
-                <div>
-                    {{npc.npc_token}}
+                <div class="npc-token-img">
+                    <img src="{{npc.npc_token}}" alt="{{npc.name}}"/>
                 </div>
-                <div>
-                    <p>NPC in {{npc.campaign.title}}</p>
+                <hr>
+                <div class="home-page-font-style center-text">
+                    <p><em>NPC in {{npc.campaign.title}}</em></p>
+                    <hr>
                     <p>{{npc.sex}} {{npc.race}}</p>
-                    <p>{{npc.location.location_name}} {% if npc.faction %} - {{npc.faction.faction_name}} {% endif %}</p>
+                    <hr>
+                    <p>Located in - {{npc.location.location_name}}</p>
+                    <hr>
+                    <p>Associated Faction{% if npc.faction %} - {{npc.faction.faction_name}} {% endif %}</p>
+                    <hr>
                 </div>
-                {% if current.user.username == npc.campaign.dm_username %}
-                <div>
-                    <p>Personality Traits</p>
+                {% if current_user.username == npc.campaign.dm_username %}
+                <div class="row">
+                <div class="col home-page-font-style center-text">
+                    <p><u>Personality Traits</u></p>
                     <p>{{npc.personality_trait_1}}</p>
                     <p>{{npc.personality_trait_2}}</p>
-                    <p>NPC Ideal: {{npc.ideals}}</p>
-                    <p>NPC Bonds: {{npc.bonds}}</p>
-                    <p>NPC Flaws: {{npc.flaws}}</p>
+                </div>
+                <div class="col home-page-font-style center-text">
+                    <p><u>NPC Ideals</u></p><p>{{npc.ideals}}</p>
+                </div>
+                </div>
+                <div class="row">
+                    <div class="col home-page-font-style center-text">
+                        <p><u>NPC Bonds</u></p><p>{{npc.bonds}}</p>
+                    </div>
+                    <div class="col home-page-font-style center-text">
+                        <p><u>NPC Flaws</u></p><p>{{npc.flaws}}</p>
+                    </div>
                 </div>
                 {% endif %}
             </div>
@@ -43,20 +59,25 @@
 </section>
 
 <section id="npc-history-section" class="section-area light-bg">
+    <hr>
     <div class="container-fluid">
         <div class="row">
-            <h3>{{npc.name}}'s History</h3>
+            <h3 class="home-subheading heading-font">{{npc.name}}'s History</h3>
         </div>
         <div class="row">
-            <p>{{npc.npc_history | safe}}</p>
+            <h5 class="home-page-font-style">{{npc.npc_history | safe}}</h5>
         </div>
+        {% if current_user.username == npc.campaign.dm_username %}
+        <a class="btn btn-outline-dark" href="#">Edit NPC History</a>
+        {% endif %}
     </div>
-    {% if current.user.username == npc.campaign.dm_username %}
+    {% if current_user.username == npc.campaign.dm_username %}
     <hr>
     <div class="row">
-        <h5>DM Notes for {{npc.name}}</h5>
-        <p>{{npc.npc_notes}}</p>
+        <h3 class="home-subheading heading-font">DM Notes for {{npc.name}}</h3>
+        <h5 class="home-page-font-style">{{npc.npc_notes | safe}}</h5>
     </div>
+    <a class="btn btn-outline-dark" href="#">Edit NPC DM Notes</a>
     {% endif %}
 </section>
 

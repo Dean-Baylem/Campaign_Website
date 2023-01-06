@@ -1104,6 +1104,14 @@ def location_page(location_id):
                            logged_in=current_user.is_authenticated, location=requested_location)
 
 
+@app.route("/npc/<int:npc_id>")
+def npc_page(npc_id):
+    campaigns = Campaign.query.all()
+    requested_npc = NPC.query.get(npc_id)
+    return render_template('npc_page.html', all_campaigns=campaigns,
+                           logged_in=current_user.is_authenticated, npc=requested_npc)
+
+
 # ----------------- Character Related Routes ------------------------
 
 @app.route("/character-hub", methods=["GET", "POST"])
