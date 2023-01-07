@@ -1,10 +1,14 @@
 import datetime
+from statistics import median
+from math import floor, ceil
+import os
 from flask import Flask, render_template, redirect, url_for, flash, request, abort, jsonify
 from flask_bootstrap import Bootstrap
 from flask_ckeditor import CKEditor
 from flask_wtf import FlaskForm
 from datetime import date
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime, Boolean
 from sqlalchemy.orm import relationship, declarative_base
@@ -18,9 +22,114 @@ import requests
 
 
 # ------------- Character Functions ---------------------
+all_tools = ["Alchemist's Supplies", "Brewer's Supplies", "Calligrapher's Supplies", "Carpenter's Tools",
+             "Cartographer's Tools", "Cobbler's Tools", "Cook's utensils", "Glassblower's Tools",
+             "Jeweler's Tools", "Leatherworker's Tools", "Mason's Tools", "Painter's Supplies",
+             "Potter's Tools", "Smith's Tools", "Tinker's Tools", "Weaver's Tools", "Woodcarver's Tools",
+             'Dice Set', 'Playing Card Set', 'Bagpipes', 'Drum', 'Dulcimer', 'Flute', 'Lute', 'Lyre',
+             'Horn', 'Pan flute', 'Shawm', 'Viol', "Navigator's Tools", "Thieves' Tools"]
+
+
+def character_tools(character):
+    """
+    This function checks the boolean values for the tools in the character database table
+    and returns a list containing the tools the character is proficient with.
+    """
+    proficient_tools = []
+    if character.alchemist_tools:
+        proficient_tools.append("Alchemist Supplies")
+    if character.calligrapher_tools:
+        proficient_tools.append("Calligrapher Tools")
+    if character.cartographer_tools:
+        proficient_tools.append("Cartographer Tools")
+    if character.cooks_utensils:
+        proficient_tools.append("Cooks Utensils")
+    if character.forgery_kit:
+        proficient_tools.append("Forgery Kit")
+    if character.herbalism_kit:
+        proficient_tools.append("Herbalism Kit")
+    if character.leatherworker_tools:
+        proficient_tools.append("Leatherworker Tools")
+    if character.navigator_tools:
+        proficient_tools.append("Navigator Tools")
+    if character.poisoner_kit:
+        proficient_tools.append("Poisoner Kit")
+    if character.smith_tools:
+        proficient_tools.append("Smith Tools")
+    if character.tinker_tools:
+        proficient_tools.append("Tinker Tools")
+    if character.woodcarver_tools:
+        proficient_tools.append("Woodcarver Tools")
+    if character.brewer_tools:
+        proficient_tools.append("Brewer Tools")
+    if character.carpenter_tools:
+        proficient_tools.append("Carpenter Tools")
+    if character.cobbler_tools:
+        proficient_tools.append("Cobbler Tools")
+    if character.disguise_kit:
+        proficient_tools.append("Disguise Kit")
+    if character.glassblower_tools:
+        proficient_tools.append("Glassblower Tools")
+    if character.jeweler_tools:
+        proficient_tools.append("Jeweler Tools")
+    if character.mason_tools:
+        proficient_tools.append("Mason Tools")
+    if character.painter_tools:
+        proficient_tools.append("Painter Tools")
+    if character.thief_tools:
+        proficient_tools.append("Thief Tools")
+    if character.weaver_tools:
+        proficient_tools.append("Weaver Tools")
+    return proficient_tools
+
+
+
+def character_languages(character):
+    """
+    This function Checks the Boolean Values for the languages in the character database table
+     and returns a list containing the characters known languages.
+     """
+    known_languages = []
+    if character.abyssal:
+        known_languages.append("Abyssal")
+    if character.celestial:
+        known_languages.append("Celestial")
+    if character.common:
+        known_languages.append("Common")
+    if character.deep_speech:
+        known_languages.append("Deep Speech")
+    if character.draconic:
+        known_languages.append("Draconic")
+    if character.dwarvish:
+        known_languages.append("Dwarvish")
+    if character.elvish:
+        known_languages.append("Elvish")
+    if character.giant:
+        known_languages.append("Giant")
+    if character.gnomish:
+        known_languages.append("Gnomish")
+    if character.goblin:
+        known_languages.append("Goblin")
+    if character.halfling:
+        known_languages.append("Halfling")
+    if character.infernal:
+        known_languages.append("Infernal")
+    if character.orc:
+        known_languages.append("Orc")
+    if character.primordial:
+        known_languages.append("Primordial")
+    if character.sylvan:
+        known_languages.append("Sylvan")
+    if character.undercommon:
+        known_languages.append("Undercommon")
+    return known_languages
 
 
 def prof_bonus(requested_character):
+    """
+    This function returns a numerical value for the character's proficiency bonus based on
+    the overall level of the character
+    """
     if requested_character.char_lvl < 5:
         return 2
     elif requested_character.char_lvl < 9:
@@ -34,6 +143,7 @@ def prof_bonus(requested_character):
 
 
 def ability_bonus(stat):
+    """This function checks the characters ability stat and returns the corresponding bonus value"""
     if stat == 1:
         return -5
     elif stat < 4:
@@ -60,8 +170,8 @@ def ability_bonus(stat):
 
 def generate_stat(num_stats):
     """
-    This function returns a set of stats in accordance to the roll 4
-    d6's and subtract the lowest value method.
+    This function returns a list of integers to be used as stats in accordance to the roll 4
+    d6's and subtract the lowest value method of rolling stats.
     """
     stats = []
     for stat in range(num_stats):
@@ -72,9 +182,13 @@ def generate_stat(num_stats):
     return stats
 
 
+UPLOAD_FOLDER = 'static/uploads'
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+
 app = Flask(__name__)
-app.jinja_env.globals.update(ability_bonus=ability_bonus)
+app.jinja_env.globals.update(ability_bonus=ability_bonus, floor=floor, len=len, ceil=ceil, median=median)
 app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 ckeditor = CKEditor(app)
 Bootstrap(app)
 
@@ -96,6 +210,18 @@ api_endpoint = "https://www.dnd5eapi.co/api"
 skills = ["Acrobatics", "Animal Handling", "Arcana", "Athletics", "Deception", "History",
           "Insight", "Intimidation", "Investigation", "Medicine", "Nature", "Perception",
           "Performance", "Persuasion", "Religion", "Sleight of Hand", "Stealth", "Survival"]
+
+
+
+
+all_languages = ['abyssal', 'celestial', 'common', 'deep_speech', 'draconic', 'dwarvish', 'elvish',
+                 'giant', 'gnomish', 'goblin', 'halfling', 'infernal', 'orc',
+                 'primordial', 'sylvan', 'undercommon']
+
+# ---------------- Function to check if allowed file ---------------
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 # ---------------- Database Tables --------------------
@@ -987,6 +1113,27 @@ def load_player(player_id):
 
 # ------------------ Home Related Routes --------------------------
 
+@app.route("/add-character-token/<int:character_id>", methods=["GET", "POST"])
+def upload_token(character_id):
+    requested_character = Character.query.get(character_id)
+    if request.method == "POST":
+        # Check if the post request has the file part
+        if 'file' not in request.files:
+            flash("No file part")
+            return redirect(url_for("home"))
+        file = request.files['file']
+        # If the user does not select a file, the browser submits an empty file without a filename
+        if file.filename == '':
+            flash("No selected file")
+            return redirect(url_for("home"))
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            requested_character.token_img = "static/uploads/" + filename
+            db.session.commit()
+            return redirect(url_for("home"))
+    return render_template('img_upload.html')
+
 @app.route("/")
 def home():
     campaigns = Campaign.query.all()
@@ -1128,8 +1275,23 @@ def character_page(character_id):
     campaigns = Campaign.query.all()
     requested_character = Character.query.get(character_id)
     prof = prof_bonus(requested_character)
+    ac = 10
+    dex_bonus = True
+    dex_bonus_limit = False
+    if requested_character.equipped_armor != "None":
+        print("Okay")
+        character_armor = Armor.query.filter_by(name=requested_character.equipped_armor).first()
+        ac = character_armor.armor_class
+        dex_bonus = character_armor.dex_bonus
+        dex_bonus_limit = character_armor.dex_bonus_limit
+    else:
+        print("Not Ok")
+    known_languages = character_languages(requested_character)
+    prof_tools = character_tools(requested_character)
     return render_template("character-page.html", character=requested_character,
-                           all_campaigns=campaigns, prof=prof, logged_in=current_user.is_authenticated)
+                           all_campaigns=campaigns, prof=prof, logged_in=current_user.is_authenticated,
+                           ac=ac, dex_bonus=dex_bonus, dex_bonus_limit=dex_bonus_limit,
+                           known_languages=known_languages, prof_tools=prof_tools)
 
 
 # ------------------------ Form Routes for DB -----------------------------
@@ -1230,6 +1392,7 @@ def add_faction_comment(faction_id):
                            logged_in=current_user.is_authenticated, faction=requested_faction, form=form)
 
 
+
 @app.route("/add-new-character", methods=["GET", "POST"])
 @login_required
 def add_new_character():
@@ -1238,10 +1401,8 @@ def add_new_character():
     if form.validate_on_submit():
         spellcaster = False
         new_character = Character(
-            char_img=form.char_img.data,
             name=form.name.data,
             sex=form.sex.data,
-            token_img=form.token_img.data,
             alignment=form.alignment.data,
             char_lvl=form.char_lvl.data,
             player_id=current_user.id,

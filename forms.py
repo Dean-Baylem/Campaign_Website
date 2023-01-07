@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField, EmailField, IntegerField, \
     SelectField, SelectMultipleField, TextAreaField, FileField, BooleanField
-from wtforms.validators import DataRequired, URL
+from wtforms.validators import DataRequired, URL, Regexp
 from flask_ckeditor import CKEditorField
 from dnd5e_api_stored_details import list_of_races, all_weapon_details, all_classes, \
     all_languages, all_race_details, all_tools
@@ -54,8 +54,6 @@ class CreateNewCharacter(FlaskForm):
     name = StringField("Character Name")
     campaign = SelectField("Please select which campaign this character is part off", choices=campaigns)
     sex = StringField("What is the characters gender?")
-    char_img = StringField("Character Image URL")
-    token_img = StringField("Character Token URL")
     char_lvl = IntegerField("What is the starting level of your character?")
     alignment = SelectField("What is your characters alignment?", choices=alignments)
 

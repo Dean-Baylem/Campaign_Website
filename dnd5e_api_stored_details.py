@@ -111,9 +111,9 @@ all_classes = ['Barbarian', 'Bard', 'Cleric', 'Druid', 'Fighter', 'Monk', 'Palad
                'Ranger', 'Rogue', 'Sorcerer', 'Warlock', 'Wizard']
 
 
-all_languages = ['Abyssal', 'Celestial', 'Common', 'Deep Speech', 'Draconic', 'Dwarvish', 'Elvish',
-                 'Giant', 'Gnomish', 'Goblin', 'Halfling', 'Infernal', 'Orc',
-                 'Primordial', 'Sylvan', 'Undercommon']
+all_languages = ['abyssal', 'celestial', 'common', 'deep_speech', 'draconic', 'dwarvish', 'elvish',
+                 'giant', 'gnomish', 'goblin', 'halfling', 'infernal', 'orc',
+                 'primordial', 'sylvan', 'undercommon']
 
 all_weapon_details = {'club': {'name': 'Club', 'weapon_range': 'Melee',
                                'dice': '1d4', 'num_die': '1', 'die_size': '4'},

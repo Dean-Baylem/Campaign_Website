@@ -137,6 +137,7 @@
   font-weight: 800;
   letter-spacing: 2px;
   line-height: 1.5;
+  display: inline;
 }
 
 .ability-score-text {
@@ -238,7 +239,20 @@
   text-align: center;
 }
 
-/* Character Hub CSS - To make footer stay at bottom of screen */
+/* Character Hub CSS */
+
+.character-page-subheading-row {
+  text-align: center;
+}
+
+div.character-page-subheading-row a {
+  margin-top: 1%
+}
+
+div.character-page-subheading-row p {
+  margin-top: 2%
+}
+/* Footer stays at bottom of screen */
 
 .hub-body {
   display:grid;
@@ -343,7 +357,7 @@
 }
 
 .card-title {
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-family: 'Cormorant Upright', serif;
   font-weight: 800;
 }
@@ -634,3 +648,4 @@ div.comment-text p {
 .npc-token-img img {
   border-radius: 50%;
 }
+
