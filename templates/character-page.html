@@ -15,6 +15,7 @@
                                              {{character.class_main}} {%if character.class_second%} - Level
                                              {{character.class_second_level}} {{character.class_second}}{%endif%}</p>
                     </div>
+                    <a href="#" class="char-text edit-anchor edit-icon"><i class="edit-fa-solid fa-solid fa-gears edit-icon"></i></a>
                 </div>
             </div>
             <div class="col-xl-3 col-lg-4">
@@ -31,23 +32,26 @@
                             <p class="char-text">{{character.player.username}}</p>
                         </div>
                     </div>
+                    <a href="#" class="char-text edit-anchor edit-icon"><i class="edit-fa-solid fa-solid fa-gears edit-icon"></i></a>
                 </div>
             </div>
             <div class="col-xl-4 col-lg-12 character_details">
-                <div class="full-box border border-dark border-3 top-row-extra-margin">
+                <div class="full-box border border-dark border-3 top-row-extra-margin" style="position: relative;">
                     <!--          This needs to change once the traits are split into seperate categories in the database.-->
                     <p class="char-text char-extra-details"><b>Background:</b> {{character.background}}</p>
                     <p class="char-text char-extra-details"><b>Alignment:</b> {{character.alignment}}</p>
                     <p class="char-text char-extra-details"><b>Appearance:</b> {{character.appearance_summary}}</p>
+                    <a href="#" class="char-text edit-anchor edit-icon"><i class="edit-fa-solid fa-solid fa-gears edit-icon"></i></a>
                 </div>
             </div>
         </div>
+        <hr>
         <div class="row">
             <!--        Character Stats       -->
             <div class="col-xl-3 col-lg-6 character-stats">
                 <div class="row">
                     <div class="col">
-                        <h4 class="character-heading char-title">Ability Scores</h4>
+                        <h4 class="character-heading char-title">Ability Scores  <a href="#" class="char-text edit-anchor-non-absolute edit-icon" style=""><i class="edit-fa-solid fa-solid fa-gears edit-icon"></i></a></h4>
                         <div class="ability-score border border-dark border-3">
                             <h4 class="ability-heading">Strength</h4>
                             <h4 class="ability-score-text">{% if character.main_bonus_score == "Strength"
@@ -100,7 +104,7 @@
             <div class="col-xl-3 col-lg-6">
                 <div class="row">
                     <div class="col">
-                        <h4 class="character-heading char-title">Skills and Bonuses</h4>
+                        <h4 class="character-heading char-title">Skills and Bonuses  <a href="#" class="char-text edit-anchor-non-absolute edit-icon" style=""><i class="edit-fa-solid fa-solid fa-gears edit-icon"></i></a></h4>
                         <div class="row">
                             <div class="col">
                                 <ul class="list-group list-group-flush skill-scores border border-dark border-3">
@@ -258,7 +262,7 @@
             <div class="col-xl-6 col-lg-12">
                 <div class="row">
                     <div class="col">
-                        <h4 class="character-heading char-title">Character Stats and Senses</h4>
+                        <h4 class="character-heading char-title">Character Stats and Senses  <a href="#" class="char-text edit-anchor-non-absolute edit-icon" style=""><i class="edit-fa-solid fa-solid fa-gears edit-icon"></i></a></h4>
                         <div class="row">
                             <div class="col-6">
                                 <div class="character-text-centered border border-dark border-3">
@@ -410,8 +414,9 @@
         <!--        Character Saving Throws     -->
         <div class="row" style="padding: 2% 0;">
             <div class="col-lg-12">
+                <hr>
                 <div class="col">
-                    <h4 class="character-heading char-title">Saving throws</h4>
+                    <h4 class="character-heading char-title">Saving throws  <a href="#" class="char-text edit-anchor-non-absolute edit-icon" style=""><i class="edit-fa-solid fa-solid fa-gears edit-icon"></i></a></h4>
                     <div class="row">
                         <div class="col-xl-4 col-lg-6">
                             <div class="character-text-centered border border-dark border-3">
@@ -497,6 +502,9 @@
             </div>
         </div>
         <div class="row">
+            <hr>
+            <div class="row">
+                <h4 class="character-heading char-title">Character Personality, Traits, and Abilities  <a href="#" class="char-text edit-anchor-non-absolute edit-icon" style=""><i class="edit-fa-solid fa-solid fa-gears edit-icon"></i></a></h4>
             <div class="col-lg-6">
                 <div class="character-personality border border-dark border-3">
                     <h4 class="ability-heading">Personality Traits</h4>
@@ -564,25 +572,30 @@
                             aria-controls="notes" aria-selected="false">Notes
                     </button>
                 </li>
-                <li class="nav-item char-nav-item border-end border-dark" role="presentation">
-                    <button class="nav-link character-navi-button" style="padding-left: 0; padding-right: 0;"
-                            id="traits-and-features-tab" data-bs-toggle="tab" data-bs-target="#traits-and-features"
-                            type="button" role="tab" aria-controls="traits-and-features" aria-selected="false">Features
-                    </button>
-                </li>
             </ul>
             <div class="tab-content border border-dark border-3" id="myTabContent">
 
                 <div class="tab-pane fade show active" id="actions" role="tabpanel" aria-labelledby="actions-tab">
                     <h5 class="ability-heading">My Actions:</h5>
-                    <p>{{character.actions | safe}}</p>
+                    {% for action in character.actions %}
+                    <h5>{{action.name}}</h5>
+                    <p>{{action.description | safe}}</p>
+                    {% endfor %}
                 </div>
                 <div class="tab-pane fade" id="spells" role="tabpanel" aria-labelledby="spells-tab">
                     <h5 class="ability-heading">My Spells:</h5>
+                    {% for spell in character.spells_known %}
+                    <p>{{spell.name}}</p>
+                    {% endfor %}
                 </div>
                 <div class="tab-pane fade" id="inventory" role="tabpanel" aria-labelledby="inventory-tab">
                     <h5 class="ability-heading">My Inventory:</h5>
-                    <p>{{character.inventory | safe}}</p>
+                    {% for item in character.inventory %}
+                    <p>{{item.name}}: {{item.category}} - Value: {{item.value}}</p>
+                     {% if item.item_desc %}
+                    <p>Description: {{item.item_desc}}</p>
+                    {% endif %}
+                    {% endfor %}
                 </div>
                 <div class="tab-pane fade" id="backstory" role="tabpanel" aria-labelledby="backstory-tab">
                     <h5 class="ability-heading">Backstory:</h5>
@@ -595,10 +608,6 @@
                 <div class="tab-pane fade" id="notes" role="tabpanel" aria-labelledby="notes-tab">
                     <h5 class="ability-heading">Character Notes:</h5>
                     <p>{{character.notes | safe}}</p>
-                </div>
-                <div class="tab-pane fade" id="traits-and-features" role="tabpanel"
-                     aria-labelledby="traits-and-features-tab">
-                    <h5 class="ability-heading">Character Traits and Features:</h5>
                 </div>
             </div>
         </div>

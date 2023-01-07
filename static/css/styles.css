@@ -107,6 +107,7 @@
 
 .full-box {
   height: 100%;
+  position: relative;
 }
 
 .character-player-details {
@@ -191,7 +192,9 @@
   padding: 2%;
   margin-top: 2%;
   margin-bottom: 2%;
+  position: relative;
 }
+
 .character-heading {
   text-align: center;
   padding: 2% 0;
@@ -202,10 +205,6 @@
 }
 /* Character Personality Trait Box */
 
-.character-personality {
-  margin-top: 2%;
-  margin-bottom: 2%;
-}
 
 .character-navi {
   padding-top: 2%;
@@ -237,6 +236,25 @@
 
 .char-token-name {
   text-align: center;
+}
+
+.edit-anchor {
+  position: absolute;
+  bottom: 1%;
+  right: 1%;
+  text-decoration: none;
+  color: black;
+}
+
+.edit-anchor-non-absolute {
+  text-decoration: none;
+  color: black;
+}
+
+.edit-fa-solid {
+  font-size: 1rem;
+  padding-bottom: 3%;
+  padding-top: 2%;
 }
 
 /* Character Hub CSS */
@@ -557,7 +575,7 @@ div.character-page-subheading-row p {
   font-weight: 700;
 }
 
-.fa-solid {
+.home-fa-solid {
   font-size: 2.5rem;
   padding-bottom: 3%;
   padding-top: 2%;
