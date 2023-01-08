@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField, EmailField, IntegerField, \
-    SelectField, SelectMultipleField, TextAreaField, FileField, BooleanField
+    SelectField, SelectMultipleField, TextAreaField, FileField, BooleanField, widgets
 from wtforms.validators import DataRequired, URL, Regexp
 from flask_ckeditor import CKEditorField
 from dnd5e_api_stored_details import list_of_races, all_weapon_details, all_classes, \
@@ -52,6 +52,7 @@ class CreateCampaignForm(FlaskForm):
 class CreateNewCharacter(FlaskForm):
     # ----------- Character Details -------------
     name = StringField("Character Name")
+    file = FileField("Character Token")
     campaign = SelectField("Please select which campaign this character is part off", choices=campaigns)
     sex = StringField("What is the characters gender?")
     char_lvl = IntegerField("What is the starting level of your character?")
@@ -98,13 +99,6 @@ class CreateNewCharacter(FlaskForm):
     instruments = TextAreaField("Which instruments are you proficient with?")
 
     submit = SubmitField("Submit Character")
-
-    # darkvision - Determined by race
-    # saves = Determined by primary class
-    # class_main_subclass = Column(String) ---- Own table based on class level
-    # class_second = Column(String(150)) ---- Own Table for this.
-    # class_second_level = Column(Integer)
-    # class_second_subclass = Column(String)
 
 
 class SpellSelection(FlaskForm):
@@ -208,25 +202,67 @@ class ContactMe(FlaskForm):
     submit = SubmitField("Submit")
 
 
-class CharacterBaseDetailsForm(FlaskForm):
-    name = StringField("Character name", default="Character name")
-    campaign = SelectField("Please select which campaign this character is part off", choices=campaigns,
-                           validators=[DataRequired()])
-    sex = StringField("What gender is your character?")
-    char_img = StringField("URL for character image")
-    token_img = StringField("URL for token image")
-    char_lvl = IntegerField("What level is your character?", default=1)
-    alignment = SelectField("What is your character's alignment?", choices=alignments)
+class UploadImageForm(FlaskForm):
+    file = FileField("Select the image file")
+    name = StringField("Name")
+    submit = SubmitField("Submit")
 
 
-class CharacterRaceFormFirst(FlaskForm):
-    race = SelectField("What race would you like to be?", choices=list_of_races)
+class EditNameRaceClass(FlaskForm):
+    name = StringField("Name")
+    race = StringField("Character Race")
+    subrace = StringField("Character Subrace")
+    class_main = StringField("Primary class")
+    class_main_level = IntegerField("Primary Class Level")
+    class_second = StringField("Multiclass Option")
+    class_second_level = IntegerField("Multiclass level")
+    submit = SubmitField("Submit Changes")
 
-# Build the below form into the route directly following the above form.
-# class CharacterRaceFormSecond(FlaskForm):
-#     subrace = Column(String(50))
-#     main_bonus_score = Column(String)
-#     sub_bonus_score = Column(String)
-#     size = Column(String)
-#     speed = Column(Integer)
-#     age = Column(Integer)
+
+class EditBackground(FlaskForm):
+    background = StringField("Character Background")
+    alignment = StringField("Character Alignment")
+    appearance_summary = StringField("Short description of character appearance (up to 300 characters)")
+    submit = SubmitField("Submit Changes")
+
+
+class EditAbilityScores(FlaskForm):
+    strength = IntegerField("Character Strength")
+    dexterity = IntegerField("Character Dexterity")
+    constitution = IntegerField("Character Constitution")
+    wisdom = IntegerField("Character Wisdom")
+    intelligence = IntegerField("Character Intelligence")
+    charisma = IntegerField("Character Charisma")
+
+
+class MultiCheckboxField(SelectMultipleField):
+    """Class to generate a checkbox field for use in WTForms"""
+    widget = widgets.ListWidget(prefix_label=False)
+    option_widget = widgets.CheckboxInput()
+
+
+class EditSkillProfs(FlaskForm):
+    skills = MultiCheckboxField("Which skills are your proficient with?", choices=all_skills)
+    submit = SubmitField("Submit Changes")
+
+
+class EditStatsSenses(FlaskForm):
+    max_hit_points = IntegerField("What's your max HP?")
+    temp_hit_points = IntegerField("How many temp Hit Points?")
+    darkvision = BooleanField("Have you gained Darkvision?")
+    darkvision_range = IntegerField("What's your dark vision range?")
+    blindsight = BooleanField("Have you gained blindsight?")
+    blindsight_range = IntegerField("Whats your blindsight range?")
+    truesight = BooleanField("Have you gained Truesight?")
+    truesight_range = IntegerField("What's your truesight range?")
+    submit = SubmitField("Submit Changes")
+
+
+class EditPersonality(FlaskForm):
+    personality_trait_1 = StringField("What is your first personality trait?")
+    personality_trait_2 = StringField("What is your second personality trait?")
+    ideals = StringField("Character Ideals")
+    bonds = StringField("Character Bonds")
+    flaws = StringField("Character Flaws")
+    submit = SubmitField("Submit Changes")
+

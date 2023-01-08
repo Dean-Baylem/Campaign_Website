@@ -8,14 +8,16 @@
             <!--        Character Details  -->
             <div class="col-xl-5 col-lg-8">
                 <div class="full-box border border-dark border-3 char-token-name">
-                    <img src="{{character.token}}" class="character_token">
                     <div class="name-race-class">
                         <h5 class="char-title">{{character.name}}</h5>
                         <p class="char-text">{{character.race}} / Level {{character.class_main_level}}
                                              {{character.class_main}} {%if character.class_second%} - Level
                                              {{character.class_second_level}} {{character.class_second}}{%endif%}</p>
                     </div>
-                    <a href="#" class="char-text edit-anchor edit-icon"><i class="edit-fa-solid fa-solid fa-gears edit-icon"></i></a>
+                    <div class="col" style="margin-bottom: 2%;">
+                    <img src="/{{character.token_img}}" class="character_token" style="border-radius: 50%;">
+                        </div>
+                    <a href="{{url_for('edit_core_character_details', character_id = character.id)}}" class="char-text edit-anchor edit-icon"><i class="edit-fa-solid fa-solid fa-gears edit-icon"></i></a>
                 </div>
             </div>
             <div class="col-xl-3 col-lg-4">
@@ -32,7 +34,6 @@
                             <p class="char-text">{{character.player.username}}</p>
                         </div>
                     </div>
-                    <a href="#" class="char-text edit-anchor edit-icon"><i class="edit-fa-solid fa-solid fa-gears edit-icon"></i></a>
                 </div>
             </div>
             <div class="col-xl-4 col-lg-12 character_details">
@@ -339,6 +340,7 @@
                                         <div class="col-lg-12">
                                             <h4 class="ability-heading">Senses</h4>
                                         </div>
+                                        {% if character.darkvision or character.blindsight or character.tremorsense or character.truesight %}
                                         <div class="col">
                                             {% if character.darkvision %}<p class="char-text sense-text"><b
                                                 class="ability-sub-heading">Darkvision:</b>
@@ -353,6 +355,7 @@
                                                 class="ability-sub-heading">Truesight:</b>
                                             {{character.truesight_distance}} ft.</p>{% endif %}
                                         </div>
+                                        {% endif %}
                                         <div class="col">
                                             <p class="char-text sense-text"><b class="ability-sub-heading">Passive
                                                                                                            Perception:</b>
@@ -416,7 +419,7 @@
             <div class="col-lg-12">
                 <hr>
                 <div class="col">
-                    <h4 class="character-heading char-title">Saving throws  <a href="#" class="char-text edit-anchor-non-absolute edit-icon" style=""><i class="edit-fa-solid fa-solid fa-gears edit-icon"></i></a></h4>
+                    <h4 class="character-heading char-title">Saving throws</h4>
                     <div class="row">
                         <div class="col-xl-4 col-lg-6">
                             <div class="character-text-centered border border-dark border-3">

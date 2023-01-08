@@ -1093,7 +1093,6 @@ class Items(db.Model):
 #         db.session.add(new_race_feature)
 #         db.session.commit()
 
-
 # --------------------- Wrapper Functions -----------------------
 
 def admin_only(f):
@@ -1110,14 +1109,13 @@ def admin_only(f):
 def load_player(player_id):
     return Player.query.get(player_id)
 
+# --------- Testing Route - For experimentation without editing established routes first ---------
 
-# ------------------ Home Related Routes --------------------------
-
-@app.route("/add-character-token/<int:character_id>", methods=["GET", "POST"])
-def upload_token(character_id):
+@app.route("/test/<int:character_id>",methods=["GET", "POST"])
+def test_upload(character_id):
+    form = forms.UploadImageForm()
     requested_character = Character.query.get(character_id)
-    if request.method == "POST":
-        # Check if the post request has the file part
+    if form.validate_on_submit():
         if 'file' not in request.files:
             flash("No file part")
             return redirect(url_for("home"))
@@ -1132,7 +1130,19 @@ def upload_token(character_id):
             requested_character.token_img = "static/uploads/" + filename
             db.session.commit()
             return redirect(url_for("home"))
-    return render_template('img_upload.html')
+    return render_template('edit-skills-form.html', form=form, character=requested_character)
+
+
+@app.route("/test-skill")
+def test_skills():
+    form = forms.EditSkillProfs()
+    if form.validate_on_submit():
+        print("Okay")
+        return redirect(url_for('home'))
+    return render_template('edit-skills-form.html', form=form)
+
+
+# ------------------ Home Related Routes --------------------------
 
 @app.route("/")
 def home():
@@ -1278,13 +1288,12 @@ def character_page(character_id):
     ac = 10
     dex_bonus = True
     dex_bonus_limit = False
-    if requested_character.equipped_armor != "None":
-        print("Okay")
+    try:
         character_armor = Armor.query.filter_by(name=requested_character.equipped_armor).first()
         ac = character_armor.armor_class
         dex_bonus = character_armor.dex_bonus
         dex_bonus_limit = character_armor.dex_bonus_limit
-    else:
+    except AttributeError:
         print("Not Ok")
     known_languages = character_languages(requested_character)
     prof_tools = character_tools(requested_character)
@@ -1399,9 +1408,23 @@ def add_new_character():
     stats = generate_stat(6)
     form = forms.CreateNewCharacter()
     if form.validate_on_submit():
+        token_img = ""
+        if 'file' not in request.files:
+            flash("No Token Provided")
+            return redirect(url_for("add_new_character"))
+        file = request.files['file']
+        # If the user does not select a file, the browser submits an empty file without a filename
+        if file.filename == '':
+            flash("No selected token file")
+            return redirect(url_for("home"))
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            token_img = "static/uploads/" + filename
         spellcaster = False
         new_character = Character(
             name=form.name.data,
+            token_img=token_img,
             sex=form.sex.data,
             alignment=form.alignment.data,
             char_lvl=form.char_lvl.data,
@@ -1642,6 +1665,25 @@ def add_review(campaign_id):
         return redirect(url_for("campaign_page", story_id=campaign_id))
     return render_template("forms.html", form=form, logged_in=current_user.is_authenticated)
 
+
+# ----------------- Character Sheet Edit Routes --------------------
+
+@app.route("/character/<int:character_id>/edit-core-details", methods=["GET", "POST"])
+def edit_core_character_details(character_id):
+    requested_character = Character.query.get(character_id)
+    form = forms.EditNameRaceClass()
+    if form.validate_on_submit():
+        requested_character.name = form.name.data
+        requested_character.race = form.race.data
+        requested_character.subrace = form.subrace.data
+        requested_character.class_main = form.class_main.data
+        requested_character.class_second = form.class_second.data
+        requested_character.class_main_level = form.class_main_level.data
+        requested_character.class_second_level = form.class_second_level.data
+        db.session.commit()
+        return redirect(url_for('character_page', character_id=character_id))
+    print("Not Ok")
+    return render_template('edit_core_details.html', form=form, character=requested_character)
 
 if __name__ == '__main__':
     app.run(debug=True)

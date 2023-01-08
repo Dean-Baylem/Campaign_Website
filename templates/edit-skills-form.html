@@ -30,16 +30,8 @@
          <div class="col-lg-8 col-md-10 mx-auto">
             <form method='post' enctype="multipart/form-data">
                 {{ form.csrf_token }}
-                {{ form.name (value=character.name)}}
-                {{ form.file }}
+                {{ form.skills }}
                 {{ form.submit }}
-<!--                <div class="form-row">-->
-<!--              <div class="form-group">-->
-<!--                <label for="imageinput">Upload Image</label>-->
-<!--                <input type="file" name="file" id="imageinput">-->
-<!--                  <input type="submit" value='upload'>-->
-               </div>
-              </div>
             </form>
          </div>
      </div>
