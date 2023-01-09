@@ -603,6 +603,16 @@ div.character-page-subheading-row p {
   font-family: 'Montserrat', sans-serif;
 }
 
+.multiselect-text {
+  font-family: 'Montserrat', sans-serif;
+  color: black;
+  font-size: 1.2rem;
+}
+
+.edit-skill-container {
+  margin: 0 20%;
+}
+
 .control-label {
   padding-bottom: 1%;
   font-family: 'Cormorant Upright', serif;

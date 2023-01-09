@@ -1093,6 +1093,7 @@ class Items(db.Model):
 #         db.session.add(new_race_feature)
 #         db.session.commit()
 
+
 # --------------------- Wrapper Functions -----------------------
 
 def admin_only(f):
@@ -1108,6 +1109,11 @@ def admin_only(f):
 @login_manager.user_loader
 def load_player(player_id):
     return Player.query.get(player_id)
+
+
+# Provide the list of all current campaigns for the footer.
+all_campaigns = db.session.query(Campaign).all()
+
 
 # --------- Testing Route - For experimentation without editing established routes first ---------
 
@@ -1130,7 +1136,7 @@ def test_upload(character_id):
             requested_character.token_img = "static/uploads/" + filename
             db.session.commit()
             return redirect(url_for("home"))
-    return render_template('edit-skills-form.html', form=form, character=requested_character)
+    return render_template('edit-skills-form.html', form=form, character=requested_character, all_campaigns=all_campaigns)
 
 
 @app.route("/test-skill")
@@ -1146,14 +1152,12 @@ def test_skills():
 
 @app.route("/")
 def home():
-    campaigns = Campaign.query.all()
-    return render_template('index.html', all_campaigns=campaigns,
+    return render_template('index.html', all_campaigns=all_campaigns,
                            logged_in=current_user.is_authenticated)
 
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    campaigns = Campaign.query.all()
     form = forms.LoginForm()
     image = 'https://img.freepik.com/free-photo/top-view-beautiful-rpg-still-life-items_23-2149282425.jpg?w=1800&t=st=1668923891~exp=1668924491~hmac=1a144e548bff837473f7442b48915694068909663936c7cc36c77c7dc4166142'
     title = 'Log In'
@@ -1174,7 +1178,7 @@ def login():
             login_user(player)
             return redirect(url_for('home'))
     return render_template("forms.html", form=form, logged_in=current_user.is_authenticated,
-                           all_campaigns=campaigns, image=image, title=title, subtitle=subtitle)
+                           all_campaigns=all_campaigns, image=image, title=title, subtitle=subtitle)
 
 
 @app.route('/logout')
@@ -1186,7 +1190,6 @@ def logout():
 @app.route('/contact-us', methods=["GET", "POST"])
 def contact_page():
     form = forms.ContactMe()
-    campaigns = Campaign.query.all()
     subtitle = 'If you wish to join a campaign, run your own game under the D.D.Inc banner, or have any questions for us here at D.D.Inc, contact us.'
     image = "https://img.freepik.com/free-photo/still-life-objects-with-role-playing-game-sheet_23-2149352342.jpg?w=1800&t=st=1668816379~exp=1668816979~hmac=392e7123a6ce3251966987d3f5463a0704a9f98e1987b90645ffe93dde9ce361"
     if form.validate_on_submit():
@@ -1198,7 +1201,7 @@ def contact_page():
         with open(file_name, 'w') as file:
             file.write(f"Contact Message\n\nname: {name} - email: {email}\nsubject: {subject}\n{message}")
         return redirect(url_for('home'))
-    return render_template('forms.html', form=form, all_campaigns=campaigns,
+    return render_template('forms.html', form=form, all_campaigns=all_campaigns,
                            logged_in=current_user.is_authenticated, image=image,
                            title='Cast Message', subtitle=subtitle, classes="contact-form")
 
@@ -1206,14 +1209,12 @@ def contact_page():
 
 @app.route("/campaigns")
 def campaigns():
-    campaigns = Campaign.query.all()
-    return render_template('campaigns.html', all_campaigns=campaigns,
+    return render_template('campaigns.html', all_campaigns=all_campaigns,
                            logged_in=current_user.is_authenticated)
 
 
 @app.route("/campaign/<story_id>", methods=["GET", "POST"])
 def campaign_page(story_id):
-    campaigns = Campaign.query.all()
     requested_campaign = Campaign.query.get(story_id)
     if current_user.is_authenticated:
         requested_character = current_user.characters
@@ -1221,51 +1222,46 @@ def campaign_page(story_id):
         requested_character = None
     return render_template("campaign_page.html", campaign=requested_campaign,
                            characters=requested_character, logged_in=current_user.is_authenticated,
-                           campaign_id=int(story_id), all_campaigns=campaigns)
+                           campaign_id=int(story_id), all_campaigns=all_campaigns)
 
 
 @app.route('/rules/<campaign_id>', methods=["GET", "POST"])
 def rules_page(campaign_id):
     requested_campaign = Campaign.query.get(campaign_id)
-    return render_template("rules.html", campaign=requested_campaign)
+    return render_template("rules.html", campaign=requested_campaign, all_campaigns=all_campaigns)
 
 
 @app.route('/<campaign_id>/session-review/<review_id>', methods=["GET", "POST"])
 def session_review_page(campaign_id, review_id):
-    campaigns = Campaign.query.all()
     requested_campaign = Campaign.query.get(campaign_id)
     requested_review = SessionReview.query.get(review_id)
     return render_template("session_review.html", campaign=requested_campaign, review=requested_review,
-                           all_campaigns=campaigns, logged_in=current_user.is_authenticated)
+                           all_campaigns=all_campaigns, logged_in=current_user.is_authenticated)
 
 
 @app.route('/schedule')
 def schedule_page():
-    campaigns = Campaign.query.all()
-    return render_template('schedule.html', all_campaigns=campaigns, logged_in=current_user.is_authenticated)
+    return render_template('schedule.html', all_campaigns=all_campaigns, logged_in=current_user.is_authenticated)
 
 
 @app.route("/faction/<int:faction_id>")
 def faction_page(faction_id):
-    campaigns = Campaign.query.all()
     requested_faction = Faction.query.get(faction_id)
-    return render_template('faction_page.html', all_campaings=campaigns,
+    return render_template('faction_page.html', all_campaigns=all_campaigns,
                            logged_in=current_user.is_authenticated, faction=requested_faction)
 
 
 @app.route("/location/<int:location_id>")
 def location_page(location_id):
-    campaigns = Campaign.query.all()
     requested_location = Location.query.get(location_id)
-    return render_template('location_page.html', all_campaings=campaigns,
+    return render_template('location_page.html', all_campaigns=all_campaigns,
                            logged_in=current_user.is_authenticated, location=requested_location)
 
 
 @app.route("/npc/<int:npc_id>")
 def npc_page(npc_id):
-    campaigns = Campaign.query.all()
     requested_npc = NPC.query.get(npc_id)
-    return render_template('npc_page.html', all_campaigns=campaigns,
+    return render_template('npc_page.html', all_campaigns=all_campaigns,
                            logged_in=current_user.is_authenticated, npc=requested_npc)
 
 
@@ -1273,16 +1269,14 @@ def npc_page(npc_id):
 
 @app.route("/character-hub", methods=["GET", "POST"])
 def character_hub():
-    campaigns = Campaign.query.all()
     if not current_user.is_authenticated:
         flash("Please login or register to create characters")
         return redirect(url_for('login'))
-    return render_template("character-hub.html", logged_in=current_user.is_authenticated, all_campaigns=campaigns)
+    return render_template("character-hub.html", logged_in=current_user.is_authenticated, all_campaigns=all_campaigns)
 
 
 @app.route('/character/<character_id>', methods=["GET", "POST"])
 def character_page(character_id):
-    campaigns = Campaign.query.all()
     requested_character = Character.query.get(character_id)
     prof = prof_bonus(requested_character)
     ac = 10
@@ -1298,7 +1292,7 @@ def character_page(character_id):
     known_languages = character_languages(requested_character)
     prof_tools = character_tools(requested_character)
     return render_template("character-page.html", character=requested_character,
-                           all_campaigns=campaigns, prof=prof, logged_in=current_user.is_authenticated,
+                           all_campaigns=all_campaigns, prof=prof, logged_in=current_user.is_authenticated,
                            ac=ac, dex_bonus=dex_bonus, dex_bonus_limit=dex_bonus_limit,
                            known_languages=known_languages, prof_tools=prof_tools)
 
@@ -1309,7 +1303,6 @@ def character_page(character_id):
 @app.route("/register", methods=["GET", "POST"])
 def register_player():
     form = forms.CreateNewPlayerForm()
-    campaigns = Campaign.query.all()
     image = 'https://img.freepik.com/free-photo/top-view-beautiful-rpg-still-life-items_23-2149282425.jpg?w=1800&t=st=1668923891~exp=1668924491~hmac=1a144e548bff837473f7442b48915694068909663936c7cc36c77c7dc4166142'
     title = "Register"
     subtitle = "Welcome to Dungeon Delvers Incorportated"
@@ -1330,12 +1323,11 @@ def register_player():
         db.session.commit()
         return redirect(url_for("home"))
     return render_template("forms.html", form=form,
-                           image=image, title=title, subtitle=subtitle, all_campaigns=campaigns)
+                           image=image, title=title, subtitle=subtitle, all_campaigns=all_campaigns)
 
 
 @app.route("/location/edit-notes/<int:location_id>", methods=["GET", "POST"])
 def edit_location_notes(location_id):
-    campaigns = Campaign.query.all()
     requested_location = Location.query.get(location_id)
     form = forms.EditNotes(
         notes=requested_location.location_notes
@@ -1344,13 +1336,12 @@ def edit_location_notes(location_id):
         requested_location.location_notes = form.notes.data
         db.session.commit()
         return redirect(url_for("location_page", location_id=location_id))
-    return render_template('forms.html', all_campaings=campaigns,
+    return render_template('forms.html', all_campaigns=all_campaigns,
                            logged_in=current_user.is_authenticated, location=requested_location, form=form)
 
 
 @app.route("/location/add-comment/<int:location_id>", methods=["GET", "POST"])
 def add_location_comment(location_id):
-    campaigns = Campaign.query.all()
     requested_location = Location.query.get(location_id)
     form = forms.AddComment()
     if form.validate_on_submit():
@@ -1363,13 +1354,12 @@ def add_location_comment(location_id):
         db.session.add(new_comment)
         db.session.commit()
         return redirect(url_for("location_page", location_id=location_id))
-    return render_template("forms.html", all_campaigns=campaigns,
+    return render_template("forms.html", all_campaigns=all_campaigns,
                            logged_in=current_user.is_authenticated, location=requested_location, form=form)
 
 
 @app.route("/faction/edit-notes/<int:faction_id>", methods=["GET", "POST"])
 def edit_faction_notes(faction_id):
-    campaigns = Campaign.query.all()
     requested_faction = Faction.query.get(faction_id)
     form = forms.EditNotes(
         notes=requested_faction.faction_notes
@@ -1378,13 +1368,12 @@ def edit_faction_notes(faction_id):
         requested_faction.faction_notes = form.notes.data
         db.session.commit()
         return redirect(url_for("faction_page", faction_id=faction_id))
-    return render_template('forms.html', all_campaings=campaigns,
+    return render_template('forms.html', all_campaigns=all_campaigns,
                            logged_in=current_user.is_authenticated, faction=requested_faction, form=form)
 
 
 @app.route("/faction/add-comment/<int:faction_id>", methods=["GET", "POST"])
 def add_faction_comment(faction_id):
-    campaigns = Campaign.query.all()
     requested_faction = Faction.query.get(faction_id)
     form = forms.AddComment()
     if form.validate_on_submit():
@@ -1397,7 +1386,7 @@ def add_faction_comment(faction_id):
         db.session.add(new_comment)
         db.session.commit()
         return redirect(url_for("faction_page", faction_id=faction_id))
-    return render_template("forms.html", all_campaigns=campaigns,
+    return render_template("forms.html", all_campaigns=all_campaigns,
                            logged_in=current_user.is_authenticated, faction=requested_faction, form=form)
 
 
@@ -1491,7 +1480,7 @@ def add_new_character():
         character_id = requested_character.id
         return redirect(url_for('home'))
     return render_template("create_character_page.html", form=form, logged_in=current_user.is_authenticated,
-                           stats=stats)
+                           stats=stats, all_campaigns=all_campaigns)
 
 
 @app.route("/character-spellcasting/<int:character_id>", methods=["GET", "POST"])
@@ -1510,7 +1499,7 @@ def character_spellcasting(character_id):
     print(all_cantrips)
     available_spells = []
     form = forms.SpellSelection(available_spells)
-    return render_template('forms.html', form=form)
+    return render_template('forms.html', form=form, all_campaigns=all_campaigns)
 
 
 @app.route("/new-location", methods=["GET", "POST"])
@@ -1533,7 +1522,7 @@ def add_new_location():
         db.session.add(new_location)
         db.session.commit()
         return redirect(url_for('home'))
-    return render_template("forms.html", form=form, logged_in=current_user.is_authenticated)
+    return render_template("forms.html", form=form, logged_in=current_user.is_authenticated, all_campaigns=all_campaigns)
 
 
 @app.route("/edit-location/<int:location_id>", methods=["GET", "POST"])
@@ -1550,7 +1539,7 @@ def edit_location(location_id):
         db.session.commit()
         return redirect(url_for('home'))
     print("Not Ok")
-    return render_template("forms.html", form=form, logged_in=current_user.is_authenticated)
+    return render_template("forms.html", form=form, logged_in=current_user.is_authenticated, all_campaigns=all_campaigns)
 
 
 @app.route("/add-npc", methods=["GET", "POST"])
@@ -1594,7 +1583,7 @@ def add_new_npc():
         db.session.add(new_npc)
         db.session.commit()
         return redirect(url_for('home'))
-    return render_template("forms.html", form=form, logged_in=current_user.is_authenticated)
+    return render_template("forms.html", form=form, logged_in=current_user.is_authenticated, all_campaigns=all_campaigns)
 
 
 @app.route("/new-campaign", methods=["GET", "POST"])
@@ -1618,11 +1607,12 @@ def add_new_campaign():
             regular_time=form.regular_time.data,
             dm_username=form.dm_username.data,
         )
-        # new_campaign.dm_img = request.files[form.dm_img.name] !! Need to finisht this !!
+        # new_campaign.dm_img = request.files[form.dm_img.name] !! Need to finish this !!
         db.session.add(new_campaign)
         db.session.commit()
         return redirect(url_for("home"))
-    return render_template("forms.html", form=form, logged_in=current_user.is_authenticated)
+    return render_template("forms.html", form=form,
+                           logged_in=current_user.is_authenticated, all_campaigns=all_campaigns)
 
 
 @app.route("/new-faction", methods=["GET", "POST"])
@@ -1663,7 +1653,7 @@ def add_review(campaign_id):
         db.session.add(new_review)
         db.session.commit()
         return redirect(url_for("campaign_page", story_id=campaign_id))
-    return render_template("forms.html", form=form, logged_in=current_user.is_authenticated)
+    return render_template("forms.html", form=form, logged_in=current_user.is_authenticated, all_campaigns=all_campaigns)
 
 
 # ----------------- Character Sheet Edit Routes --------------------
@@ -1671,6 +1661,7 @@ def add_review(campaign_id):
 @app.route("/character/<int:character_id>/edit-core-details", methods=["GET", "POST"])
 def edit_core_character_details(character_id):
     requested_character = Character.query.get(character_id)
+    title = "Edit Core Character Details"
     form = forms.EditNameRaceClass()
     if form.validate_on_submit():
         requested_character.name = form.name.data
@@ -1682,8 +1673,340 @@ def edit_core_character_details(character_id):
         requested_character.class_second_level = form.class_second_level.data
         db.session.commit()
         return redirect(url_for('character_page', character_id=character_id))
-    print("Not Ok")
-    return render_template('edit_core_details.html', form=form, character=requested_character)
+    return render_template('edit_core_details.html', form=form,
+                           character=requested_character, all_campaigns=all_campaigns, title=title)
+
+
+@app.route("/character/<int:character_id>/edit-background", methods=["GET", "POST"])
+def edit_background(character_id):
+    requested_character = Character.query.get(character_id)
+    title = "Edit Character Background"
+    form = forms.EditBackground()
+    if form.validate_on_submit():
+        requested_character.background = form.background.data
+        requested_character.alignment = form.alignment.data
+        requested_character.appearance_summary = form.appearance_summary.data
+        db.session.commit()
+        return redirect(url_for('character_page', character_id=character_id))
+    return render_template('edit-background.html', form=form,
+                           character=requested_character, all_campaigns=all_campaigns, title=title)
+
+
+@app.route("/character/<int:character_id>/edit-ability-scores", methods=["GET", "POST"])
+def edit_ability_scores(character_id):
+    requested_character = Character.query.get(character_id)
+    title = "Edit Character Ability Scores"
+    form = forms.EditAbilityScores()
+    if form.validate_on_submit():
+        requested_character.strength = form.strength.data
+        requested_character.dexterity = form.dexterity.data
+        requested_character.constitution = form.constitution.data
+        requested_character.wisdom = form.wisdom.data
+        requested_character.intelligence = form.intelligence.data
+        requested_character.charisma = form.charisma.data
+        db.session.commit()
+        return redirect(url_for('character_page', character_id=character_id))
+    return render_template('edit-ability-scores.html', form=form,
+                           character=requested_character, all_campaigns=all_campaigns, title=title)
+
+
+@app.route("/character/<int:character_id>/edit-personality", methods=["GET", "POST"])
+def edit_personality(character_id):
+    requested_character = Character.query.get(character_id)
+    title = "Edit Character Personality"
+    form = forms.EditPersonality()
+    if form.validate_on_submit():
+        requested_character.personality_trait_1 = form.personality_trait_1.data
+        requested_character.personality_trait_2 = form.personality_trait_2.data
+        requested_character.ideals = form.ideals.data
+        requested_character.bonds = form.bonds.data
+        requested_character.flaws = form.flaws.data
+        db.session.commit()
+        return redirect(url_for('character_page', character_id=character_id))
+    return render_template('edit-personality.html', form=form, character=requested_character,
+                           all_campaigns=all_campaigns, title=title)
+
+
+@app.route("/character/<int:character_id>/edit-character-skill-profs", methods=["GET", "POST"])
+def edit_skill_profs(character_id):
+    requested_character = Character.query.get(character_id)
+    title = "Select your skill proficiencies"
+    form = forms.EditSkillProfs()
+    if form.validate_on_submit():
+        data = form.skills.data
+        if "Acrobatics" in data:
+            requested_character.acrobatics = True
+        else:
+            requested_character.acrobatics = False
+        if "Animal Handling" in data:
+            requested_character.animal_handling = True
+        else:
+            requested_character.animal_handling = False
+        if "Arcana" in data:
+            requested_character.arcana = True
+        else:
+            requested_character.arcana = False
+        if "Athletics" in data:
+            requested_character.athletics = True
+        else:
+            requested_character.athletics = False
+        if "Deception" in data:
+            requested_character.deception = True
+        else:
+            requested_character.deception = False
+        if "History" in data:
+            requested_character.history = True
+        else:
+            requested_character.history = False
+        if "Insight" in data:
+            requested_character.insight = True
+        else:
+            requested_character.insight = False
+        if "Intimidation" in data:
+            requested_character.intimidation = True
+        else:
+            requested_character.intimidation = False
+        if "Investigation" in data:
+            requested_character.investigation = True
+        else:
+            requested_character.investigation = False
+        if "Medicine" in data:
+            requested_character.medicine = True
+        else:
+            requested_character.medicine = False
+        if "Nature" in data:
+            requested_character.nature = True
+        else:
+            requested_character.nature = False
+        if "Perception" in data:
+            requested_character.perception = True
+        else:
+            requested_character.perception = False
+        if "Performance" in data:
+            requested_character.performance = True
+        else:
+            requested_character.performance = False
+        if "Persuasion" in data:
+            requested_character.persuasion = True
+        else:
+            requested_character.persuasion = False
+        if "Religion" in data:
+            requested_character.religion = True
+        else:
+            requested_character.religion = False
+        if "Sleight of Hand" in data:
+            requested_character.sleight_of_hand = True
+        else:
+            requested_character.sleight_of_hand = False
+        if "Stealth" in data:
+            requested_character.stealth = True
+        else:
+            requested_character.stealth = False
+        if "Survival" in data:
+            requested_character.survival = True
+        else:
+            requested_character.survival = False
+        db.session.commit()
+        return redirect(url_for('character_page', character_id=character_id))
+    return render_template('edit-skills-form.html', form=form, character=requested_character,
+                           all_campaigns=all_campaigns, title=title)
+
+
+@app.route("/character/<int:character_id>/edit-stats-and-senses", methods=["GET", "POST"])
+def edit_stats_senses(character_id):
+    requested_character = Character.query.get(character_id)
+    title = "Edit Character Hit Points, Senses, Tools and Languages"
+    form = forms.EditStatsSenses()
+    if form.validate_on_submit():
+        requested_character.current_hit_points = form.current_hit_points.data
+        requested_character.max_hit_points = form.max_hit_points.data
+        requested_character.temp_hit_points = form.temp_hit_points.data
+        if form.darkvision == "Yes":
+            requested_character.darkvision = True
+        else:
+            requested_character.darkvision = False
+        requested_character.darkvision_range = form.darkvision_range.data
+        if form.blindsight == "Yes":
+            requested_character.blindsight = True
+        else:
+            requested_character.blindsight = False
+        requested_character.blindsight_range = form.blindsight_range.data
+        if form.truesight == "Yes":
+            requested_character.truesight = True
+        else:
+            requested_character.truesight = False
+        requested_character.truesight_range = form.truesight_range.data
+        first_tool_data = form.first_half_tools.data
+        second_tool_data = form.second_half_tools.data
+        first_languages = form.first_half_languages.data
+        second_languages = form.second_half_languages.data
+        # Check for skill Booleans and apply to database
+        if "Alchemist's Supplies" in first_tool_data:
+            requested_character.alchemist_tools = True
+        else:
+            requested_character.alchemist_tools = False
+        if "Brewer's Supplies" in first_tool_data:
+            requested_character.brewer_tools = True
+        else:
+            requested_character.brewer_tools = False
+        if "Calligrapher's Supplies" in first_tool_data:
+            requested_character.calligrapher_tools = True
+        else:
+            requested_character.calligrapher_tools = False
+        if "Carpenter's Tools" in first_tool_data:
+            requested_character.carpenter_tools = True
+        else:
+            requested_character.carpenter_tools = False
+        if "Cartographer's Tools" in first_tool_data:
+            requested_character.cartographer_tools = True
+        else:
+            requested_character.cartographer_tools = False
+        if "Cobbler's Tools" in first_tool_data:
+            requested_character.cobbler_tools = True
+        else:
+            requested_character.cobbler_tools = False
+        if "Cook's Utensils" in first_tool_data:
+            requested_character.cooks_utensils = True
+        else:
+            requested_character.cooks_utensils = False
+        if "Glassblower's Tools" in first_tool_data:
+            requested_character.glassblower_tools = True
+        else:
+            requested_character.glassblower_tools = False
+        if "Jeweler's Tools" in first_tool_data:
+            requested_character.jeweler_tools = True
+        else:
+            requested_character.jeweler_tools = False
+        if "Leatherworker's Tools" in first_tool_data:
+            requested_character.leatherworker_tools = True
+        else:
+            requested_character.leatherworker_tools = False
+        if "Mason's Tools" in first_tool_data:
+            requested_character.mason_tools = True
+        else:
+            requested_character.mason_tools = False
+        if "Painter's Supplies" in second_tool_data:
+            requested_character.painter_tools = True
+        else:
+            requested_character.painter_tools = False
+        if "Smith's Tools" in second_tool_data:
+            requested_character.smith_tools = True
+        else:
+            requested_character.smith_tools = False
+        if "Tinker's Tools" in second_tool_data:
+            requested_character.tinker_tools = True
+        else:
+            requested_character.tinker_tools = False
+        if "Weaver's Tools" in second_tool_data:
+            requested_character.weaver_tools = True
+        else:
+            requested_character.weaver_tools = False
+        if "Woodcarver's Tools" in second_tool_data:
+            requested_character.woodcarver_tools = True
+        else:
+            requested_character.woodcarver_tools = False
+        if "Navigator's Tools" in second_tool_data:
+            requested_character.navigator_tools = True
+        else:
+            requested_character.navigator_tools = False
+        if "Thieves' Tools" in second_tool_data:
+            requested_character.thief_tools = True
+        else:
+            requested_character.thief_tools = False
+        if "Forgery Kit" in second_tool_data:
+            requested_character.forgery_kit = True
+        else:
+            requested_character.forgery_kit = False
+        if "Poisoner Kit" in second_tool_data:
+            requested_character.poisoner_kit = True
+        else:
+            requested_character.poisoner_kit = False
+        if "Disguise Kit" in second_tool_data:
+            requested_character.disguise_kit = True
+        else:
+            requested_character.disguise_kit = False
+        # Check for language Boolean Values and apply to database
+        if "Abyssal" in first_languages:
+            requested_character.abyssal = True
+        else:
+            requested_character.abyssal = False
+        if "Celestial" in first_languages:
+            requested_character.celestial = True
+        else:
+            requested_character.celestial = False
+        if "Common" in first_languages:
+            requested_character.common = True
+        else:
+            requested_character.common = False
+        if "Deep Speech" in first_languages:
+            requested_character.deep_speech = True
+        else:
+            requested_character.deep_speech = False
+        if "Draconic" in first_languages:
+            requested_character.draconic = True
+        else:
+            requested_character.draconic = False
+        if "Dwarvish" in first_languages:
+            requested_character.dwarvish = True
+        else:
+            requested_character.dwarvish = False
+        if "Elvish" in first_languages:
+            requested_character.elvish = True
+        else:
+            requested_character.elvish = False
+        if "Giant" in first_languages:
+            requested_character.giant = True
+        else:
+            requested_character.giant = False
+        if "Gnomish" in second_languages:
+            requested_character.gnomish = True
+        else:
+            requested_character.gnomish = False
+        if "Goblin" in second_languages:
+            requested_character.goblin = True
+        else:
+            requested_character.goblin = False
+        if "Halfling" in second_languages:
+            requested_character.halfling = True
+        else:
+            requested_character.halfling = False
+        if "Infernal" in second_languages:
+            requested_character.infernal = True
+        else:
+            requested_character.infernal = False
+        if "Orcish" in second_languages:
+            requested_character.orc = True
+        else:
+            requested_character.orc = False
+        if "Primordial" in second_languages:
+            requested_character.primordial = True
+        else:
+            requested_character.primordial = False
+        if "Sylvan" in second_languages:
+            requested_character.sylvan = True
+        else:
+            requested_character.sylvan = False
+        if "Undercommon" in second_languages:
+            requested_character.undercommon = True
+        else:
+            requested_character.undercommon = False
+        db.session.commit()
+        return redirect(url_for('character_page', character_id=character_id))
+    return render_template('edit-stats-and-senses.html', form=form,
+                           all_campaigns=all_campaigns, character=requested_character, title=title)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

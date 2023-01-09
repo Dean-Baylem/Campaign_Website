@@ -4,24 +4,16 @@
 
 {% block content %}
 
-{% if image %}
-
 <section id="campaign-heading" class="light-bg">
-  <div class="container-fluid" style="background-image: url({{image}}); background-repeat: no-repeat; background-size: cover; padding: 0;">
+  <div class="container-fluid" style="background-image: url(https://img.freepik.com/free-photo/still-life-objects-with-role-playing-game-sheet_23-2149352342.jpg?w=1800&t=st=1673180289~exp=1673180889~hmac=74c0f026dc7be27f4988200fb9dacc16893c885bcbe5c824bcaeffbf4de1ced0); background-repeat: no-repeat; background-size: cover; padding: 0;">
   <div class="mask" style="background-color: rgba(0, 0, 0, 0.5)" >
     <div class="row section-area">
       <h1 class="home-title heading-font">{{title}}</h1>
-        <div class="col">
-          <div class="campaigns-subtitle">
-            <h4 class="home-subtitle home-page-font">{{subtitle}}</h4>
-          </div>
         </div>
     </div>
   </div>
   </div>
 </section>
-
-{% endif %}
 
 <body>
 <section class="light-bg section-area login-body">
@@ -30,8 +22,8 @@
          <div class="col-lg-8 col-md-10 mx-auto">
             <form method='post' enctype="multipart/form-data">
                 {{ form.csrf_token }}
-                {{ form.skills }}
-                {{ form.submit }}
+                {{ form.skills (class='multiselect-text') }}
+                {{ form.submit(class='form-control') }}
             </form>
          </div>
      </div>

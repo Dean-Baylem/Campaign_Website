@@ -29,6 +29,27 @@ stats = ["Strength", "Dexterity", "Constitution", "Wisdom", "Intelligence", "Cha
 # Boolean Selection
 yes_no = ["Yes", "No"]
 
+# ALl Tools
+
+first_half_tools = ["Alchemist's Supplies", "Brewer's Supplies", "Calligrapher's Supplies", "Carpenter's Tools",
+                    "Cartographer's Tools", "Cobbler's Tools", "Cook's Utensils", "Glassblower's Tools",
+                    "Jeweler's Tools", "Leatherworker's Tools", "Mason's Tools"]
+
+second_half_tools = ["Painter's Supplies", "Poisoner Kit", "Smith's Tools",
+                     "Tinker's Tools", "Weaver's Tools", "Woodcarver's Tools",
+                     "Navigator's Tools", "Thieves' Tools", "Forgery Kit", "Disguise Kit"]
+
+instruments = ['Bagpipes', 'Drum', 'Dulcimer', 'Flute', 'Lute', 'Lyre',
+             'Horn', 'Pan flute', 'Shawm', 'Viol']
+
+
+# All languages
+
+first_half_all_languages = ['Abyssal', 'Celestial', 'Common', 'Deep Speech',
+                            'Draconic', 'Dwarvish', 'Elvish', 'Giant']
+
+second_half_all_languages = ['Gnomish', 'Goblin', 'Halfling', 'Infernal',
+                             'Orcish', 'Primordial', 'Sylvan', 'Undercommon']
 
 class CreateCampaignForm(FlaskForm):
     title = StringField("Campaign Title", validators=[DataRequired()])
@@ -233,6 +254,7 @@ class EditAbilityScores(FlaskForm):
     wisdom = IntegerField("Character Wisdom")
     intelligence = IntegerField("Character Intelligence")
     charisma = IntegerField("Character Charisma")
+    submit = SubmitField("Submit Changes")
 
 
 class MultiCheckboxField(SelectMultipleField):
@@ -247,14 +269,19 @@ class EditSkillProfs(FlaskForm):
 
 
 class EditStatsSenses(FlaskForm):
+    current_hit_points = IntegerField("What's your current HP?")
     max_hit_points = IntegerField("What's your max HP?")
     temp_hit_points = IntegerField("How many temp Hit Points?")
-    darkvision = BooleanField("Have you gained Darkvision?")
+    darkvision = SelectField("Have you gained Darkvision?", choices=yes_no)
     darkvision_range = IntegerField("What's your dark vision range?")
-    blindsight = BooleanField("Have you gained blindsight?")
+    blindsight = SelectField("Have you gained blindsight?", choices=yes_no)
     blindsight_range = IntegerField("Whats your blindsight range?")
-    truesight = BooleanField("Have you gained Truesight?")
+    truesight = SelectField("Have you gained Truesight?", choices=yes_no)
     truesight_range = IntegerField("What's your truesight range?")
+    first_half_tools = MultiCheckboxField(choices=first_half_tools)
+    second_half_tools = MultiCheckboxField(choices=second_half_tools)
+    first_half_languages = MultiCheckboxField(choices=first_half_all_languages)
+    second_half_languages = MultiCheckboxField(choices=second_half_all_languages)
     submit = SubmitField("Submit Changes")
 
 
