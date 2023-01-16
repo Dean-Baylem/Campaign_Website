@@ -3,299 +3,625 @@
 
 <!--First row will contain the character image column, name race and class column and character traits column.-->
 <section class="character-area light-bg">
-  <div class="container-fluid">
-    <div class="row character_top_row">
-      <!--        Character Details  -->
-      <div class="col-xl-5 col-lg-8">
-        <div class="full-box border border-dark border-3 char-token-name">
-          <img src="{{character.token}}" class="character_token">
-          <div class="name-race-class">
-          <h5 class="char-title">{{character.name}}</h5>
-          <p class="char-text">{{character.race}} / {{character.character_class}}</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-xl-3 col-lg-4">
-        <div class="full-box border border-dark border-3 top-row-extra-margin">
-          <div class="row">
-          <div class="name-race-class character-player-details">
-            <h5 class="char-title">Campaign</h5>
-            <p class="char-text">{{character.campaign.title}}</p>
-          </div>
-            </div>
-          <div class="row">
-          <div class="name-race-class character-player-details">
-            <h5 class="char-title">Player</h5>
-            <p class="char-text">{{character.player.username}}</p>
-           </div>
-          </div>
-          </div>
-        </div>
-      <div class="col-xl-4 col-lg-12 character_details">
-        <div class="full-box border border-dark border-3 top-row-extra-margin">
-<!--          This needs to change once the traits are split into seperate categories in the database.-->
-          <p class="char-text char-extra-details"><b>Background:</b> {{character.background}}</p>
-          <p class="char-text char-extra-details"><b>Alignment:</b> {{character.alignment}}</p>
-          <p class="char-text char-extra-details"><b>Appearance:</b> {{character.appearance_summary}}</p>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <!--        Character Stats       -->
-      <div class="col-xl-3 col-lg-6 character-stats">
-        <div class="row">
-          <div class="col">
-            <h4 class="character-heading char-title">Ability Scores</h4>
-        <div class="ability-score border border-dark border-3">
-          <h4 class="ability-heading">Strength</h4>
-          <h4 class="ability-score-text">{{character.strength}}</h4>
-        </div>
-        <div class="ability-score border border-dark border-3">
-          <h4 class="ability-heading">Dexterity</h4>
-          <h4 class="ability-score-text">{{character.dexterity}}</h4>
-        </div>
-        <div class="ability-score border border-dark border-3">
-          <h4 class="ability-heading">Constitution</h4>
-          <h4 class="ability-score-text">{{character.constitution}}</h4>
-        </div>
-        <div class="ability-score border border-dark border-3">
-          <h4 class="ability-heading">Intelligence</h4>
-          <h4 class="ability-score-text">{{character.intelligence}}</h4>
-        </div>
-        <div class="ability-score border border-dark border-3">
-          <h4 class="ability-heading">Wisdom</h4>
-          <h4 class="ability-score-text">{{character.wisdom}}</h4>
-        </div>
-        <div class="ability-score border border-dark border-3">
-          <h4 class="ability-heading">Charisma</h4>
-          <h4 class="ability-score-text">{{character.charisma}}</h4>
-        </div>
-      </div>
-    </div>
-  </div>
-<!--        Character Skill Scores          -->
-      <div class="col-xl-3 col-lg-6">
-        <div class="row">
-          <div class="col">
-            <h4 class="character-heading char-title">Skills and Bonuses</h4>
-        <div class="row">
-          <div class="col">
-        <ul class="list-group list-group-flush skill-scores border border-dark border-3">
-          <li class="list-group-item bg-transparent"><h5 class="skill-number">{% if character.acrobatics %}{{prof + ability_bonus(character.dexterity)}}{% else %}{{ability_bonus(character.dexterity)}}{% endif %}</h5><p class="ability-text">Acrobatics</p></li>
-          <li class="list-group-item bg-transparent"><h5 class="skill-number">{% if character.animal_handling %}{{prof + ability_bonus(character.wisdom)}}{% else %}{{ability_bonus(character.wisdom)}}{% endif %}</h5><p class="ability-text">Animal Handling</p></li>
-          <li class="list-group-item bg-transparent"><h5 class="skill-number">{% if character.arcana %}{{prof + ability_bonus(character.intelligence)}}{% else %}{{ability_bonus(character.intelligence)}}{% endif %}</h5><p class="ability-text">Arcana</p></li>
-          <li class="list-group-item bg-transparent"><h5 class="skill-number">{% if character.athletics %}{{prof + ability_bonus(character.strength)}}{% else %}{{ability_bonus(character.strength)}}{% endif %}</h5><p class="ability-text">Athletics</p></li>
-          <li class="list-group-item bg-transparent"><h5 class="skill-number">{% if character.deception %}{{prof + ability_bonus(character.charisma)}}{% else %}{{ability_bonus(character.charisma)}}{% endif %}</h5><p class="ability-text">Deception</p></li>
-          <li class="list-group-item bg-transparent"><h5 class="skill-number">{% if character.history %}{{prof + ability_bonus(character.intelligence)}}{% else %}{{ability_bonus(character.intelligence)}}{% endif %}</h5><p class="ability-text">History</p></li>
-          <li class="list-group-item bg-transparent"><h5 class="skill-number">{% if character.insight %}{{prof + ability_bonus(character.wisdom)}}{% else %}{{ability_bonus(character.wisdom)}}{% endif %}</h5><p class="ability-text">Insight</p></li>
-          <li class="list-group-item bg-transparent"><h5 class="skill-number">{% if character.intimidation %}{{prof + ability_bonus(character.charisma)}}{% else %}{{ability_bonus(character.charisma)}}{% endif %}</h5><p class="ability-text">Intimidation</p></li>
-          <li class="list-group-item bg-transparent"><h5 class="skill-number">{% if character.investigation %}{{prof + ability_bonus(character.intelligence)}}{% else %}{{ability_bonus(character.intelligence)}}{% endif %}</h5><p class="ability-text">Investigation</p></li>
-          <li class="list-group-item bg-transparent"><h5 class="skill-number">{% if character.medicine %}{{prof + ability_bonus(character.wisdom)}}{% else %}{{ability_bonus(character.wisdom)}}{% endif %}</h5><p class="ability-text">Medicine</p></li>
-          <li class="list-group-item bg-transparent"><h5 class="skill-number">{% if character.nature %}{{prof + ability_bonus(character.intelligence)}}{% else %}{{ability_bonus(character.intelligence)}}{% endif %}</h5><p class="ability-text">Nature</p></li>
-          <li class="list-group-item bg-transparent"><h5 class="skill-number">{% if character.perception %}{{prof + ability_bonus(character.wisdom)}}{% else %}{{ability_bonus(character.wisdom)}}{% endif %}</h5><p class="ability-text">Perception</p></li>
-          <li class="list-group-item bg-transparent"><h5 class="skill-number">{% if character.performance %}{{prof + ability_bonus(character.charisma)}}{% else %}{{ability_bonus(character.charisma)}}{% endif %}</h5><p class="ability-text">Performance</p></li>
-          <li class="list-group-item bg-transparent"><h5 class="skill-number">{% if character.persuasion %}{{prof + ability_bonus(character.charisma)}}{% else %}{{ability_bonus(character.charisma)}}{% endif %}</h5><p class="ability-text">Persuasion</p></li>
-          <li class="list-group-item bg-transparent"><h5 class="skill-number">{% if character.religion %}{{prof + ability_bonus(character.intelligence)}}{% else %}{{ability_bonus(character.intelligence)}}{% endif %}</h5><p class="ability-text">Religion</p></li>
-          <li class="list-group-item bg-transparent"><h5 class="skill-number">{% if character.sleight_of_hand %}{{prof + ability_bonus(character.dexterity)}}{% else %}{{ability_bonus(character.dexterity)}}{% endif %}</h5><p class="ability-text">Sleight of Hand</p></li>
-          <li class="list-group-item bg-transparent"><h5 class="skill-number">{% if character.stealth %}{{prof + ability_bonus(character.dexterity)}}{% else %}{{ability_bonus(character.dexterity)}}{% endif %}</h5><p class="ability-text">Stealth</p></li>
-          <li class="list-group-item bg-transparent"><h5 class="skill-number">{% if character.survival %}{{prof + ability_bonus(character.wisdom)}}{% else %}{{ability_bonus(character.wisdom)}}{% endif %}</h5><p class="ability-text">Survival</p></li>
-        </ul>
-            </div>
-      </div>
-    </div>
-    </div>
-  </div>
-<!--        Character AC / HP / Init / Prof Bonus / Senses / Proficiencies      -->
-<div class="col-xl-6 col-lg-12">
-  <div class="row">
-    <div class="col">
-      <h4 class="character-heading char-title">Character Stats and Senses</h4>
-      <div class="row">
-        <div class="col-6">
-          <div class="character-text-centered border border-dark border-3">
-            <h4 class="ability-heading">Armor Class</h4>
-            <h4 class="ability-score-text">14</h4>
-          </div>
-          <div class="character-text-centered border border-dark border-3">
-            <h4 class="ability-heading">Maximum HP / Current HP</h4>
-            <h4 class="ability-score-text">35 / 35</h4>
-          </div>
-        </div>
-        <div class="col-6">
-          <div class="character-text-centered border border-dark border-3">
-            <h4 class="ability-heading">Initiative Bonus</h4>
-            <h4 class="ability-score-text">{{ability_bonus(character.dexterity)}}</h4>
-          </div>
-          <div class="character-text-centered border border-dark border-3">
-            <h4 class="ability-heading">Proficiency Bonus</h4>
-            <h4 class="ability-score-text">{{prof}}</h4>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-      <div class="col-xl-6 col-lg-12">
-      <div class="character-senses border border-dark border-3">
-        <h4 class="ability-heading">Senses</h4>
-        {% if character.darkvision != 0 %}<p class="char-text sense-text"><b class="ability-sub-heading">Darkvision:</b> {{character.darkvision}} ft.</p>{% endif %}
-        {% if character.blindsight != 0 %}<p class="char-text sense-text"><b class="ability-sub-heading">Blindsight:</b> {{character.blindsight}} ft.</p>{% endif %}
-        {% if character.tremorsense != 0 %}<p class="char-text sense-text"><b class="ability-sub-heading">Tremorsense:</b> {{character.tremorsense}} ft.</p>{% endif %}
-        {% if character.truesight != 0 %}<p class="char-text sense-text"><b class="ability-sub-heading">Truesight:</b> {{character.truesight}} ft.</p>{% endif %}
-        <p class="char-text sense-text"><b class="ability-sub-heading">Passive Perception:</b> {% if character.perception %}{{10 + prof + ability_bonus(character.wisdom)}}{% else %}{{10 + ability_bonus(character.wisdom)}}{% endif %}</p>
-        <p class="char-text sense-text"><b class="ability-sub-heading">Passive Insight:</b> {% if character.insight %}{{10 + prof + ability_bonus(character.wisdom)}}{% else %}{{10 + ability_bonus(character.wisdom)}}{% endif %}</p>
-        <p class="char-text sense-text"><b class="ability-sub-heading">Passive Investigation:</b> {% if character.investigation %}{{10 + prof + ability_bonus(character.intelligence)}}{% else %}{{10 + ability_bonus(character.intelligence)}}{% endif %}</p>
-        <p class="char-text sense-text"><b class="ability-sub-heading">Passive Stealth:</b> {% if character.stealth %}{{10 + prof + ability_bonus(character.dexterity)}}{% else %}{{10 + ability_bonus(character.dexterity)}}{% endif %}</p>
-      </div>
-      </div>
-      <div class="col-xl-6 col-lg-12">
-      <div class="character-senses border border-dark border-3">
-        <h4 class="ability-heading">Proficiencies and Languages</h4>
-        <p class="ability-sub-heading">Languages</p>
-        <p>{{character.languages | safe}}</p>
-        {% if character.tool_proficiencies %}
-        <p class="ability-sub-heading">Tools</p>
-        <p>{{character.tool_proficiencies | safe}}</p>
-        {% endif %}
-      </div>
-      </div>
-      </div>
-    </div>
-  </div>
-</div>
-</div>
-<!--        Character Saving Throws     -->
-    <div class="row" style="padding: 2% 0;">
-      <div class="col-lg-12">
-          <div class="col">
-            <h4 class="character-heading char-title">Saving throws</h4>
-            <div class="row">
-              <div class="col-xl-4 col-lg-6">
-                <div class="character-text-centered border border-dark border-3">
-                <h4 class="ability-heading">Strength</h4>
-                <h4 class="ability-score-text">{% if character.strength %}{{ ability_bonus(character.strength) + prof }}{% else %}{{ability_bonus(character.strength)}}{%endif%}</h4>
-                </div>
-              </div>
-              <div class="col-xl-4 col-lg-6">
-                <div class="character-text-centered border border-dark border-3">
-                <h4 class="ability-heading">Dexterity</h4>
-                <h4 class="ability-score-text">{% if character.dexterity %}{{ ability_bonus(character.dexterity) + prof }}{% else %}{{ability_bonus(character.dexterity)}}{%endif%}</h4>
-              </div>
-                </div>
-              <div class="col-xl-4 col-lg-6">
-                <div class="character-text-centered border border-dark border-3">
-                <h4 class="ability-heading">Constitution</h4>
-                <h4 class="ability-score-text">{% if character.constitution %}{{ ability_bonus(character.constitution) + prof }}{% else %}{{ability_bonus(character.constitution)}}{%endif%}</h4>
-              </div>
-                </div>
-              <div class="col-xl-4 col-lg-6">
-                <div class="character-text-centered border border-dark border-3">
-                <h4 class="ability-heading">Wisdom</h4>
-                <h4 class="ability-score-text">{% if character.wisdom %}{{ ability_bonus(character.wisdom) + prof }}{% else %}{{ability_bonus(character.wisdom)}}{%endif%}</h4>
-              </div>
-                </div>
-              <div class="col-xl-4 col-lg-6">
-                <div class="character-text-centered border border-dark border-3">
-                <h4 class="ability-heading">Intelligence</h4>
-                <h4 class="ability-score-text">{% if character.intelligence %}{{ ability_bonus(character.intelligence) + prof }}{% else %}{{ability_bonus(character.intelligence)}}{%endif%}</h4>
-              </div>
-                </div>
-              <div class="col-xl-4 col-lg-6">
-                <div class="character-text-centered border border-dark border-3">
-                <h4 class="ability-heading">Charisma</h4>
-                <h4 class="ability-score-text">{% if character.charisma %}{{ ability_bonus(character.charisma) + prof }}{% else %}{{ability_bonus(character.charisma)}}{%endif%}</h4>
-              </div>
+    <div class="container-fluid">
+        <div class="row character_top_row">
+            <!--        Character Details  -->
+            <div class="col-xl-5 col-lg-8">
+                <div class="full-box border border-dark border-3 char-token-name">
+                    <div class="name-race-class">
+                        <h5 class="char-title">{{character.name}}</h5>
+                        <p class="char-text">{{character.race}} / Level {{character.class_main_level}}
+                                             {{character.class_main}} {%if character.class_second%} - Level
+                                             {{character.class_second_level}} {{character.class_second}}{%endif%}</p>
+                    </div>
+                    <div class="col" style="margin-bottom: 2%;">
+                    <img src="/{{character.token_img}}" class="character_token" style="border-radius: 50%;">
+                        </div>
+                    <a href="{{url_for('edit_core_character_details', character_id = character.id)}}" class="char-text edit-anchor edit-icon"><i class="edit-fa-solid fa-solid fa-gears edit-icon"></i></a>
                 </div>
             </div>
+            <div class="col-xl-3 col-lg-4">
+                <div class="full-box border border-dark border-3 top-row-extra-margin">
+                    <div class="row">
+                        <div class="name-race-class character-player-details">
+                            <h5 class="char-title">Campaign</h5>
+                            <p class="char-text">{{character.campaign.title}}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="name-race-class character-player-details">
+                            <h5 class="char-title">Player</h5>
+                            <p class="char-text">{{character.player.username}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-4 col-lg-12 character_details">
+                <div class="full-box border border-dark border-3 top-row-extra-margin" style="position: relative;">
+                    <p class="char-text char-extra-details"><b>Background:</b> {{character.background}}</p>
+                    <p class="char-text char-extra-details"><b>Alignment:</b> {{character.alignment}}</p>
+                    <p class="char-text char-extra-details"><b>Appearance:</b> {{character.appearance_summary}}</p>
+                    <a href="{{url_for('edit_background', character_id = character.id)}}" class="char-text edit-anchor edit-icon"><i class="edit-fa-solid fa-solid fa-gears edit-icon"></i></a>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <!--        Character Stats       -->
+            <div class="col-xl-3 col-lg-6 character-stats">
+                <div class="row">
+                    <div class="col">
+                        <h4 class="character-heading char-title">Ability Scores  <a href="{{url_for('edit_ability_scores', character_id = character.id)}}" class="char-text edit-anchor-non-absolute edit-icon" style=""><i class="edit-fa-solid fa-solid fa-gears edit-icon"></i></a></h4>
+                        <div class="ability-score border border-dark border-3">
+                            <h4 class="ability-heading">Strength</h4>
+                            <h4 class="ability-score-text">{% if character.main_bonus_score == "Strength"
+                                                           %}{{character.strength + 2}}{% elif character.sub_bonus_score
+                                                           == "Strength" %}{{character.strength + 1}}{% else
+                                                           %}{{character.strength}}{% endif %}</h4>
+                        </div>
+                        <div class="ability-score border border-dark border-3">
+                            <h4 class="ability-heading">Dexterity</h4>
+                            <h4 class="ability-score-text">{% if character.main_bonus_score == "Dexterity"
+                                                           %}{{character.dexterity + 2}}{% elif
+                                                           character.sub_bonus_score == "Dexterity"
+                                                           %}{{character.dexterity + 1}}{% else
+                                                           %}{{character.dexterity}}{% endif %}</h4>
+                        </div>
+                        <div class="ability-score border border-dark border-3">
+                            <h4 class="ability-heading">Constitution</h4>
+                            <h4 class="ability-score-text">{% if character.main_bonus_score == "Constitution"
+                                                           %}{{character.constitution + 2}}{% elif
+                                                           character.sub_bonus_score == "Constitution"
+                                                           %}{{character.constitution + 1}}{% else
+                                                           %}{{character.constitution}}{% endif %}</h4>
+                        </div>
+                        <div class="ability-score border border-dark border-3">
+                            <h4 class="ability-heading">Intelligence</h4>
+                            <h4 class="ability-score-text">{% if character.main_bonus_score == "Intelligence"
+                                                           %}{{character.intelligence + 2}}{% elif
+                                                           character.sub_bonus_score == "Intelligence"
+                                                           %}{{character.intelligence + 1}}{% else
+                                                           %}{{character.intelligence}}{% endif %}</h4>
+                        </div>
+                        <div class="ability-score border border-dark border-3">
+                            <h4 class="ability-heading">Wisdom</h4>
+                            <h4 class="ability-score-text">{% if character.main_bonus_score == "Wisdom"
+                                                           %}{{character.wisdom + 2}}{% elif character.sub_bonus_score
+                                                           == "Wisdom" %}{{character.wisdom + 1}}{% else
+                                                           %}{{character.wisdom}}{% endif %}</h4>
+                        </div>
+                        <div class="ability-score border border-dark border-3">
+                            <h4 class="ability-heading">Charisma</h4>
+                            <h4 class="ability-score-text">{% if character.main_bonus_score == "Charisma"
+                                                           %}{{character.charisma + 2}}{% elif character.sub_bonus_score
+                                                           == "Charisma" %}{{character.charisma + 1}}{% else
+                                                           %}{{character.charisma}}{% endif %}</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--        Character Skill Scores          -->
+            <div class="col-xl-3 col-lg-6">
+                <div class="row">
+                    <div class="col">
+                        <h4 class="character-heading char-title">Skills and Bonuses  <a href="{{url_for('edit_skill_profs', character_id = character.id)}}" class="char-text edit-anchor-non-absolute edit-icon" style=""><i class="edit-fa-solid fa-solid fa-gears edit-icon"></i></a></h4>
+                        <div class="row">
+                            <div class="col">
+                                <ul class="list-group list-group-flush skill-scores border border-dark border-3">
+                                    <li class="list-group-item bg-transparent"><h5 class="skill-number">{% if
+                                                                                                        character.acrobatics
+                                                                                                        %}{{prof +
+                                                                                                        ability_bonus(character.dexterity)}}{%
+                                                                                                        else
+                                                                                                        %}{{ability_bonus(character.dexterity)}}{%
+                                                                                                        endif %}</h5>
+                                        <p class="ability-text">Acrobatics</p></li>
+                                    <li class="list-group-item bg-transparent"><h5 class="skill-number">{% if
+                                                                                                        character.animal_handling
+                                                                                                        %}{{prof +
+                                                                                                        ability_bonus(character.wisdom)}}{%
+                                                                                                        else
+                                                                                                        %}{{ability_bonus(character.wisdom)}}{%
+                                                                                                        endif %}</h5>
+                                        <p class="ability-text">Animal Handling</p></li>
+                                    <li class="list-group-item bg-transparent"><h5 class="skill-number">{% if
+                                                                                                        character.arcana
+                                                                                                        %}{{prof +
+                                                                                                        ability_bonus(character.intelligence)}}{%
+                                                                                                        else
+                                                                                                        %}{{ability_bonus(character.intelligence)}}{%
+                                                                                                        endif %}</h5>
+                                        <p class="ability-text">Arcana</p></li>
+                                    <li class="list-group-item bg-transparent"><h5 class="skill-number">{% if
+                                                                                                        character.athletics
+                                                                                                        %}{{prof +
+                                                                                                        ability_bonus(character.strength)}}{%
+                                                                                                        else
+                                                                                                        %}{{ability_bonus(character.strength)}}{%
+                                                                                                        endif %}</h5>
+                                        <p class="ability-text">Athletics</p></li>
+                                    <li class="list-group-item bg-transparent"><h5 class="skill-number">{% if
+                                                                                                        character.deception
+                                                                                                        %}{{prof +
+                                                                                                        ability_bonus(character.charisma)}}{%
+                                                                                                        else
+                                                                                                        %}{{ability_bonus(character.charisma)}}{%
+                                                                                                        endif %}</h5>
+                                        <p class="ability-text">Deception</p></li>
+                                    <li class="list-group-item bg-transparent"><h5 class="skill-number">{% if
+                                                                                                        character.history
+                                                                                                        %}{{prof +
+                                                                                                        ability_bonus(character.intelligence)}}{%
+                                                                                                        else
+                                                                                                        %}{{ability_bonus(character.intelligence)}}{%
+                                                                                                        endif %}</h5>
+                                        <p class="ability-text">History</p></li>
+                                    <li class="list-group-item bg-transparent"><h5 class="skill-number">{% if
+                                                                                                        character.insight
+                                                                                                        %}{{prof +
+                                                                                                        ability_bonus(character.wisdom)}}{%
+                                                                                                        else
+                                                                                                        %}{{ability_bonus(character.wisdom)}}{%
+                                                                                                        endif %}</h5>
+                                        <p class="ability-text">Insight</p></li>
+                                    <li class="list-group-item bg-transparent"><h5 class="skill-number">{% if
+                                                                                                        character.intimidation
+                                                                                                        %}{{prof +
+                                                                                                        ability_bonus(character.charisma)}}{%
+                                                                                                        else
+                                                                                                        %}{{ability_bonus(character.charisma)}}{%
+                                                                                                        endif %}</h5>
+                                        <p class="ability-text">Intimidation</p></li>
+                                    <li class="list-group-item bg-transparent"><h5 class="skill-number">{% if
+                                                                                                        character.investigation
+                                                                                                        %}{{prof +
+                                                                                                        ability_bonus(character.intelligence)}}{%
+                                                                                                        else
+                                                                                                        %}{{ability_bonus(character.intelligence)}}{%
+                                                                                                        endif %}</h5>
+                                        <p class="ability-text">Investigation</p></li>
+                                    <li class="list-group-item bg-transparent"><h5 class="skill-number">{% if
+                                                                                                        character.medicine
+                                                                                                        %}{{prof +
+                                                                                                        ability_bonus(character.wisdom)}}{%
+                                                                                                        else
+                                                                                                        %}{{ability_bonus(character.wisdom)}}{%
+                                                                                                        endif %}</h5>
+                                        <p class="ability-text">Medicine</p></li>
+                                    <li class="list-group-item bg-transparent"><h5 class="skill-number">{% if
+                                                                                                        character.nature
+                                                                                                        %}{{prof +
+                                                                                                        ability_bonus(character.intelligence)}}{%
+                                                                                                        else
+                                                                                                        %}{{ability_bonus(character.intelligence)}}{%
+                                                                                                        endif %}</h5>
+                                        <p class="ability-text">Nature</p></li>
+                                    <li class="list-group-item bg-transparent"><h5 class="skill-number">{% if
+                                                                                                        character.perception
+                                                                                                        %}{{prof +
+                                                                                                        ability_bonus(character.wisdom)}}{%
+                                                                                                        else
+                                                                                                        %}{{ability_bonus(character.wisdom)}}{%
+                                                                                                        endif %}</h5>
+                                        <p class="ability-text">Perception</p></li>
+                                    <li class="list-group-item bg-transparent"><h5 class="skill-number">{% if
+                                                                                                        character.performance
+                                                                                                        %}{{prof +
+                                                                                                        ability_bonus(character.charisma)}}{%
+                                                                                                        else
+                                                                                                        %}{{ability_bonus(character.charisma)}}{%
+                                                                                                        endif %}</h5>
+                                        <p class="ability-text">Performance</p></li>
+                                    <li class="list-group-item bg-transparent"><h5 class="skill-number">{% if
+                                                                                                        character.persuasion
+                                                                                                        %}{{prof +
+                                                                                                        ability_bonus(character.charisma)}}{%
+                                                                                                        else
+                                                                                                        %}{{ability_bonus(character.charisma)}}{%
+                                                                                                        endif %}</h5>
+                                        <p class="ability-text">Persuasion</p></li>
+                                    <li class="list-group-item bg-transparent"><h5 class="skill-number">{% if
+                                                                                                        character.religion
+                                                                                                        %}{{prof +
+                                                                                                        ability_bonus(character.intelligence)}}{%
+                                                                                                        else
+                                                                                                        %}{{ability_bonus(character.intelligence)}}{%
+                                                                                                        endif %}</h5>
+                                        <p class="ability-text">Religion</p></li>
+                                    <li class="list-group-item bg-transparent"><h5 class="skill-number">{% if
+                                                                                                        character.sleight_of_hand
+                                                                                                        %}{{prof +
+                                                                                                        ability_bonus(character.dexterity)}}{%
+                                                                                                        else
+                                                                                                        %}{{ability_bonus(character.dexterity)}}{%
+                                                                                                        endif %}</h5>
+                                        <p class="ability-text">Sleight of Hand</p></li>
+                                    <li class="list-group-item bg-transparent"><h5 class="skill-number">{% if
+                                                                                                        character.stealth
+                                                                                                        %}{{prof +
+                                                                                                        ability_bonus(character.dexterity)}}{%
+                                                                                                        else
+                                                                                                        %}{{ability_bonus(character.dexterity)}}{%
+                                                                                                        endif %}</h5>
+                                        <p class="ability-text">Stealth</p></li>
+                                    <li class="list-group-item bg-transparent"><h5 class="skill-number">{% if
+                                                                                                        character.survival
+                                                                                                        %}{{prof +
+                                                                                                        ability_bonus(character.wisdom)}}{%
+                                                                                                        else
+                                                                                                        %}{{ability_bonus(character.wisdom)}}{%
+                                                                                                        endif %}</h5>
+                                        <p class="ability-text">Survival</p></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--        Character AC / HP / Init / Prof Bonus / Senses / Proficiencies      -->
+            <div class="col-xl-6 col-lg-12">
+                <div class="row">
+                    <div class="col">
+                        <h4 class="character-heading char-title">Character Stats and Senses  <a href="{{url_for('edit_stats_senses', character_id = character.id)}}" class="char-text edit-anchor-non-absolute edit-icon" style=""><i class="edit-fa-solid fa-solid fa-gears edit-icon"></i></a></h4>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="character-text-centered border border-dark border-3">
+                                    <h4 class="ability-heading">Armor Class</h4>
+                                    <h4 class="ability-score-text">
+                                        <!--              Code to determine the AC of the character based on the armor they have equipped-->
+                                        <!--              !!!!! Change this into a function that can be accessed in Jinja in the future !!!!!-->
+                                        {% if dex_bonus %}
+                                        {% if dex_bonus_limit %}
+                                        {% if character.main_bonus_limit == "Dexterity" %}
+                                        {% if ability_bonus(character.dexterity + 2) > 2 %}
+                                        {{ ac + 2 }}
+                                        {% else %}
+                                        {{ ac + ability_bonus(character.dexterity + 2) }}
+                                        {% endif %}
+                                        {% elif character.sub_bonus_limit == "Dexterity" %}
+                                        {% if ability_bonus(character.dexterity + 1) > 2 %}
+                                        {{ ac + 2}}
+                                        {% else %}
+                                        {{ ac + ability_bonus(character.dexterity + 1) }}
+                                        {% endif %}
+                                        {% else %}
+                                        {% if ability_bonus(character.dexterity) > 2 %}
+                                        {{ ac + 2}}
+                                        {% else %}
+                                        {{ ac + ability_bonus(character.dexterity) }}
+                                        {% endif %}
+                                        {% endif %}
+                                        {% else %}
+                                        {% if character.main_bonus_score == "Dexterity" %}
+                                        {{ ac + ability_bonus(character.dexterity + 2) }}
+                                        {% elif character.sub_bonus_score == "Dexterity" %}
+                                        {{ ac + ability_bonus(character.dexterity + 1) }}
+                                        {% else %}
+                                        {{ ac + ability_bonus(character.dexterity) }}
+                                        {% endif %}
+                                        {% endif %}
+                                        {% else %}
+                                        {{ ac }}
+                                        {% endif %}
+                                    </h4>
+                                </div>
+                                <div class="character-text-centered border border-dark border-3">
+                                    <h4 class="ability-heading">Maximum HP / Current HP{% if character.temp_hit_points
+                                                                != 0 or None %} / Temp HP{% endif %}</h4>
+                                    <h4 class="ability-score-text">{{character.max_hit_points}} /
+                                                                   {{character.current_hit_points}}{% if
+                                                                   character.temp_hit_points != 0 or None %} /
+                                                                   {{character.temp_hit_points}}{% endif %}</h4>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="character-text-centered border border-dark border-3">
+                                    <h4 class="ability-heading">Initiative Bonus</h4>
+                                    <h4 class="ability-score-text">{% if character.main_bonus_score == "Dexterity" %}
+                                                                   {{ability_bonus(character.dexterity + 2) }}
+                                                                   {% elif character.sub_bonus_score == "Dexterity" %}
+                                                                   {{ability_bonus(character.dexterity + 1) }}
+                                                                   {% else %}
+                                                                   {{ability_bonus(character.dexterity) }}
+                                                                   {% endif %}
+                                    </h4>
+                                </div>
+                                <div class="character-text-centered border border-dark border-3">
+                                    <h4 class="ability-heading">Proficiency Bonus</h4>
+                                    <h4 class="ability-score-text">{{prof}}</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-6 col-lg-12">
+                                <div class="character-senses border border-dark border-3">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <h4 class="ability-heading">Senses</h4>
+                                        </div>
+                                        {% if character.darkvision or character.blindsight or character.tremorsense or character.truesight %}
+                                        <div class="col">
+                                            {% if character.darkvision %}<p class="char-text sense-text"><b
+                                                class="ability-sub-heading">Darkvision:</b>
+                                            {{character.darkvision_distance}} ft.</p>{% endif %}
+                                            {% if character.blindsight %}<p class="char-text sense-text"><b
+                                                class="ability-sub-heading">Blindsight:</b>
+                                            {{character.blindsight_distance}} ft.</p>{% endif %}
+                                            {% if character.tremorsense %}<p class="char-text sense-text"><b
+                                                class="ability-sub-heading">Tremorsense:</b>
+                                            {{character.tremorsense_distance}} ft.</p>{% endif %}
+                                            {% if character.truesight %}<p class="char-text sense-text"><b
+                                                class="ability-sub-heading">Truesight:</b>
+                                            {{character.truesight_distance}} ft.</p>{% endif %}
+                                        </div>
+                                        {% endif %}
+                                        <div class="col">
+                                            <p class="char-text sense-text"><b class="ability-sub-heading">Passive
+                                                                                                           Perception:</b>
+                                                {% if character.perception %}{{10 + prof +
+                                                ability_bonus(character.wisdom)}}{% else %}{{10 +
+                                                ability_bonus(character.wisdom)}}{% endif %}</p>
+                                            <p class="char-text sense-text"><b class="ability-sub-heading">Passive
+                                                                                                           Insight:</b>
+                                                {% if character.insight %}{{10 + prof +
+                                                ability_bonus(character.wisdom)}}{% else %}{{10 +
+                                                ability_bonus(character.wisdom)}}{% endif %}</p>
+                                            <p class="char-text sense-text"><b class="ability-sub-heading">Passive
+                                                                                                           Investigation:</b>
+                                                {% if character.investigation %}{{10 + prof +
+                                                ability_bonus(character.intelligence)}}{% else %}{{10 +
+                                                ability_bonus(character.intelligence)}}{% endif %}</p>
+                                            <p class="char-text sense-text"><b class="ability-sub-heading">Passive
+                                                                                                           Stealth:</b>
+                                                {% if character.stealth %}{{10 + prof +
+                                                ability_bonus(character.dexterity)}}{% else %}{{10 +
+                                                ability_bonus(character.dexterity)}}{% endif %}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-12">
+                                <div class="character-senses border border-dark border-3">
+                                    <h4 class="ability-heading">Languages</h4>
+                                    {% for language in known_languages %}
+                                    <p>{{language}}</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="character-senses border border-dark border-3">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <h4 class="ability-sub-heading">Tools</h4>
+                                        </div>
+                                        <div class="col-md-6">
+                                            {% for tool in prof_tools %}
+                                                {% if loop.index + 1 == ceil(len(prof_tools))  %}
+                                            </div>
+                                                <div class="col-md-6">
+                                                {% endif %}
+                                            <p>{{ tool }}</p>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--        Character Saving Throws     -->
+        <div class="row" style="padding: 2% 0;">
+            <div class="col-lg-12">
+                <hr>
+                <div class="col">
+                    <h4 class="character-heading char-title">Saving throws</h4>
+                    <div class="row">
+                        <div class="col-xl-4 col-lg-6">
+                            <div class="character-text-centered border border-dark border-3">
+                                <h4 class="ability-heading">Strength</h4>
+                                <h4 class="ability-score-text">{% if character.main_bonus_score == "Strength" %}
+                                                               {% if character.strength_save %}{{ ability_bonus(character.strength) + prof + 2 }}
+                                                               {% else %}{{ability_bonus(character.strength) + 2}}{%endif%}
+                                                               {% elif character.sub_bonus_score == "Strength" %}{% if character.strength_save %}{{ ability_bonus(character.strength) + prof + 1 }}
+                                                               {% else %}{{ability_bonus(character.strength) + 1}}{%endif%}
+                                                               {% else %}{% if character.strength_save %}{{ ability_bonus(character.strength) + prof}}
+                                                               {% else %}{{ability_bonus(character.strength)}}{%endif%}{%endif%}
+                                </h4>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-lg-6">
+                            <div class="character-text-centered border border-dark border-3">
+                                <h4 class="ability-heading">Dexterity</h4>
+                                <h4 class="ability-score-text">{% if character.main_bonus_score == "Dexterity" %}
+                                                               {% if character.dexterity_save %}{{ ability_bonus(character.dexterity + 2) + prof}}
+                                                               {% else %}{{ability_bonus(character.dexterity + 2)}}{%endif%}
+                                                               {% elif character.sub_bonus_score == "Dexterity" %}{% if character.dexterity_save %}{{ ability_bonus(character.dexterity + 1) + prof }}
+                                                               {% else %}{{ability_bonus(character.dexterity + 1)}}{%endif%}
+                                                               {% else %}{% if character.dexterity_save %}{{ ability_bonus(character.dexterity) + prof}}
+                                                               {% else %}{{ability_bonus(character.dexterity)}}{%endif%}{%endif%}
+                                </h4>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-lg-6">
+                            <div class="character-text-centered border border-dark border-3">
+                                <h4 class="ability-heading">Constitution</h4>
+                                <h4 class="ability-score-text">{% if character.main_bonus_score == "Constitution" %}
+                                                               {% if character.constitution_save %}{{ ability_bonus(character.constitution) + prof + 2 }}
+                                                               {% else %}{{ability_bonus(character.constitution) + 2}}{%endif%}
+                                                               {% elif character.sub_bonus_score == "Constitution" %}{% if character.constitution_save %}{{ ability_bonus(character.constitution) + prof + 1 }}
+                                                               {% else %}{{ability_bonus(character.constitution) + 1}}{%endif%}
+                                                               {% else %}{% if character.constitution_save %}{{ ability_bonus(character.constitution) + prof}}
+                                                               {% else %}{{ability_bonus(character.constitution)}}{%endif%}{%endif%}
+                                </h4>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-lg-6">
+                            <div class="character-text-centered border border-dark border-3">
+                                <h4 class="ability-heading">Wisdom</h4>
+                                <h4 class="ability-score-text">{% if character.main_bonus_score == "Wisdom" %}
+                                                               {% if character.wisdom_save %}{{ ability_bonus(character.wisdom) + prof + 2 }}
+                                                               {% else %}{{ability_bonus(character.wisdom) + 2}}{%endif%}
+                                                               {% elif character.sub_bonus_score == "Wisdom" %}{% if character.wisdom_save %}{{ ability_bonus(character.wisdom) + prof + 1 }}
+                                                               {% else %}{{ability_bonus(character.wisdom) + 1}}{%endif%}
+                                                               {% else %}{% if character.wisdom_save %}{{ ability_bonus(character.wisdom) + prof}}
+                                                               {% else %}{{ability_bonus(character.wisdom)}}{%endif%}{%endif%}
+                                </h4>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-lg-6">
+                            <div class="character-text-centered border border-dark border-3">
+                                <h4 class="ability-heading">Intelligence</h4>
+                                <h4 class="ability-score-text">{% if character.main_bonus_score == "Intelligence" %}
+                                                               {% if character.intelligence_save %}{{ ability_bonus(character.intelligence) + prof + 2 }}
+                                                               {% else %}{{ability_bonus(character.intelligence) + 2}}{%endif%}
+                                                               {% elif character.sub_bonus_score == "Intelligence" %}{% if character.intelligence_save %}{{ ability_bonus(character.intelligence) + prof + 1 }}
+                                                               {% else %}{{ability_bonus(character.intelligence) + 1}}{%endif%}
+                                                               {% else %}{% if character.intelligence_save %}{{ ability_bonus(character.intelligence) + prof}}
+                                                               {% else %}{{ability_bonus(character.intelligence)}}{%endif%}{%endif%}
+                                </h4>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-lg-6">
+                            <div class="character-text-centered border border-dark border-3">
+                                <h4 class="ability-heading">Charisma</h4>
+                                <h4 class="ability-score-text">{% if character.main_bonus_score == "Charisma" %}
+                                                               {% if character.charisma_save %}{{ ability_bonus(character.charisma) + prof + 2 }}
+                                                               {% else %}{{ability_bonus(character.charisma) + 2}}{%endif%}
+                                                               {% elif character.sub_bonus_score == "Charisma" %}{% if character.charisma_save %}{{ ability_bonus(character.charisma) + prof + 1 }}
+                                                               {% else %}{{ability_bonus(character.charisma) + 1}}{%endif%}
+                                                               {% else %}{% if character.charisma_save %}{{ ability_bonus(character.charisma) + prof}}
+                                                               {% else %}{{ability_bonus(character.charisma)}}{%endif%}{%endif%}
+                                </h4>
+                            </div>
+                        </div>
+                    </div>
 
-          </div>
+                </div>
+            </div>
         </div>
-      </div>
         <div class="row">
-          <div class="col-lg-6">
-          <div class="character-personality border border-dark border-3">
-            <h4 class="ability-heading">Personality Traits</h4>
-            <p class="char-text">{{character.personality_traits | safe}}</p>
-          </div>
-          </div>
-          <div class="col-lg-6">
-          <div class="character-personality border border-dark border-3">
-            <h4 class="ability-heading">Ideals</h4>
-            <p class="char-text">{{character.ideals | safe}}</p>
-          </div>
-          </div>
-          <div class="col-lg-6">
-          <div class="character-personality border border-dark border-3">
-            <h4 class="ability-heading">Bonds</h4>
-            <p class="char-text">{{character.bonds | safe}}</p>
-          </div>
-          </div>
-          <div class="col-lg-6">
-          <div class="character-personality border border-dark border-3">
-            <h4 class="ability-heading">Flaws</h4>
-            <p class="char-text">{{character.flaws | safe}}</p>
-          </div>
-          </div>
+            <hr>
+            <div class="row">
+                <h4 class="character-heading char-title">Character Personality, Traits, and Abilities  <a href="{{url_for('edit_personality', character_id = character.id)}}" class="char-text edit-anchor-non-absolute edit-icon" style=""><i class="edit-fa-solid fa-solid fa-gears edit-icon"></i></a></h4>
+            <div class="col-lg-6">
+                <div class="character-personality border border-dark border-3">
+                    <h4 class="ability-heading">Personality Traits</h4>
+                    <p class="char-text">{{character.personality_trait_1 | safe}}</p>
+                    <p class="char-text">{{character.personality_trait_2 | safe}}</p>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="character-personality border border-dark border-3">
+                    <h4 class="ability-heading">Ideals</h4>
+                    <p class="char-text">{{character.ideals | safe}}</p>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="character-personality border border-dark border-3">
+                    <h4 class="ability-heading">Bonds</h4>
+                    <p class="char-text">{{character.bonds | safe}}</p>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="character-personality border border-dark border-3">
+                    <h4 class="ability-heading">Flaws</h4>
+                    <p class="char-text">{{character.flaws | safe}}</p>
+                </div>
+            </div>
         </div>
-        </div>
-<!--          Bootstrap tabs to show various information about the characters    -->
-      <div class="row character-navi">
+    </div>
+    <!--          Bootstrap tabs to show various information about the characters    -->
+    <div class="row character-navi">
         <div class="col">
-          <ul class="nav nav-tabs border border-dark border-3 border-bottom-0" id="myTab" role="tablist">
-            <li class="nav-item char-nav-item border-bottom border-end border-dark" role="presentation">
-              <button class="nav-link active character-navi-button" style="padding-left: 0; padding-right: 0;" id="actions-tab" data-bs-toggle="tab" data-bs-target="#actions" type="button" role="tab" aria-controls="actions" aria-selected="true">Actions</button>
-            </li>
-            <li class="nav-item char-nav-item border-bottom border-end border-dark" role="presentation">
-              <button class="nav-link character-navi-button" style="padding-left: 0; padding-right: 0;" id="spells-tab" data-bs-toggle="tab" data-bs-target="#spells" type="button" role="tab" aria-controls="spells" aria-selected="false">Spells</button>
-            </li>
-            <li class="nav-item char-nav-item border-bottom border-end border-dark" role="presentation">
-              <button class="nav-link character-navi-button" style="padding-left: 0; padding-right: 0;" id="inventory-tab" data-bs-toggle="tab" data-bs-target="#inventory" type="button" role="tab" aria-controls="inventory" aria-selected="false">Inventory</button>
-            </li>
-            <li class="nav-item char-nav-item border-bottom border-end border-dark" role="presentation">
-              <button class="nav-link character-navi-button" style="padding-left: 0; padding-right: 0;" id="backstory-tab" data-bs-toggle="tab" data-bs-target="#backstory" type="button" role="tab" aria-controls="backstory" aria-selected="false">Backstory</button>
-            </li>
-            <li class="nav-item char-nav-item border-bottom border-dark" role="presentation">
-              <button class="nav-link character-navi-button" style="padding-left: 0; padding-right: 0;" id="description-tab" data-bs-toggle="tab" data-bs-target="#description" type="button" role="tab" aria-controls="description" aria-selected="false">Description</button>
-            </li>
-            <li class="nav-item char-nav-item border-end border-dark" role="presentation">
-              <button class="nav-link character-navi-button" style="padding-left: 0; padding-right: 0;" id="notes-tab" data-bs-toggle="tab" data-bs-target="#notes" type="button" role="tab" aria-controls="notes" aria-selected="false">Notes</button>
-            </li>
-            <li class="nav-item char-nav-item border-end border-dark" role="presentation">
-              <button class="nav-link character-navi-button" style="padding-left: 0; padding-right: 0;" id="traits-and-features-tab" data-bs-toggle="tab" data-bs-target="#traits-and-features" type="button" role="tab" aria-controls="traits-and-features" aria-selected="false">Features</button>
-            </li>
-          </ul>
+            <ul class="nav nav-tabs border border-dark border-3 border-bottom-0" id="myTab" role="tablist">
+                <li class="nav-item char-nav-item border-bottom border-end border-dark" role="presentation">
+                    <button class="nav-link active character-navi-button" style="padding-left: 0; padding-right: 0;"
+                            id="actions-tab" data-bs-toggle="tab" data-bs-target="#actions" type="button" role="tab"
+                            aria-controls="actions" aria-selected="true">Actions
+                    </button>
+                </li>
+                <li class="nav-item char-nav-item border-bottom border-end border-dark" role="presentation">
+                    <button class="nav-link character-navi-button" style="padding-left: 0; padding-right: 0;"
+                            id="spells-tab" data-bs-toggle="tab" data-bs-target="#spells" type="button" role="tab"
+                            aria-controls="spells" aria-selected="false">Spells
+                    </button>
+                </li>
+                <li class="nav-item char-nav-item border-bottom border-end border-dark" role="presentation">
+                    <button class="nav-link character-navi-button" style="padding-left: 0; padding-right: 0;"
+                            id="inventory-tab" data-bs-toggle="tab" data-bs-target="#inventory" type="button" role="tab"
+                            aria-controls="inventory" aria-selected="false">Inventory
+                    </button>
+                </li>
+                <li class="nav-item char-nav-item border-bottom border-end border-dark" role="presentation">
+                    <button class="nav-link character-navi-button" style="padding-left: 0; padding-right: 0;"
+                            id="backstory-tab" data-bs-toggle="tab" data-bs-target="#backstory" type="button" role="tab"
+                            aria-controls="backstory" aria-selected="false">Backstory
+                    </button>
+                </li>
+                <li class="nav-item char-nav-item border-bottom border-dark" role="presentation">
+                    <button class="nav-link character-navi-button" style="padding-left: 0; padding-right: 0;"
+                            id="description-tab" data-bs-toggle="tab" data-bs-target="#description" type="button"
+                            role="tab" aria-controls="description" aria-selected="false">Description
+                    </button>
+                </li>
+                <li class="nav-item char-nav-item border-end border-dark" role="presentation">
+                    <button class="nav-link character-navi-button" style="padding-left: 0; padding-right: 0;"
+                            id="notes-tab" data-bs-toggle="tab" data-bs-target="#notes" type="button" role="tab"
+                            aria-controls="notes" aria-selected="false">Notes
+                    </button>
+                </li>
+            </ul>
             <div class="tab-content border border-dark border-3" id="myTabContent">
 
-              <div class="tab-pane fade show active" id="actions" role="tabpanel" aria-labelledby="actions-tab">
-                <h5 class="ability-heading">My Actions:</h5>
-                <p>{{character.actions | safe}}</p>
-              </div>
-              <div class="tab-pane fade" id="spells" role="tabpanel" aria-labelledby="spells-tab">
-                <h5 class="ability-heading">My Spells:</h5>
-              </div>
-              <div class="tab-pane fade" id="inventory" role="tabpanel" aria-labelledby="inventory-tab">
-                <h5 class="ability-heading">My Inventory:</h5>
-                <p>{{character.inventory | safe}}</p>
-              </div>
-              <div class="tab-pane fade" id="backstory" role="tabpanel" aria-labelledby="backstory-tab">
-                <h5 class="ability-heading">Backstory:</h5>
-                <p>{{character.backstory | safe}}</p>
-              </div>
-              <div class="tab-pane fade" id="description" role="tabpanel" aria-labelledby="description-tab">
-                <h5 class="ability-heading">Character Description:</h5>
-                <p>{{character.description | safe}}</p>
-              </div>
-              <div class="tab-pane fade" id="notes" role="tabpanel" aria-labelledby="notes-tab">
-                <h5 class="ability-heading">Character Notes:</h5>
-                <p>{{character.notes | safe}}</p>
-              </div>
-              <div class="tab-pane fade" id="traits-and-features" role="tabpanel" aria-labelledby="traits-and-features-tab">
-                <h5 class="ability-heading">Character Traits and Features:</h5>
-              </div>
+                <div class="tab-pane fade show active" id="actions" role="tabpanel" aria-labelledby="actions-tab">
+                    <h5 class="ability-heading">My Actions:</h5>
+                    {% for action in character.actions %}
+                    <h5>{{action.name}}</h5>
+                    <p>{{action.description | safe}}</p>
+                    {% endfor %}
+                    <a class="btn btn-outline-dark" href="{{url_for('add_character_action', character_id=character.id)}}">New Action</a>
+                </div>
+                <div class="tab-pane fade" id="spells" role="tabpanel" aria-labelledby="spells-tab">
+                    <h5 class="ability-heading">My Spells:</h5>
+                    {% for spell in character.spells_known %}
+                    <p>{{spell.name}}</p>
+                    {% endfor %}
+                    <a class="btn btn-outline-dark" href="{{url_for('character_spell_selection', character_id=character.id)}}">New Spell</a>
+                </div>
+                <div class="tab-pane fade" id="inventory" role="tabpanel" aria-labelledby="inventory-tab">
+                    <h5 class="ability-heading">My Inventory:</h5>
+                    {% for item in character.inventory %}
+                    <p>{{item.name}}: {{item.category}} - Value: {{item.value}}</p>
+                     {% if item.item_desc %}
+                    <p>Description: {{item.item_desc}}</p>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="tab-pane fade" id="backstory" role="tabpanel" aria-labelledby="backstory-tab">
+                    <h5 class="ability-heading">Backstory:</h5>
+                    <p>{{character.backstory | safe}}</p>
+                    <a class="btn btn-outline-dark" href="{{url_for('edit_character_description', character_id=character.id)}}">Edit Backstory & Description</a>
+                </div>
+                <div class="tab-pane fade" id="description" role="tabpanel" aria-labelledby="description-tab">
+                    <h5 class="ability-heading">Character Description:</h5>
+                    <p>{{character.appearance_detailed | safe}}</p>
+                    <a class="btn btn-outline-dark" href="{{url_for('edit_character_description', character_id=character.id)}}">Edit Backstory & Description</a>
+                </div>
+                <div class="tab-pane fade" id="notes" role="tabpanel" aria-labelledby="notes-tab">
+                    <h5 class="ability-heading">Character Notes:</h5>
+                    <p>{{character.notes | safe}}</p>
+                    <a class="btn btn-outline-dark" href="{{url_for('edit_character_notes', character_id=character.id)}}">Edit Notes</a>
+                </div>
             </div>
         </div>
-      </div>
     </div>
-  </div>
-</div>
+    </div>
+    </div>
+    </div>
 </section>
 
 {% include "footer.html" %}

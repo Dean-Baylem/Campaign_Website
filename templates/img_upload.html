@@ -28,18 +28,19 @@
  <div class="container" style="margin: 0; padding: 0;">
      <div class="row">
          <div class="col-lg-8 col-md-10 mx-auto">
-             {% with messages = get_flashed_messages() %}
-               {% if messages %}
-                 {% for message in messages %}
-                   <p class="campaign-text" style="color: red;">{{message}}</p>
-                 {% endfor %}
-               {% endif %}
-             {% endwith %}
-
-             {{ ckeditor.load() }}
-             {{ ckeditor.config(name='blurb') }}
-             {{ wtf.quick_form(form, extra_classes=classes ,novalidate=True, button_map={"submit": "outline-primary"}) }}
-
+            <form method='post' enctype="multipart/form-data">
+                {{ form.csrf_token }}
+                {{ form.name (value=character.name)}}
+                {{ form.file }}
+                {{ form.submit }}
+<!--                <div class="form-row">-->
+<!--              <div class="form-group">-->
+<!--                <label for="imageinput">Upload Image</label>-->
+<!--                <input type="file" name="file" id="imageinput">-->
+<!--                  <input type="submit" value='upload'>-->
+               </div>
+              </div>
+            </form>
          </div>
      </div>
  </div>

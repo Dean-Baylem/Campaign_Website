@@ -1,27 +1,40 @@
 {% include "header.html" %}
 
+<section id="campaign-heading">
+  <div class="container-fluid" style="background-image: url(https://img.freepik.com/free-photo/still-life-objects-with-role-playing-game-sheet_23-2149352302.jpg?w=1800&t=st=1673050213~exp=1673050813~hmac=1644590cdbbe18786ec7d09fdfabfe0acb47ce26f8606d1be58d8bd66c834584); background-repeat: no-repeat; background-size: cover; padding: 0;">
+    <div class="mask" style="background-color: rgba(0, 0, 0, 0.5)" >
+    <div class="row section-area" style="margin: 0;">
+        <h1 class="home-title heading-font">My Characters</h1>
+      </div>
+    </div>
+  </div>
+</section>
+
+
 <!-- Title and new character button -->
 <body class="light-bg hub-body">
 <div class="wrapper">
 <section id="character-hub-section" class="character-hub section-area light-bg">
-    <div class="row">
-        <div class="col-lg-3">
-            <h2>My Characters</h2>
+    <hr>
+    <div class="row character-page-subheading-row">
+        <div class="col">
+            <p class="home-page-font-style">Access your character sheets or create a new adventurer</p>
         </div>
-        <div class="col-lg-3">
-            <a class="btn btn-primary" href="{{url_for('add_new_character')}}" role="button">Create a Character</a>
+        <div class="col">
+            <a class="btn btn-outline-dark" href="{{url_for('add_new_character')}}" role="button">New Character</a>
         </div>
     </div>
+    <hr>
     <div class="row">
     {% for character in current_user.characters %}
-        <div class="col-lg-3 col-md-6 col-sm-12">
-            <div class="card">
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="card character-hub-card-img">
                 <a href="{{url_for('character_page', character_id=character.id)}}" class="stretched-link"></a>
                 <div class="card-body">
-                  <img src="{{character.character_image}}" class="card-img-top" alt="...">
-                  <h5 class="card-title">{{character.name}}</h5>
-                  <p class="card-text">{{character.race}} / {{character.character_class}}</p>
-                  <p class="card-text">{{character.campaign.title}}</p>
+                  <img src="{{character.char_img}}" class="card-img-top npc-image" alt="{{character.name}}'s image">
+                  <h5 class="card-title card-name">{{character.name}}</h5>
+                  <p class="card-details">{{character.race}} / Level {{character.class_main_level}} {{character.class_main}} {%if character.class_second%} - Level {{character.class_second_level}} {{character.class_second}}{%endif%}</p>
+                  <p class="card-summary">Character in : {{character.campaign.title}} campaign</p>
               </div>
             </div>
         </div>

@@ -1,9 +1,9 @@
 {% include "header.html" %}
 
 <section id="campaign-heading">
-  <div class="container-fluid" style="background-image: url(../static/{{campaign.page_image}}); background-repeat: no-repeat; background-size: cover; height: 40%;">
+  <div class="container-fluid" style="background-image: url(../static/{{campaign.page_image}}); background-repeat: no-repeat; background-size: cover; height: 40%; padding: 0;">
     <div class="mask" style="background-color: rgba(0, 0, 0, 0.5)" >
-    <div class="row">
+    <div class="row" style="margin: 0;">
       <div class="col campaign-title">
         <h1 class="main-title">{{campaign.title}}</h1>
       </div>
@@ -47,9 +47,10 @@
           <div class="carousel-inner">
             {% for location in campaign.locations%}
             <div class="carousel-item{% if loop.index == 1 %} active {% endif %}">
-              <img src="{{location.image}}" class="d-block w-100" alt="{{location.place_name}}">
+              <a href="{{url_for('location_page', location_id = location.id)}}" class="stretched-link"></a>
+              <img src="{{location.location_img}}" class="d-block w-100" alt="{{location.location_name}}">
               <div class="carousel-caption d-none d-md-block">
-                <h5>{{location.place_name}}</h5>
+                <h5>{{location.location_name}}</h5>
               </div>
             </div>
             {% endfor %}
@@ -93,7 +94,8 @@
           <div class="carousel-inner">
             {% for faction in campaign.factions %}
             <div class="carousel-item {% if loop.index == 1 %} active {% endif %}">
-              <img src="{{faction.faction_image}}" class="d-block w-100" alt="{{faction.faction_name}}">
+              <a href="{{url_for('faction_page', faction_id = faction.id)}}" class="stretched-link"></a>
+              <img src="{{faction.faction_img}}" class="d-block w-100" alt="{{faction.faction_name}}">
               <div class="carousel-caption d-none d-md-block">
                 <h5>{{faction.faction_name}}</h5>
               </div>
@@ -129,11 +131,12 @@
           <div class="card flex-fill">
               <a href="#" class="stretched-link"></a>
               <div class="card-body">
+                <a href="{{url_for('npc_page', npc_id = npc.id)}}" class="stretched-link"></a>
                 <img src="{{npc.npc_image}}" class="card-img-top npc-image" alt="{{npc.name}}">
                 <hr>
                 <h5 class="card-title card-name">{{npc.name}}</h5>
                 {% if npc.faction %}
-                <p class="card-text card-details">{{npc.faction}}</p>
+                <p class="card-text card-details">{{npc.faction.faction_name}}</p>
                 {% endif %}
             </div>
           </div>
@@ -153,7 +156,6 @@
       {% for character in campaign.characters %}
       <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 d-flex">
           <div class="card flex-fill">
-              <a href="#" class="stretched-link"></a>
               <div class="card-body npc-card">
                 <div class="row">
                 <div class="col">
@@ -197,7 +199,7 @@
         {% endfor %}
         {% if current_user.id == 1: %}
         <div class="d-grid justify-content-md-end">
-          <a class="btn btn-primary" href="{{ url_for('add_review', campaign_id=campaign.id) }}">Post Session Review</a>
+          <a class="btn btn-outline-dark" href="{{ url_for('add_review', campaign_id=campaign.id) }}">Post Session Review</a>
         </div>
         {% endif %}
       </div>

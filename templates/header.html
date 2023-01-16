@@ -77,11 +77,6 @@
                 <a class="nav-link" href="{{url_for('add_new_npc')}}">New NPC</a>
               </li>
               {% endif %}
-              {% if campaign %}
-              <li class="nav-item header-nav-item">
-                <a class="nav-link" href="{{url_for('rules_page', campaign_id=campaign.id)}}">Rules</a>
-              </li>
-              {% endif %}
               <li class="nav-item header-nav-item">
                 <a class="nav-link" href="{{url_for('logout')}}">Logout</a>
               </li>

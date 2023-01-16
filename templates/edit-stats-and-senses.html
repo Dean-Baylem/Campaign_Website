@@ -1,0 +1,100 @@
+{% include "header.html" %}
+
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+
+<section id="campaign-heading" class="light-bg">
+  <div class="container-fluid" style="background-image: url(https://img.freepik.com/free-photo/still-life-objects-with-role-playing-game-sheet_23-2149352342.jpg?w=1800&t=st=1673180289~exp=1673180889~hmac=74c0f026dc7be27f4988200fb9dacc16893c885bcbe5c824bcaeffbf4de1ced0); background-repeat: no-repeat; background-size: cover; padding: 0;">
+  <div class="mask" style="background-color: rgba(0, 0, 0, 0.5)" >
+    <div class="row section-area">
+      <h1 class="home-title heading-font">{{title}}</h1>
+        </div>
+    </div>
+  </div>
+  </div>
+</section>
+
+<body>
+<section class="light-bg section-area login-body">
+ <div class="container" style="margin: 0; padding: 0;">
+     <div class="row">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="character-senses-tab" data-bs-toggle="tab" data-bs-target="#character-senses-tab-pane" type="button" role="tab" aria-controls="character-senses-tab-pane" aria-selected="true">Character Senses</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="character-tool-profs-tab" data-bs-toggle="tab" data-bs-target="#character-tool-profs-tab-pane" type="button" role="tab" aria-controls="character-tool-profs-tab-pane" aria-selected="false">Character Tool Proficiencies</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="character-languages-tab" data-bs-toggle="tab" data-bs-target="#character-languages-tab-pane" type="button" role="tab" aria-controls="character-languages-tab-pane" aria-selected="false">Character Languages</button>
+          </li>
+        </ul>
+         <form method="POST">
+        <div class="tab-content" id="myTabContent">
+          <div class="tab-pane fade show active" id="character-senses-tab-pane" role="tabpanel" aria-labelledby="character-senses-tab" tabindex="0">
+                  {{ form.csrf_token }}
+                  <div class="row form-group required">
+                      <div class="col-lg-5 control-label">{{ form.current_hit_points.label }}</div>
+                      <div class="col-lg-7">{{ form.current_hit_points(class='form-control', value=character.current_hit_points) }}</div>
+                  </div>
+                  <div class="row form-group required">
+                      <div class="col-lg-5 control-label">{{ form.max_hit_points.label }}</div>
+                      <div class="col-lg-7">{{ form.max_hit_points(class='form-control', value=character.max_hit_points) }}</div>
+                  </div>
+                  <div class="row form-group required">
+                      <div class="col-lg-5 control-label">{{ form.temp_hit_points.label }}</div>
+                      <div class="col-lg-7">{{ form.temp_hit_points(class='form-control', value=character.temp_hit_points) }}</div>
+                  </div>
+                  <div class="row form-group required">
+                      <div class="col-lg-5 control-label">{{ form.darkvision.label }}</div>
+                      <div class="col-lg-7">{{ form.darkvision(value=character.darkvision) }}</div>
+                  </div>
+                  <div class="row form-group required">
+                      <div class="col-lg-5 control-label">{{ form.darkvision_range.label }}</div>
+                      <div class="col-lg-7">{{ form.darkvision_range(class='form-control', value=character.darkvision_range) }}</div>
+                  </div>
+                  <div class="row form-group required">
+                      <div class="col-lg-5 control-label">{{ form.blindsight.label }}</div>
+                      <div class="col-lg-7">{{ form.blindsight(value=character.blindsight) }}</div>
+                  </div>
+              <div class="row form-group required">
+                      <div class="col-lg-5 control-label">{{ form.blindsight_range.label }}</div>
+                      <div class="col-lg-7">{{ form.blindsight_range(class='form-control', value=character.blindsight_range) }}</div>
+                  </div>
+              <div class="row form-group required">
+                      <div class="col-lg-5 control-label">{{ form.truesight.label }}</div>
+                      <div class="col-lg-7">{{ form.truesight(value=character.truesight) }}</div>
+                  </div>
+              <div class="row form-group required">
+                      <div class="col-lg-5 control-label">{{ form.truesight_range.label }}</div>
+                      <div class="col-lg-7">{{ form.truesight_range(class='form-control', value=character.truesight_range) }}</div>
+                  </div>
+          </div>
+          <div class="tab-pane fade" id="character-tool-profs-tab-pane" role="tabpanel" aria-labelledby="character-tool-profs-tab" tabindex="0">
+                <div class="row form-group required">
+                      <div class="col-lg-5 control-label">Character Tools Proficiencies</div>
+                    <div class="row">
+                      <div class="col-lg-6">{{ form.first_half_tools(class='multiselect-text') }}</div>
+                      <div class="col-lg-6">{{ form.second_half_tools(class='multiselect-text') }}</div>
+                    </div>
+                  </div>
+              </div>
+          <div class="tab-pane fade" id="character-languages-tab-pane" role="tabpanel" aria-labelledby="character-languages-tab" tabindex="0">
+                  <div class="row form-group required">
+                      <div class="col-lg-5 control-label">Known Character Languages</div>
+                      <div class="row">
+                        <div class="col-lg-6">{{ form.first_half_languages(class='multiselect-text') }}</div>
+                          <div class="col-lg-6">{{ form.second_half_languages(class='multiselect-text') }}</div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+         <div>{{form.submit(class='form-control')}}</div>
+         </form>
+     </div>
+ </div>
+</section>
+{% endblock %}
+
+{% include 'footer.html' %}

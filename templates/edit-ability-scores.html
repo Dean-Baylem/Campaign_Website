@@ -1,0 +1,60 @@
+{% include "header.html" %}
+
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+
+<section id="campaign-heading" class="light-bg">
+  <div class="container-fluid" style="background-image: url(https://img.freepik.com/free-photo/still-life-objects-with-role-playing-game-sheet_23-2149352342.jpg?w=1800&t=st=1673180289~exp=1673180889~hmac=74c0f026dc7be27f4988200fb9dacc16893c885bcbe5c824bcaeffbf4de1ced0); background-repeat: no-repeat; background-size: cover; padding: 0;">
+  <div class="mask" style="background-color: rgba(0, 0, 0, 0.5)" >
+    <div class="row section-area">
+      <h1 class="home-title heading-font">{{title}}</h1>
+        </div>
+    </div>
+  </div>
+  </div>
+</section>
+
+<body>
+<section class="light-bg section-area login-body">
+ <div class="container edit-skill-container" style="margin: 0; padding: 0;">
+     <div class="row">
+         <div class="col-lg-8 col-md-10 mx-auto">
+            <form method='post'>
+                {{ form.csrf_token }}
+                <div class="row form-group required">
+                    <div class="col-lg-5 control-label">Character Strength:</div>
+                    <div class="col-lg-7">{{ form.strength(class='form-control', value=character.strength) }}</div>
+                </div>
+                <div class="row form-group required">
+                    <div class="col-lg-5 control-label">Character Dexterity:</div>
+                    <div class="col-lg-7">{{ form.dexterity(class='form-control', value=character.dexterity)}}</div>
+                </div>
+                <div class="row form-group required">
+                    <div class="col-lg-5 control-label">Character Constitution:</div>
+                    <div class="col-lg-7">{{ form.constitution(class='form-control', value=character.constitution) }}</div>
+                </div>
+                <div class="row form-group required">
+                    <div class="col-lg-5 control-label">Character Wisdom:</div>
+                    <div class="col-lg-7">{{ form.wisdom(class='form-control', value=character.wisdom) }}</div>
+                </div>
+                <div class="row form-group required">
+                    <div class="col-lg-5 control-label">Character Intelligence:</div>
+                    <div class="col-lg-7">{{ form.intelligence(class='form-control', value=character.intelligence) }}</div>
+                </div>
+                <div class="row form-group required">
+                    <div class="col-lg-5 control-label">Character Charisma:</div>
+                    <div class="col-lg-7">{{ form.charisma(class='form-control', value=character.charisma) }}</div>
+                </div>
+                <div class="row form-group required">
+                    <div class="col-lg-5 control-label">Submit Changes:</div>
+                    <div class="col-lg-7">{{ form.submit(class='form-control') }}</div>
+                </div>
+            </form>
+         </div>
+     </div>
+ </div>
+</section>
+{% endblock %}
+
+{% include 'footer.html' %}

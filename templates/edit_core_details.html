@@ -1,0 +1,66 @@
+{% include "header.html" %}
+
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+
+
+<section id="campaign-heading" class="light-bg">
+  <div class="container-fluid" style="background-image: url(https://img.freepik.com/free-photo/still-life-objects-with-role-playing-game-sheet_23-2149352342.jpg?w=1800&t=st=1673180289~exp=1673180889~hmac=74c0f026dc7be27f4988200fb9dacc16893c885bcbe5c824bcaeffbf4de1ced0); background-repeat: no-repeat; background-size: cover; padding: 0;">
+  <div class="mask" style="background-color: rgba(0, 0, 0, 0.5)" >
+    <div class="row section-area">
+      <h1 class="home-title heading-font">{{title}}</h1>
+        </div>
+    </div>
+  </div>
+  </div>
+</section>
+
+
+<body>
+<section class="light-bg section-area login-body">
+ <div class="container" style="margin: 0; padding: 0;">
+     <div class="row">
+         <div class="col-lg-8 col-md-10 mx-auto">
+            <form method='post'>
+                {{ form.csrf_token }}
+                <div class="row form-group required">
+                    <div class="col-lg-5 control-label">Character Name:</div>
+                    <div class="col-lg-7">{{ form.name(class='form-control', value=character.name) }}</div>
+                </div>
+                <div class="row form-group required">
+                    <div class="col-lg-5 control-label">Character Race:</div>
+                    <div class="col-lg-7">{{ form.race(class='form-control', value=character.race)}}</div>
+                </div>
+                <div class="row form-group required">
+                    <div class="col-lg-5 control-label">Character Subrace:</div>
+                    <div class="col-lg-7">{{ form.subrace(class='form-control', value=character.subrace) }}</div>
+                </div>
+                <div class="row form-group required">
+                    <div class="col-lg-5 control-label">Character Class:</div>
+                    <div class="col-lg-7">{{ form.class_main(class='form-control', value=character.class_main) }}</div>
+                </div>
+                <div class="row form-group required">
+                    <div class="col-lg-5 control-label">Character Class Level:</div>
+                    <div class="col-lg-7">{{ form.class_main_level(class='form-control', value=character.class_main_level) }}</div>
+                </div>
+                <div class="row form-group required">
+                    <div class="col-lg-5 control-label">Character Multiclass:</div>
+                    <div class="col-lg-7">{{ form.class_second(class='form-control', value=character.class_second) }}</div>
+                </div>
+                <div class="row form-group required">
+                    <div class="col-lg-5 control-label">Character Multiclass Level:</div>
+                    <div class="col-lg-7">{{ form.class_second_level(class='form-control', value=character.class_second_level) }}</div>
+                </div>
+                <div class="row form-group required">
+                    <div class="col-lg-5 control-label">Submit Changes:</div>
+                    <div class="col-lg-7">{{ form.submit(class='form-control') }}</div>
+                </div>
+            </form>
+         </div>
+     </div>
+ </div>
+</section>
+{% endblock %}
+
+{% include 'footer.html' %}

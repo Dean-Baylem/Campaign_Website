@@ -16,6 +16,7 @@ from flask_login import UserMixin, login_user, LoginManager, login_required, cur
 from flask_gravatar import Gravatar
 from functools import wraps
 import forms
+from server import db
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
@@ -79,8 +80,8 @@ class LocationComments(db.Model):
     date = Column(DateTime, nullable=False, default=datetime.datetime.utcnow())
     location_id = Column(Integer, ForeignKey("location.id"))
     location = relationship("Location", back_populates="location_comments")
-    player_id = Column(Integer, ForeignKey("player.id"))
-    player = relationship("Player", back_populates="location_comments")
+    player_id = Column(Integer, ForeignKey("players.id"))
+    players = relationship("Player", back_populates="location_comments")
 
 
 class Player(UserMixin, db.Model):
@@ -91,8 +92,9 @@ class Player(UserMixin, db.Model):
     password = Column(String, nullable=False)
     characters = relationship("Character", back_populates="player")
     session_review = relationship("SessionReview", back_populates="player")
+    session_review_comments = relationship("SessionReviewComments")
     faction_comments = relationship("FactionComments", back_populates="player")
-    location_comments = relationship("LocationComments", back_populates="player")
+    location_comments = relationship("LocationComments")
     campaign_id = Column(Integer, ForeignKey("campaign.id"))
     campaign = relationship("Campaign", back_populates="players") # !!! Change to Many to Many !!!
 
@@ -143,7 +145,7 @@ class FactionComments(db.Model):
     id = Column(Integer, primary_key=True)
     body = Column(Text)
     date = Column(DateTime, nullable=False, default=datetime.datetime.utcnow())
-    player_id = Column(Integer, ForeignKey("player.id"))
+    player_id = Column(Integer, ForeignKey("players.id"))
     player = relationship("Player", back_populates="faction_comments")
     faction_id = Column(Integer, ForeignKey("faction.id"))
     faction = relationship("Faction", back_populates="faction_comments")
@@ -156,7 +158,7 @@ class SessionReview(db.Model):
     subtitle = Column(String(300))
     body = Column(Text)
     date = Column(DateTime, nullable=False, default=datetime.datetime.utcnow())
-    player_id = Column(Integer, ForeignKey("player.id"))
+    player_id = Column(Integer, ForeignKey("players.id"))
     player = relationship("Player", back_populates="session_review")
     campaign_id = Column(Integer, ForeignKey("campaign.id"))
     campaign = relationship("Campaign", back_populates="session_review")
@@ -168,7 +170,7 @@ class SessionReviewComments(db.Model):
     id = Column(Integer, primary_key=True)
     body = Column(Text)
     date = Column(DateTime, nullable=False, default=datetime.datetime.utcnow())
-    player_id = Column(Integer, ForeignKey("player.id"))
+    player_id = Column(Integer, ForeignKey("players.id"))
     player = relationship("Player", back_populates="session_review_comments")
     session_review_id = Column(Integer, ForeignKey("session_review.id"))
     session_review = relationship("SessionReview", back_populates="session_review_comments")
@@ -211,16 +213,15 @@ class Character(db.Model):
     char_img = Column(String(250))
     token_img = Column(String(250))
     char_lvl = Column(Integer)
-    alignment = Column(String(50), nullable=False)
+    alignment = Column(String(50))
     campaign_id = Column(Integer, ForeignKey("campaign.id"))
     campaign = relationship("Campaign", back_populates="characters")
     player_id = Column(Integer, ForeignKey("players.id"))
     player = relationship("Player", back_populates="characters")
 
     # ------------- Character Race -----------------
-    race = Column(String(50), nullable=False)
+    race = Column(String(50))
     subrace = Column(String(50))
-    race_features = relationship("race_features")
     main_bonus_score = Column(String)
     sub_bonus_score = Column(String)
     size = Column(String)
@@ -228,22 +229,20 @@ class Character(db.Model):
     age = Column(Integer)
 
     # ------------- Ability Scores -----------------
-    strength = Column(Integer, nullable=False)
-    dexterity = Column(Integer, nullable=False)
-    constitution = Column(Integer, nullable=False)
-    wisdom = Column(Integer, nullable=False)
-    intelligence = Column(Integer, nullable=False)
-    charisma = Column(Integer, nullable=False)
+    strength = Column(Integer, default=0)
+    dexterity = Column(Integer, default=0)
+    constitution = Column(Integer, default=0)
+    wisdom = Column(Integer, default=0)
+    intelligence = Column(Integer, default=0)
+    charisma = Column(Integer, default=0)
 
     # -------------- Character Class ----------------
-    class_main = Column(String(150), nullable=False)
-    class_main_level = Column(Integer, nullable=False)
+    class_main = Column(String(150))
+    class_main_level = Column(Integer)
     class_main_subclass = Column(String)
     class_second = Column(String(150))
     class_second_level = Column(Integer)
     class_second_subclass = Column(String)
-    class_features = relationship("class_features")
-    subclass_features = relationship("subclass_features")
     hit_dice = Column(Integer)
     max_hit_points = Column(Integer)
     current_hit_points = Column(Integer)
@@ -259,6 +258,7 @@ class Character(db.Model):
     spellcaster = Column(Boolean)
 
     # ----------- Spellcasting -------------------
+    # Depending on the character there will be another table for spell options!
     spell_ability = Column(String) # All of these will be updated after a player changes the level of the character.
     spell_dc = Column(Integer)
     spell_attack_mod = Column(Integer)
@@ -272,7 +272,7 @@ class Character(db.Model):
     seventh_level_slots = Column(Integer)
     eighth_level_slots = Column(Integer)
     ninth_level_slots = Column(Integer)
-    spells_known = relationship("spells")
+    spells_known = relationship("CharacterKnownSpells")
     short_save_restore = Column(Boolean)
 
     # ----------- Skill Profs --------------------
@@ -296,19 +296,57 @@ class Character(db.Model):
     survival = Column(Boolean, default=False)
 
     # ------------ Tool & language Proficiencies --------------
-    tools = relationship("tool_profs") # Add all the tools as Booleans
-    languages = relationship("languages")
+    alchemist_tools = Column(Boolean, default=False)
+    calligrapher_tools = Column(Boolean, default=False)
+    cartographer_tools = Column(Boolean, default=False)
+    cooks_utensils = Column(Boolean, default=False)
+    forgery_kit = Column(Boolean, default=False)
+    herbalism_kit = Column(Boolean, default=False)
+    leatherworker_tools = Column(Boolean, default=False)
+    navigator_tools = Column(Boolean, default=False)
+    poisoner_kit = Column(Boolean, default=False)
+    smith_tools = Column(Boolean, default=False)
+    tinker_tools = Column(Boolean, default=False)
+    woodcarver_tools = Column(Boolean, default=False)
+    brewer_tools = Column(Boolean, default=False)
+    carpenter_tools = Column(Boolean, default=False)
+    cobbler_tools = Column(Boolean, default=False)
+    disguise_kit = Column(Boolean, default=False)
+    glassblower_tools = Column(Boolean, default=False)
+    jeweler_tools = Column(Boolean, default=False)
+    mason_tools = Column(Boolean, default=False)
+    painter_tools = Column(Boolean, default=False)
+    thief_tools = Column(Boolean, default=False)
+    weaver_tools = Column(Boolean, default=False)
+    instruments = Column(Text)
+    common = Column(Boolean, default=False)
+    dwarvish = Column(Boolean, default=False)
+    elvish = Column(Boolean, default=False)
+    giant = Column(Boolean, default=False)
+    gnomish = Column(Boolean, default=False)
+    goblin = Column(Boolean, default=False)
+    halfling = Column(Boolean, default=False)
+    orc = Column(Boolean, default=False)
+    abyssal = Column(Boolean, default=False)
+    celestial = Column(Boolean, default=False)
+    draconic = Column(Boolean, default=False)
+    deep_speech = Column(Boolean, default=False)
+    infernal = Column(Boolean, default=False)
+    primordial = Column(Boolean, default=False)
+    sylvan = Column(Boolean, default=False)
+    undercommon = Column(Boolean, default=False)
+    druidic = Column(Boolean, default=False)
+    thieves_cant = Column(Boolean, default=False)
 
     # ------------ Character Background -----------------------
     background = Column(String(100))
-    background_features = relationship("background_features")
     appearance_summary = Column(String(150))
     appearance_detailed = Column(Text)
-    personality_trait_1 = Column(String, nullable=False)
-    personality_trait_2 = Column(String, nullable=False)
-    ideals = Column(String, nullable=False)
-    bonds = Column(String, nullable=False)
-    flaws = Column(String, nullable=False)
+    personality_trait_1 = Column(String)
+    personality_trait_2 = Column(String)
+    ideals = Column(String)
+    bonds = Column(String)
+    flaws = Column(String)
     height = Column(Integer)
     weight = Column(Integer)
     backstory = Column(Text)
@@ -319,10 +357,9 @@ class Character(db.Model):
     ep = Column(Integer)
     gp = Column(Integer)
     pp = Column(Integer)
-    weapons = relationship("weapons")
-    armor = relationship("armor")
+    weapons = relationship("Weapons")
+    armor = relationship("Armor")
     equipped_armor = Column(String)
-    items = relationship("items")
 
     # ---------------- Bonuses ------------------------------
 
@@ -345,8 +382,15 @@ class Character(db.Model):
     # ---------------- Miscellaneous -----------------
 
     notes = Column(Text)
-    actions = relationship("actions") # Still need to make this table!!!
-    inventory = relationship("items")
+    actions = relationship("Actions")
+    inventory = relationship("Items")
+
+
+class CharacterKnownSpells(db.Model):
+    __tablename__ = "character_known_spells"
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    character_id = Column(Integer, ForeignKey("characters.id"))
 
 
 class Actions(db.Model):
@@ -374,7 +418,7 @@ class CharacterRaces(db.Model):
     age_desc = Column(Text)
     size_desc = Column(Text)
     speed = Column(Integer)
-    subraces = relationship("SubRaces", back_populates="race")
+    subraces = relationship("Subraces", back_populates="race")
     racial_features = relationship("RacialFeatures", back_populates="race")
 
 
@@ -494,60 +538,6 @@ class Spells(db.Model):
     cantrip_damage_die_4 = Column(Integer)
 
 
-class Backgrounds(db.Model):
-    __tablename__ = "backgrounds"
-    id = Column(Integer, primary_key=True)
-    name = Column(String)
-    background_desc = Column(Text)
-    background_skill_1 = Column(String)
-    background_skill_2 = Column(String)
-    background_prof_1 = Column(String)
-    background_prof_2 = Column(String)
-    language_1 = Column(String)
-    langauge_2 = Column(String)
-    equipment_desc = Column(Text)
-    background_traits = relationship("BackgroundTraits")
-    background_bonds = relationship("BackgroundBonds")
-    background_ideals = relationship("BackgroundIdeals")
-    background_flaws = relationship("BackgroundFlaws")
-    background_features = relationship("BackgroundFeatures")
-    
-
-class BackgroundTraits(db.Model):
-    __tablename__ = "background_traits"
-    id = Column(Integer, primary_key=True)
-    desc = Column(Text)
-    background_id = Column(Integer, ForeignKey("backgrounds.id"))
-
-
-class BackgroundBonds(db.Model):
-    __tablename__ = "background_bonds"
-    id = Column(Integer, primary_key=True)
-    desc = Column(Text)
-    background_id = Column(Integer, ForeignKey("backgrounds.id"))
-
-
-class BackgroundIdeals(db.Model):
-    __tablename__ = "background_ideals"
-    id = Column(Integer, primary_key=True)
-    desc = Column(Text)
-    background_id = Column(Integer, ForeignKey("backgrounds.id"))
-
-
-class BackgroundFlaws(db.Model):
-    __tablename__ = "background_flaws"
-    id = Column(Integer, primary_key=True)
-    desc = Column(Text)
-    background_id = Column(Integer, ForeignKey("backgrounds.id"))
-
-
-class BackgroundFeatures(db.Model):
-    __tablename__ = "background_features"
-    id = Column(Integer, primary_key=True)
-    title = Column(String)
-    desc = Column(Text)
-
-
 class Weapons(db.Model):
     __tablename__ = "weapons"
     id = Column(Integer, primary_key=True)
@@ -593,31 +583,4 @@ class Items(db.Model):
     character_id = Column(Integer, ForeignKey("characters.id"))
 
 
-class Languages(db.Model):
-    __tablename__ = "languages"
-    id = Column(Integer, primary_key=True)
-    common = Column(Boolean)
-    dwarvish = Column(Boolean)
-    elvish = Column(Boolean)
-    giant = Column(Boolean)
-    gnomish = Column(Boolean)
-    goblin = Column(Boolean)
-    halfling = Column(Boolean)
-    orc = Column(Boolean)
-    abyssal = Column(Boolean)
-    celestial = Column(Boolean)
-    draconic = Column(Boolean)
-    deep_speech = Column(Boolean)
-    infernal = Column(Boolean)
-    primordial = Column(Boolean)
-    sylvan = Column(Boolean)
-    undercommon = Column(Boolean)
-    druidic = Column(Boolean)
-    thieves_cant = Column(Boolean)
-    character_id = Column(Integer, ForeignKey("characters.id"))
-
-
-
-
-
-
+# db.create_all()
