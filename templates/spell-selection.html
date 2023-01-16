@@ -1,0 +1,144 @@
+{% include "header.html" %}
+
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+
+
+<section id="campaign-heading" class="light-bg">
+  <div class="container-fluid" style="background-image: url(https://img.freepik.com/free-photo/still-life-objects-with-role-playing-game-sheet_23-2149352342.jpg?w=1800&t=st=1673180289~exp=1673180889~hmac=74c0f026dc7be27f4988200fb9dacc16893c885bcbe5c824bcaeffbf4de1ced0); background-repeat: no-repeat; background-size: cover;">
+  <div class="mask" style="background-color: rgba(0, 0, 0, 0.5)" >
+    <div class="row section-area">
+      <h1 class="home-title heading-font">Select Your Spells</h1>
+        <div class="col">
+        </div>
+    </div>
+  </div>
+  </div>
+</section>
+
+
+<body>
+<section class="light-bg section-area login-body">
+ <div class="container" style="margin: 0; padding: 0;">
+     <div class="row">
+        <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="cantrips-tab" data-bs-toggle="tab" data-bs-target="#cantrips-tab-pane" type="button" role="tab" aria-controls="cantrips-tab-pane" aria-selected="true">Cantrips</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="first-level-spells-tab" data-bs-toggle="tab" data-bs-target="#first-level-spells-tab-pane" type="button" role="tab" aria-controls="first-level-spells-tab-pane" aria-selected="false">First Level</button>
+          </li>
+          {% if character.second_level_slots!=0 %}
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="second-level-spells-tab" data-bs-toggle="tab" data-bs-target="#second-level-spells-tab-pane" type="button" role="tab" aria-controls="second-level-spells-tab-pane" aria-selected="false">Second Level</button>
+          </li>
+          {% endif %}
+          {% if character.third_level_slots!=0 %}
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="third-level-spells-tab" data-bs-toggle="tab" data-bs-target="#third-level-spells-tab-pane" type="button" role="tab" aria-controls="third-level-spells-tab-pane" aria-selected="false">Third Level</button>
+          </li>
+          {% endif %}
+          {% if character.fourth_level_slots!=0 %}
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="fourth-level-spells-tab" data-bs-toggle="tab" data-bs-target="#fourth-level-spells-tab-pane" type="button" role="tab" aria-controls="fourth-level-spells-tab-pane" aria-selected="false">Fourth Level</button>
+          </li>
+          {% endif %}
+          {% if character.fifth_level_slots!=0 %}
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="fifth-level-spells-tab" data-bs-toggle="tab" data-bs-target="#fifth-level-spells-tab-pane" type="button" role="tab" aria-controls="fifth-level-spells-tab-pane" aria-selected="false">Fifth Level</button>
+          </li>
+          {% endif %}
+          {% if character.sixth_level_slots!=0 %}
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="sixth-level-spells-tab" data-bs-toggle="tab" data-bs-target="#sixth-level-spells-tab-pane" type="button" role="tab" aria-controls="sixth-level-spells-tab-pane" aria-selected="false">Sixth Level</button>
+          </li>
+          {% endif %}
+          {% if character.seventh_level_slots!=0 %}
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="seventh-level-spells-tab" data-bs-toggle="tab" data-bs-target="#seventh-level-spells-tab-pane" type="button" role="tab" aria-controls="seventh-level-spells-tab-pane" aria-selected="false">Seventh Level</button>
+          </li>
+          {% endif %}
+          {% if character.eighth_level_slots!=0 %}
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="eighth-level-spells-tab" data-bs-toggle="tab" data-bs-target="#eighth-level-spells-tab-pane" type="button" role="tab" aria-controls="eighth-level-spells-tab-pane" aria-selected="false">Eighth Level</button>
+          </li>
+          {% endif %}
+          {% if character.ninth_level_slots!=0 %}
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="ninth-level-spells-tab" data-bs-toggle="tab" data-bs-target="#ninth-level-spells-tab-pane" type="button" role="tab" aria-controls="ninth-level-spells-tab-pane" aria-selected="false">Ninth Level</button>
+          </li>
+          {% endif %}
+        </ul>
+         <form method="POST">
+        <div class="tab-content" id="myTabContent" style="overflow:hidden; margin-bottom:0;">
+          <div class="tab-pane fade show active" id="cantrips-tab-pane" role="tabpanel" aria-labelledby="cantrips-tab" tabindex="0">
+                  {{ form.csrf_token }}
+                  <div class="row form-group spell-group required">
+                      <div class="col-lg-2 control-label">Cantrips</div>
+                      <div class="col-lg-4">{{ form.cantrips(class='form-control spell-selection-form') }}</div>
+                  </div>
+          </div>
+          <div class="tab-pane fade" id="first-level-spells-tab-pane" role="tabpanel" aria-labelledby="first-level-spells-tab" tabindex="0">
+                <div class="row form-group spell-group required">
+                      <div class="col-lg-2 control-label">1st Level Spells</div>
+                      <div class="col-lg-4">{{ form.first_level_spells(class='form-control spell-selection-form') }}</div>
+                  </div>
+          </div>
+          <div class="tab-pane fade" id="second-level-spells-tab-pane" role="tabpanel" aria-labelledby="second-level-spells-tab" tabindex="0">
+                  <div class="row form-group spell-group required">
+                      <div class="col-lg-3 control-label">Second Level Spells</div>
+                      <div class="col-lg-4">{{ form.second_level_spells(class='form-control spell-selection-form') }}</div>
+                  </div>
+          </div>
+          <div class="tab-pane fade" id="third-level-spells-tab-pane" role="tabpanel" aria-labelledby="third-level-spells-tab" tabindex="0">
+                <div class="row form-group spell-group required">
+                      <div class="col-lg-3 control-label">Third Level Spells</div>
+                      <div class="col-lg-4">{{ form.third_level_spells(class='form-control spell-selection-form') }}</div>
+                </div>
+          </div>
+          <div class="tab-pane fade" id="fourth-level-spells-tab-pane" role="tabpanel" aria-labelledby="fourth-level-spells-tab" tabindex="0">
+                  <div class="row form-group spell-group required">
+                      <div class="col-lg-3 control-label">Fourth Level Spells</div>
+                      <div class="col-lg-4">{{ form.fourth_level_spells(class='form-control spell-selection-form') }}</div>
+                  </div>
+          </div>
+          <div class="tab-pane fade" id="fifth-level-spells-tab-pane" role="tabpanel" aria-labelledby="fifth-level-spells-tab" tabindex="0">
+              <div class="row form-group spell-group required">
+                  <div class="col-lg-3 control-label">Fifth Level Spells</div>
+                  <div class="col-lg-4">{{ form.fifth_level_spells(class='form-control spell-selection-form') }}</div>
+              </div>
+          </div>
+          <div class="tab-pane fade" id="sixth-level-spells-tab-pane" role="tabpanel" aria-labelledby="sixth-level-spells-tab" tabindex="0">
+                  <div class="row form-group spell-group required">
+                      <div class="col-lg-3 control-label">Sixth Level Spells</div>
+                      <div class="col-lg-4">{{ form.sixth_level_spells(class='form-control spell-selection-form') }}</div>
+                  </div>
+          </div>
+          <div class="tab-pane fade" id="seventh-level-spells-tab-pane" role="tabpanel" aria-labelledby="seventh-level-spells-tab" tabindex="0">
+                  <div class="row form-group spell-group required">
+                      <div class="col-lg-3 control-label">Seventh Level Spells</div>
+                      <div class="col-lg-4">{{ form.seventh_level_spells(class='form-control spell-selection-form') }}</div>
+                  </div>
+          </div>
+          <div class="tab-pane fade" id="eighth-level-spells-tab-pane" role="tabpanel" aria-labelledby="eighth-level-spells-tab" tabindex="0">
+                  <div class="row form-group spell-group required">
+                      <div class="col-lg-3 control-label">Eighth Level Spells</div>
+                      <div class="col-lg-4">{{ form.eighth_level_spells(class='form-control spell-selection-form') }}</div>
+                  </div>
+          </div>
+          <div class="tab-pane fade" id="ninth-level-spells-tab-pane" role="tabpanel" aria-labelledby="ninth-level-spells-tab" tabindex="0">
+                  <div class="row form-group spell-group required">
+                      <div class="col-lg-3 control-label">Ninth Level Spells</div>
+                      <div class="col-lg-4">{{ form.ninth_level_spells(class='form-control spell-selection-form') }}</div>
+                  </div>
+          </div>
+        </div>
+        {{form.submit(class='form-control')}}
+       </form>
+    </div>
+ </div>
+</section>
+{% endblock %}
+
+{% include 'footer.html' %}

@@ -599,6 +599,10 @@ div.character-page-subheading-row p {
   padding-bottom: 4%;
 }
 
+.spell-group {
+  justify-content: center;
+}
+
 .form-control {
   font-family: 'Montserrat', sans-serif;
 }
@@ -608,6 +612,13 @@ div.character-page-subheading-row p {
   color: black;
   font-size: 1.2rem;
 }
+
+
+.spell-selection-form {
+  height: 400px;
+  font-size: 1.5rem;
+}
+
 
 .edit-skill-container {
   margin: 0 20%;

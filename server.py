@@ -1111,8 +1111,22 @@ def load_player(player_id):
     return Player.query.get(player_id)
 
 
-# Provide the list of all current campaigns for the footer.
+# --------- Provide the list of all current campaigns for the footer. ------------
 all_campaigns = db.session.query(Campaign).all()
+
+
+# ------------ Functions for use in routes involving database queries ------------
+def get_spell_list(character_class, spell_level):
+    """
+    This function takes a character's class and inputted spell level to filter the database for matching
+    spells and return their names as a list.
+    """
+    list_of_spells = []
+    all_spells = Spells.query.filter_by(spell_level=spell_level).all()
+    for spell in all_spells:
+        if character_class in spell.classes.split(','):
+            list_of_spells.append(spell.name)
+    return list_of_spells
 
 
 # --------- Testing Route - For experimentation without editing established routes first ---------
@@ -1996,16 +2010,208 @@ def edit_stats_senses(character_id):
                            all_campaigns=all_campaigns, character=requested_character, title=title)
 
 
+# ------------ Spell Selection Form -----------------
 
 
+@app.route("/character/<int:character_id>/spell-selection", methods=["POST", "GET"])
+def character_spell_selection(character_id):
+    requested_character = Character.query.get(character_id)
+    cantrips = []
+    first_level_spells = []
+    second_level_spells = []
+    third_level_spells = []
+    fourth_level_spells = []
+    fifth_level_spells = []
+    sixth_level_spells = []
+    seventh_level_spells = []
+    eighth_level_spells = []
+    ninth_level_spells = []
+    if requested_character.cantrips:
+        cantrips = get_spell_list(requested_character.class_main, 0)
+    if requested_character.first_level_slots:
+        first_level_spells = get_spell_list(requested_character.class_main, 1)
+    if requested_character.second_level_slots:
+        second_level_spells = get_spell_list(requested_character.class_main, 2)
+    if requested_character.third_level_slots:
+        third_level_spells = get_spell_list(requested_character.class_main, 3)
+    if requested_character.fourth_level_slots:
+        fourth_level_spells = get_spell_list(requested_character.class_main, 4)
+    if requested_character.fifth_level_slots:
+        fifth_level_spells = get_spell_list(requested_character.class_main, 5)
+    if requested_character.sixth_level_slots:
+        sixth_level_spells = get_spell_list(requested_character.class_main, 6)
+    if requested_character.seventh_level_slots:
+        seventh_level_spells = get_spell_list(requested_character.class_main, 7)
+    if requested_character.eighth_level_slots:
+        eighth_level_spells = get_spell_list(requested_character.class_main, 8)
+    if requested_character.ninth_level_slots:
+        ninth_level_spells = get_spell_list(requested_character.class_main, 9)
+    form = forms.SpellSelection()
+    form.cantrips.choices = cantrips
+    form.first_level_spells.choices = first_level_spells
+    form.second_level_spells.choices = second_level_spells
+    form.third_level_spells.choices = third_level_spells
+    form.fourth_level_spells.choices = fourth_level_spells
+    form.fifth_level_spells.choices = fifth_level_spells
+    form.sixth_level_spells.choices = sixth_level_spells
+    form.seventh_level_spells.choices = seventh_level_spells
+    form.eighth_level_spells.choices = eighth_level_spells
+    form.ninth_level_spells.choices = ninth_level_spells
+    if form.validate_on_submit():
+        for spell in form.cantrips.data:
+            new_spell = CharacterKnownSpells(
+                name=spell.title(),
+                character_id=character_id,
+            )
+            db.session.add(new_spell)
+            db.session.commit()
+        for spell in form.first_level_spells.data:
+            new_spell = CharacterKnownSpells(
+                name=spell.title(),
+                character_id=character_id,
+            )
+            db.session.add(new_spell)
+            db.session.commit()
+        for spell in form.second_level_spells.data:
+            new_spell = CharacterKnownSpells(
+                name=spell.title(),
+                character_id=character_id,
+            )
+            db.session.add(new_spell)
+            db.session.commit()
+        for spell in form.third_level_spells.data:
+            new_spell = CharacterKnownSpells(
+                name=spell.title(),
+                character_id=character_id,
+            )
+            db.session.add(new_spell)
+            db.session.commit()
+        for spell in form.fourth_level_spells.data:
+            new_spell = CharacterKnownSpells(
+                name=spell.title(),
+                character_id=character_id,
+            )
+            db.session.add(new_spell)
+            db.session.commit()
+        for spell in form.fifth_level_spells.data:
+            new_spell = CharacterKnownSpells(
+                name=spell.title(),
+                character_id=character_id,
+            )
+            db.session.add(new_spell)
+            db.session.commit()
+        for spell in form.sixth_level_spells.data:
+            new_spell = CharacterKnownSpells(
+                name=spell.title(),
+                character_id=character_id,
+            )
+            db.session.add(new_spell)
+            db.session.commit()
+        for spell in form.seventh_level_spells.data:
+            new_spell = CharacterKnownSpells(
+                name=spell.title(),
+                character_id=character_id,
+            )
+            db.session.add(new_spell)
+            db.session.commit()
+        for spell in form.eighth_level_spells.data:
+            new_spell = CharacterKnownSpells(
+                name=spell.title(),
+                character_id=character_id,
+            )
+            db.session.add(new_spell)
+            db.session.commit()
+        for spell in form.ninth_level_spells.data:
+            new_spell = CharacterKnownSpells(
+                name=spell.title(),
+                character_id=character_id,
+            )
+            db.session.add(new_spell)
+            db.session.commit()
+        return redirect(url_for('character_page', character_id=character_id))
+    return render_template('spell-selection.html', form=form, character=character_id, all_campaigns=all_campaigns)
 
 
+@app.route("/character/<int:character_id>/add-action", methods=["POST", "GET"])
+def add_character_action(character_id):
+    requested_character = Character.query.get(character_id)
+    title = "Add Character Action"
+    form = forms.AddNewAction()
+    if form.validate_on_submit():
+        new_action = Actions(
+            name=form.name.data,
+            description=form.description.data,
+            type=form.type.data,
+            range=form.range.data,
+            target=form.target.data,
+            character_id=character_id
+        )
+        if form.saving_action == "Yes":
+            new_action.saving_action = True
+            new_action.saving_attribute = form.saving_attribute.data
+        else:
+            new_action.saving_action = False
+        if form.damaging_action == "Yes":
+            new_action.damaging_action = True
+            new_action.damage_roll_main = form.damage_roll_main.data
+            new_action.damage_type_main = form.damage_type_main.data
+            new_action.damage_roll_secondary = form.damage_roll_secondary.data
+            new_action.damage_type_secondary = form.damage_type_secondary.data
+        else:
+            new_action.damaging_action = False
+        db.session.add(new_action)
+        db.session.commit()
+        return redirect(url_for('character_page', character_id=character_id))
+    return render_template('forms.html', form=form, all_campaigns=all_campaigns,
+                           character=requested_character, title=title)
 
 
+@app.route("/character/<int:character_id>/edit-notes", methods=["POST", "GET"])
+def edit_character_notes(character_id):
+    requested_character = Character.query.get(character_id)
+    form = forms.EditNotes()
+    form.notes.data = requested_character.notes
+    title = "Edit your notes"
+    if form.validate_on_submit():
+        requested_character.notes = form.notes.data
+        db.session.commit()
+        return redirect(url_for('character_page', character_id=character_id))
+    return render_template('edit-notes.html', form=form, all_campaigns=all_campaigns,
+                           character=requested_character, title=title)
 
 
+@app.route("/character/<int:character_id>/edit-description", methods=["GET", "POST"])
+def edit_character_description(character_id):
+    requested_character = Character.query.get(character_id)
+    form = forms.EditDescription()
+    form.backstory.data = requested_character.backstory
+    form.appearance_detailed.data = requested_character.appearance_summary
+    if form.validate_on_submit():
+        requested_character.backstory = form.backstory.data
+        requested_character.appearance_summary = form.appearance_detailed.data
+        db.session.commit()
+        return redirect(url_for('character_page', character_id=character_id))
+    return render_template('edit-backstory-appearance.html', form=form, all_campaigns=all_campaigns,
+                           character=requested_character)
 
 
+@app.route("/character/<int:character_id>/add-item", methods=["GET", "POST"])
+def add_character_item(character_id):
+    requested_character = Character.query.get(character_id)
+    form = forms.AddItem()
+    if form.validate_on_submit():
+        new_item = Items(
+            name=form.name.data,
+            category=form.category.data,
+            value=form.value.data,
+            item_desc=form.item_desc.data,
+            character_id=character_id
+        )
+        db.session.add(new_item)
+        db.session.commit()
+        return redirect(url_for('character_page', character_id=character_id))
+    return render_template('forms.html', form=form, all_campaigns=all_campaigns,
+                           character=requested_character)
 
 
 if __name__ == '__main__':

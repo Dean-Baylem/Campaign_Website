@@ -51,6 +51,16 @@ first_half_all_languages = ['Abyssal', 'Celestial', 'Common', 'Deep Speech',
 second_half_all_languages = ['Gnomish', 'Goblin', 'Halfling', 'Infernal',
                              'Orcish', 'Primordial', 'Sylvan', 'Undercommon']
 
+
+# Item categories
+
+item_categories = ['Armor', 'Potions', 'Rings', 'Rods', 'Scrolls', 'Staffs', 'Wands', 'Weapons', 'Wondrous Item']
+
+
+# Action Types
+action_types = ["Action", "Bonus Action", "Reaction"]
+
+
 class CreateCampaignForm(FlaskForm):
     title = StringField("Campaign Title", validators=[DataRequired()])
     subtitle = StringField("Campaign Subtitle", validators=[DataRequired()])
@@ -123,8 +133,34 @@ class CreateNewCharacter(FlaskForm):
 
 
 class SpellSelection(FlaskForm):
-    spells = SelectMultipleField("Please select your spells")
+    cantrips = SelectMultipleField("Please select your spells")
+    first_level_spells = SelectMultipleField("Please select your spells")
+    second_level_spells = SelectMultipleField("Please select your spells")
+    third_level_spells = SelectMultipleField("Please select your spells")
+    fourth_level_spells = SelectMultipleField("Please select your spells")
+    fifth_level_spells = SelectMultipleField("Please select your spells")
+    sixth_level_spells = SelectMultipleField("Please select your spells")
+    seventh_level_spells = SelectMultipleField("Please select your spells")
+    eighth_level_spells = SelectMultipleField("Please select your spells")
+    ninth_level_spells = SelectMultipleField("Please select your spells")
     submit = SubmitField("Submit")
+
+
+class AddNewAction(FlaskForm):
+    name = StringField("Action Name")
+    description = TextAreaField("Action Description")
+    type = SelectField("Type of Action", choices=action_types)
+    range = StringField("What is the range of the action?")
+    target = StringField("What is the target of the action?")
+    saving_action = SelectField("Does this action cause a Saving Throw?", choices=yes_no)
+    saving_attribute = SelectField("If yes, what attribute is used for the saving throw?", choices=stats)
+    damaging_action = SelectField("Does this action deal damage?", choices=yes_no)
+    damage_roll_main = StringField("If damaging, what is the die roll? i.e. 2d6 + 2")
+    damage_type_main = StringField("Damage type")
+    damage_roll_secondary = StringField("If more than one type of damage, what is the die roll?", default="None")
+    damage_type_secondary = StringField("What is the secondary damage type?", default="None")
+    submit = SubmitField("Submit Action")
+
 
 
 class CreateStats(FlaskForm):
@@ -139,7 +175,7 @@ class CreateStats(FlaskForm):
 
 class CreateFactionForm(FlaskForm):
     faction_name = StringField("Name of Faction", validators=[DataRequired()])
-    faction_description = CKEditorField("Faction Summary", validators=[DataRequired()])
+    faction_description = TextAreaField("Faction Summary", validators=[DataRequired()])
     faction_image = StringField("Faction image", validators=[DataRequired()])
     campaign = SelectField("Please select which campaign this faction is found in", choices=campaigns,
                            validators=[DataRequired()])
@@ -292,4 +328,18 @@ class EditPersonality(FlaskForm):
     bonds = StringField("Character Bonds")
     flaws = StringField("Character Flaws")
     submit = SubmitField("Submit Changes")
+
+
+class EditDescription(FlaskForm):
+    appearance_detailed = CKEditorField("Edit character appearance description")
+    backstory = CKEditorField("Edit character backstory")
+    submit = SubmitField("Submit Changes")
+
+
+class AddItem(FlaskForm):
+    name = StringField("Item name")
+    category = SelectField("Item Category", choices=item_categories)
+    value = StringField("Item Value")
+    item_desc = TextAreaField("Item Description")
+    submit = SubmitField("Add Item")
 

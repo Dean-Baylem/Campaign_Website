@@ -583,12 +583,14 @@
                     <h5>{{action.name}}</h5>
                     <p>{{action.description | safe}}</p>
                     {% endfor %}
+                    <a class="btn btn-outline-dark" href="{{url_for('add_character_action', character_id=character.id)}}">New Action</a>
                 </div>
                 <div class="tab-pane fade" id="spells" role="tabpanel" aria-labelledby="spells-tab">
                     <h5 class="ability-heading">My Spells:</h5>
                     {% for spell in character.spells_known %}
                     <p>{{spell.name}}</p>
                     {% endfor %}
+                    <a class="btn btn-outline-dark" href="{{url_for('character_spell_selection', character_id=character.id)}}">New Spell</a>
                 </div>
                 <div class="tab-pane fade" id="inventory" role="tabpanel" aria-labelledby="inventory-tab">
                     <h5 class="ability-heading">My Inventory:</h5>
@@ -602,14 +604,17 @@
                 <div class="tab-pane fade" id="backstory" role="tabpanel" aria-labelledby="backstory-tab">
                     <h5 class="ability-heading">Backstory:</h5>
                     <p>{{character.backstory | safe}}</p>
+                    <a class="btn btn-outline-dark" href="{{url_for('edit_character_description', character_id=character.id)}}">Edit Backstory & Description</a>
                 </div>
                 <div class="tab-pane fade" id="description" role="tabpanel" aria-labelledby="description-tab">
                     <h5 class="ability-heading">Character Description:</h5>
                     <p>{{character.appearance_detailed | safe}}</p>
+                    <a class="btn btn-outline-dark" href="{{url_for('edit_character_description', character_id=character.id)}}">Edit Backstory & Description</a>
                 </div>
                 <div class="tab-pane fade" id="notes" role="tabpanel" aria-labelledby="notes-tab">
                     <h5 class="ability-heading">Character Notes:</h5>
                     <p>{{character.notes | safe}}</p>
+                    <a class="btn btn-outline-dark" href="{{url_for('edit_character_notes', character_id=character.id)}}">Edit Notes</a>
                 </div>
             </div>
         </div>
